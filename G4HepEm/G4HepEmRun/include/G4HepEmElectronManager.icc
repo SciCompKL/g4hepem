@@ -26,8 +26,8 @@
 
 // tlData GetPrimaryElectronTrack needs to be set needs to be set based on the G4Track;
 
-//#define NOMSC
-//#define NOFLUCTUATION
+#define NOMSC
+#define NOFLUCTUATION
 
 
 // Note: pStepLength will be set here i.e. this is the first access to it that

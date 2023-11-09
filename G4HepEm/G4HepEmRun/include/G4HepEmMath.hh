@@ -34,7 +34,7 @@ T G4HepEmLog(T x) {
  return std::log(x);
 }
 // use the specialisations only on the host
-#ifndef __CUDA_ARCH__
+#if 0
 template < >
 inline
 double G4HepEmLog(double x) {
@@ -54,7 +54,7 @@ T G4HepEmExp(T x) {
  return std::exp(x);
 }
 // use the specialisations only on the host
-#ifndef __CUDA_ARCH__
+#if 0
 template < >
 inline
 double G4HepEmExp(double x) {
@@ -74,7 +74,7 @@ T G4HepEmPow(T x, T a) {
  return std::pow(x, a);
 }
 // use the specialisations only on the host
-#ifndef __CUDA_ARCH__
+#if 0
 template < >
 inline
 double G4HepEmPow(double x, double a) {
