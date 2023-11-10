@@ -99,7 +99,11 @@ namespace nlohmann
       // Assumes a to_json(j, T)
       for(auto& elem : d)
       {
-        j.push_back(elem);
+        if constexpr(std::is_same_v<T,G4double> && !std::is_same_v<T,double>){
+          j.push_back(elem.getValue());
+        } else {
+          j.push_back(elem);
+        }
       }
     }
 
@@ -136,16 +140,16 @@ namespace nlohmann
       }
       else
       {
-        j["fElectronTrackingCut"]  = d->fElectronTrackingCut;
-        j["fMinLossTableEnergy"]   = d->fMinLossTableEnergy;
-        j["fMaxLossTableEnergy"]   = d->fMaxLossTableEnergy;
+        j["fElectronTrackingCut"]  = d->fElectronTrackingCut.getValue();
+        j["fMinLossTableEnergy"]   = d->fMinLossTableEnergy.getValue();
+        j["fMaxLossTableEnergy"]   = d->fMaxLossTableEnergy.getValue();
         j["fNumLossTableBins"]     = d->fNumLossTableBins;
-        j["fFinalRange"]           = d->fFinalRange;
-        j["fDRoverRange"]          = d->fDRoverRange;
-        j["fLinELossLimit"]        = d->fLinELossLimit;
-        j["fElectronBremModelLim"] = d->fElectronBremModelLim;
-        j["fMSCRangeFactor"]       = d->fMSCRangeFactor;
-        j["fMSCSafetyFactor"]      = d->fMSCSafetyFactor;
+        j["fFinalRange"]           = d->fFinalRange.getValue();
+        j["fDRoverRange"]          = d->fDRoverRange.getValue();
+        j["fLinELossLimit"]        = d->fLinELossLimit.getValue();
+        j["fElectronBremModelLim"] = d->fElectronBremModelLim.getValue();
+        j["fMSCRangeFactor"]       = d->fMSCRangeFactor.getValue();
+        j["fMSCSafetyFactor"]      = d->fMSCSafetyFactor.getValue();
       }
     }
 
@@ -159,16 +163,16 @@ namespace nlohmann
       {
         auto* d = new G4HepEmParameters;
 
-        d->fElectronTrackingCut  = j.at("fElectronTrackingCut").get<G4double>();
-        d->fMinLossTableEnergy   = j.at("fMinLossTableEnergy").get<G4double>();
-        d->fMaxLossTableEnergy   = j.at("fMaxLossTableEnergy").get<G4double>();
+        d->fElectronTrackingCut  = j.at("fElectronTrackingCut").get<double>();
+        d->fMinLossTableEnergy   = j.at("fMinLossTableEnergy").get<double>();
+        d->fMaxLossTableEnergy   = j.at("fMaxLossTableEnergy").get<double>();
         d->fNumLossTableBins     = j.at("fNumLossTableBins").get<int>();
-        d->fFinalRange           = j.at("fFinalRange").get<G4double>();
-        d->fDRoverRange          = j.at("fDRoverRange").get<G4double>();
-        d->fLinELossLimit        = j.at("fLinELossLimit").get<G4double>();
-        d->fElectronBremModelLim = j.at("fElectronBremModelLim").get<G4double>();
-        d->fMSCRangeFactor       = j.at("fMSCRangeFactor").get<G4double>();
-        d->fMSCSafetyFactor      = j.at("fMSCSafetyFactor").get<G4double>();
+        d->fFinalRange           = j.at("fFinalRange").get<double>();
+        d->fDRoverRange          = j.at("fDRoverRange").get<double>();
+        d->fLinELossLimit        = j.at("fLinELossLimit").get<double>();
+        d->fElectronBremModelLim = j.at("fElectronBremModelLim").get<double>();
+        d->fMSCRangeFactor       = j.at("fMSCRangeFactor").get<double>();
+        d->fMSCSafetyFactor      = j.at("fMSCSafetyFactor").get<double>();
         return d;
       }
     }
@@ -197,37 +201,37 @@ namespace nlohmann
     // JSON
     static void to_json(json& j, const G4HepEmElemData& d)
     {
-      j["fZet"]          = d.fZet;
-      j["fZet13"]        = d.fZet13;
-      j["fZet23"]        = d.fZet23;
-      j["fCoulomb"]      = d.fCoulomb;
-      j["fLogZ"]         = d.fLogZ;
-      j["fZFactor1"]     = d.fZFactor1;
-      j["fDeltaMaxLow"]  = d.fDeltaMaxLow;
-      j["fDeltaMaxHigh"] = d.fDeltaMaxHigh;
-      j["fILVarS1"]      = d.fILVarS1;
-      j["fILVarS1Cond"]  = d.fILVarS1Cond;
+      j["fZet"]          = d.fZet.getValue();
+      j["fZet13"]        = d.fZet13.getValue();
+      j["fZet23"]        = d.fZet23.getValue();
+      j["fCoulomb"]      = d.fCoulomb.getValue();
+      j["fLogZ"]         = d.fLogZ.getValue();
+      j["fZFactor1"]     = d.fZFactor1.getValue();
+      j["fDeltaMaxLow"]  = d.fDeltaMaxLow.getValue();
+      j["fDeltaMaxHigh"] = d.fDeltaMaxHigh.getValue();
+      j["fILVarS1"]      = d.fILVarS1.getValue();
+      j["fILVarS1Cond"]  = d.fILVarS1Cond.getValue();
       j["fSandiaEnergies"] =
         make_span(d.fNumOfSandiaIntervals, d.fSandiaEnergies);
       j["fSandiaCoefficients"] =
         make_span(4 * d.fNumOfSandiaIntervals, d.fSandiaCoefficients);
-      j["fKShellBindingEnergy"] = d.fKShellBindingEnergy;
+      j["fKShellBindingEnergy"] = d.fKShellBindingEnergy.getValue();
     }
 
     static G4HepEmElemData from_json(const json& j)
     {
       G4HepEmElemData d;
 
-      j.at("fZet").get_to(d.fZet);
-      j.at("fZet13").get_to(d.fZet13);
-      j.at("fZet23").get_to(d.fZet23);
-      j.at("fCoulomb").get_to(d.fCoulomb);
-      j.at("fLogZ").get_to(d.fLogZ);
-      j.at("fZFactor1").get_to(d.fZFactor1);
-      j.at("fDeltaMaxLow").get_to(d.fDeltaMaxLow);
-      j.at("fDeltaMaxHigh").get_to(d.fDeltaMaxHigh);
-      j.at("fILVarS1").get_to(d.fILVarS1);
-      j.at("fILVarS1Cond").get_to(d.fILVarS1Cond);
+      d.fZet = j.at("fZet").get<double>();
+      d.fZet13 = j.at("fZet13").get<double>();
+      d.fZet23 = j.at("fZet23").get<double>();
+      d.fCoulomb = j.at("fCoulomb").get<double>();
+      d.fLogZ = j.at("fLogZ").get<double>();
+      d.fZFactor1 = j.at("fZFactor1").get<double>();
+      d.fDeltaMaxLow = j.at("fDeltaMaxLow").get<double>();
+      d.fDeltaMaxHigh = j.at("fDeltaMaxHigh").get<double>();
+      d.fILVarS1 = j.at("fILVarS1").get<double>();
+      d.fILVarS1Cond = j.at("fILVarS1Cond").get<double>();
 
       auto tmpSandiaEnergies =
         j.at("fSandiaEnergies").get<dynamic_array<G4double>>();
@@ -238,7 +242,7 @@ namespace nlohmann
         j.at("fSandiaCoefficients").get<dynamic_array<G4double>>();
       d.fSandiaCoefficients = tmpSandiaCoefficients.data;
 
-      j.at("fKShellBindingEnergy").get_to(d.fKShellBindingEnergy);
+      d.fKShellBindingEnergy = j.at("fKShellBindingEnergy").get<double>();
 
       return d;
     }
@@ -288,7 +292,7 @@ namespace nlohmann
         for(const auto& e : j)
         {
           auto tmpElem       = e.get<G4HepEmElemData>();
-          int i              = static_cast<int>(tmpElem.fZet);
+          int i              = static_cast<int>(tmpElem.fZet.getValue());
           p->fElementData[i] = tmpElem;
         }
         return p;
@@ -313,24 +317,27 @@ namespace nlohmann
       j["fElementVect"] = make_span(d.fNumOfElement, d.fElementVect);
       j["fNumOfAtomsPerVolumeVect"] =
         make_span(d.fNumOfElement, d.fNumOfAtomsPerVolumeVect);
-      j["fDensity"]          = d.fDensity;
-      j["fDensityCorfactor"] = d.fDensityCorFactor;
-      j["fElectronDensity"]  = d.fElectronDensity;
-      j["fRadiationLength"]  = d.fRadiationLength;
-      j["fMeanExEnergy"]     = d.fMeanExEnergy;
+      j["fDensity"]          = d.fDensity.getValue();
+      j["fDensityCorfactor"] = d.fDensityCorFactor.getValue();
+      j["fElectronDensity"]  = d.fElectronDensity.getValue();
+      j["fRadiationLength"]  = d.fRadiationLength.getValue();
+      j["fMeanExEnergy"]     = d.fMeanExEnergy.getValue();
       j["fSandiaEnergies"] =
         make_span(d.fNumOfSandiaIntervals, d.fSandiaEnergies);
       j["fSandiaCoefficients"] =
         make_span(4 * d.fNumOfSandiaIntervals, d.fSandiaCoefficients);
 
-      j["fZeff"]      = d.fZeff;
-      j["fZeff23"]    = d.fZeff23;
-      j["fZeffSqrt"]  = d.fZeffSqrt;
+      j["fZeff"]      = d.fZeff.getValue();
+      j["fZeff23"]    = d.fZeff23.getValue();
+      j["fZeffSqrt"]  = d.fZeffSqrt.getValue();
 
-      j["fUMSCPar"]         = d.fUMSCPar;
-      j["fUMSCStepMinPars"] = d.fUMSCStepMinPars;
-      j["fUMSCTailCoeff"]   = d.fUMSCTailCoeff;
-      j["fUMSCThetaCoeff"]  = d.fUMSCThetaCoeff;
+      j["fUMSCPar"]         = d.fUMSCPar.getValue();
+      ARR(d.fUMSCStepMinPars,tmp10,2);
+      j["fUMSCStepMinPars"] = tmp10;
+      ARR(d.fUMSCTailCoeff,tmp11,4);
+      j["fUMSCTailCoeff"]   = tmp11;
+      ARR(d.fUMSCThetaCoeff,tmp12,2);
+      j["fUMSCThetaCoeff"]  = tmp12;
 
     }
 
@@ -338,7 +345,7 @@ namespace nlohmann
     {
       G4HepEmMatData d;
 
-      j.at("fG4MatIndex").get_to(d.fG4MatIndex);
+      d.fG4MatIndex = j.at("fG4MatIndex").get_to(d.fG4MatIndex);
       auto tmpElemVect = j.at("fElementVect").get<dynamic_array<int>>();
       d.fNumOfElement  = tmpElemVect.N;
       d.fElementVect   = tmpElemVect.data;
@@ -347,11 +354,11 @@ namespace nlohmann
         j.at("fNumOfAtomsPerVolumeVect").get<dynamic_array<G4double>>();
       d.fNumOfAtomsPerVolumeVect = tmpAtomsPerVolumeVect.data;
 
-      j.at("fDensity").get_to(d.fDensity);
-      j.at("fDensityCorfactor").get_to(d.fDensityCorFactor);
-      j.at("fElectronDensity").get_to(d.fElectronDensity);
-      j.at("fRadiationLength").get_to(d.fRadiationLength);
-      j.at("fMeanExEnergy").get_to(d.fMeanExEnergy);
+      d.fDensity = j.at("fDensity").get<double>();
+      d.fDensityCorFactor = j.at("fDensityCorfactor").get<double>();
+      d.fElectronDensity = j.at("fElectronDensity").get<double>();
+      d.fRadiationLength = j.at("fRadiationLength").get<double>();
+      d.fMeanExEnergy = j.at("fMeanExEnergy").get<double>();
 
       auto tmpSandiaEnergies =
         j.at("fSandiaEnergies").get<dynamic_array<G4double>>();
@@ -362,14 +369,20 @@ namespace nlohmann
         j.at("fSandiaCoefficients").get<dynamic_array<G4double>>();
       d.fSandiaCoefficients = tmpSandiaCoefficients.data;
 
-      j.at("fZeff").get_to(d.fZeff);
-      j.at("fZeff23").get_to(d.fZeff23);
-      j.at("fZeffSqrt").get_to(d.fZeffSqrt);
+      d.fZeff = j.at("fZeff").get<double>();
+      d.fZeff23 = j.at("fZeff23").get<double>();
+      d.fZeffSqrt = j.at("fZeffSqrt").get<double>();
 
-      j.at("fUMSCPar").get_to(d.fUMSCPar);
-      j.at("fUMSCStepMinPars").get_to(d.fUMSCStepMinPars);
-      j.at("fUMSCTailCoeff").get_to(d.fUMSCTailCoeff);
-      j.at("fUMSCThetaCoeff").get_to(d.fUMSCThetaCoeff);
+      d.fUMSCPar = j.at("fUMSCPar").get<double>();
+      BRR(d.fUMSCStepMinPars,tmp10,2);
+      BRR(d.fUMSCTailCoeff,tmp11,4);
+      BRR(d.fUMSCThetaCoeff,tmp12,2);
+      j.at("fUMSCStepMinPars").get_to(tmp10);
+      j.at("fUMSCTailCoeff").get_to(tmp11);
+      j.at("fUMSCThetaCoeff").get_to(tmp12);
+      CRR(d.fUMSCStepMinPars,tmp10,2);
+      CRR(d.fUMSCTailCoeff,tmp11,4);
+      CRR(d.fUMSCThetaCoeff,tmp12,2);
 
       return d;
     }
@@ -429,9 +442,9 @@ namespace nlohmann
   {
     static void to_json(json& j, const G4HepEmMCCData& d)
     {
-      j["fSecElProdCutE"]  = d.fSecElProdCutE;
-      j["fSecGamProdCutE"] = d.fSecGamProdCutE;
-      j["fLogSecGamCutE"]  = d.fLogSecGamCutE;
+      j["fSecElProdCutE"]  = d.fSecElProdCutE.getValue();
+      j["fSecGamProdCutE"] = d.fSecGamProdCutE.getValue();
+      j["fLogSecGamCutE"]  = d.fLogSecGamCutE.getValue();
       j["fHepEmMatIndex"]  = d.fHepEmMatIndex;
       j["fG4MatCutIndex"]  = d.fG4MatCutIndex;
     }
@@ -440,9 +453,9 @@ namespace nlohmann
     {
       G4HepEmMCCData d;
 
-      j.at("fSecElProdCutE").get_to(d.fSecElProdCutE);
-      j.at("fSecGamProdCutE").get_to(d.fSecGamProdCutE);
-      j.at("fLogSecGamCutE").get_to(d.fLogSecGamCutE);
+      d.fSecElProdCutE = j.at("fSecElProdCutE").get<double>();
+      d.fSecGamProdCutE = j.at("fSecGamProdCutE").get<double>();
+      d.fLogSecGamCutE = j.at("fLogSecGamCutE").get<double>();
       j.at("fHepEmMatIndex").get_to(d.fHepEmMatIndex);
       j.at("fG4MatCutIndex").get_to(d.fG4MatCutIndex);
 
@@ -513,8 +526,8 @@ namespace nlohmann
       {
         j["fNumMatCuts"]      = d->fNumMatCuts;
         j["fNumMaterials"]    = d->fNumMaterials;
-        j["fELossLogMinEkin"] = d->fELossLogMinEkin;
-        j["fELossEILDelta"]   = d->fELossEILDelta;
+        j["fELossLogMinEkin"] = d->fELossLogMinEkin.getValue();
+        j["fELossEILDelta"]   = d->fELossEILDelta.getValue();
 
         j["fELossEnergyGrid"] =
           make_span(d->fELossEnergyGridSize, d->fELossEnergyGrid);
@@ -561,8 +574,8 @@ namespace nlohmann
 
         j.at("fNumMatCuts").get_to(d->fNumMatCuts);
         j.at("fNumMaterials").get_to(d->fNumMaterials);
-        j.at("fELossLogMinEkin").get_to(d->fELossLogMinEkin);
-        j.at("fELossEILDelta").get_to(d->fELossEILDelta);
+        d->fELossLogMinEkin = j.at("fELossLogMinEkin").get<double>();
+        d->fELossEILDelta = j.at("fELossEILDelta").get<double>();
 
         auto tmpElossGrid =
           j.at("fELossEnergyGrid").get<dynamic_array<G4double>>();
@@ -643,12 +656,16 @@ namespace nlohmann
       }
       else
       {
-        j["fLogMinElEnergy"]  = d->fLogMinElEnergy;
-        j["fILDeltaElEnergy"] = d->fILDeltaElEnergy;
-        j["fElEnergyVect"]    = d->fElEnergyVect;
-        j["fLElEnergyVect"]   = d->fLElEnergyVect;
-        j["fKappaVect"]       = d->fKappaVect;
-        j["fLKappaVect"]      = d->fLKappaVect;
+        j["fLogMinElEnergy"]  = d->fLogMinElEnergy.getValue();
+        j["fILDeltaElEnergy"] = d->fILDeltaElEnergy.getValue();
+        ARR(d->fElEnergyVect,tmp10,65);
+        j["fElEnergyVect"]    = tmp10;
+        ARR(d->fLElEnergyVect,tmp11,65);
+        j["fLElEnergyVect"]   = tmp11;
+        ARR(d->fKappaVect,tmp12,54);
+        j["fKappaVect"]       = tmp12;
+        ARR(d->fLKappaVect,tmp13,54);
+        j["fLKappaVect"]      = tmp13;
 
         j["fGammaCutIndxStartIndexPerMC"] =
           make_span(d->fNumHepEmMatCuts, d->fGammaCutIndxStartIndexPerMC);
@@ -692,12 +709,20 @@ namespace nlohmann
                   d->fSBTableData);
 
         // Now remaining data
-        j.at("fLogMinElEnergy").get_to(d->fLogMinElEnergy);
-        j.at("fILDeltaElEnergy").get_to(d->fILDeltaElEnergy);
-        j.at("fElEnergyVect").get_to(d->fElEnergyVect);
-        j.at("fLElEnergyVect").get_to(d->fLElEnergyVect);
-        j.at("fKappaVect").get_to(d->fKappaVect);
-        j.at("fLKappaVect").get_to(d->fLKappaVect);
+        d->fLogMinElEnergy = j.at("fLogMinElEnergy").get<double>();
+        d->fILDeltaElEnergy = j.at("fILDeltaElEnergy").get<double>();
+        BRR(d->fElEnergyVect,tmp10,65);
+        j.at("fElEnergyVect").get_to(tmp10);
+        CRR(d->fElEnergyVect,tmp10,65);
+        BRR(d->fLElEnergyVect,tmp11,65);
+        j.at("fLElEnergyVect").get_to(tmp11);
+        CRR(d->fLElEnergyVect,tmp11,65);
+        BRR(d->fKappaVect,tmp12,54);
+        j.at("fKappaVect").get_to(tmp12);
+        CRR(d->fKappaVect,tmp12,54);
+        BRR(d->fLKappaVect,tmp13,54);
+        j.at("fLKappaVect").get_to(tmp13);
+        CRR(d->fLKappaVect,tmp13,54);
 
         j.at("fSBStartTablesStartPerZ").get_to(d->fSBTablesStartPerZ);
 
@@ -726,15 +751,15 @@ namespace nlohmann
         j["fNumMaterials"] = d->fNumMaterials;
 
         //// === conversion related data. Grid: 146 bins form 2mc^2 - 100 TeV
-        j["fConvLogMinEkin"] = d->fConvLogMinEkin;
-        j["fConvEILDelta"]   = d->fConvEILDelta;
+        j["fConvLogMinEkin"] = d->fConvLogMinEkin.getValue();
+        j["fConvEILDelta"]   = d->fConvEILDelta.getValue();
         j["fConvEnergyGrid"] =
           make_span(d->fConvEnergyGridSize, d->fConvEnergyGrid);
 
         //// === compton related data. 84 bins (7 per decades) from 100 eV - 100
         /// TeV
-        j["fCompLogMinEkin"] = d->fCompLogMinEkin;
-        j["fCompEILDelta"]   = d->fCompEILDelta;
+        j["fCompLogMinEkin"] = d->fCompLogMinEkin.getValue();
+        j["fCompEILDelta"]   = d->fCompEILDelta.getValue();
         j["fCompEnergyGrid"] =
           make_span(d->fCompEnergyGridSize, d->fCompEnergyGrid);
 
@@ -746,8 +771,8 @@ namespace nlohmann
 
         //// === element selector for conversion (note: KN compton interaction
         /// do not know anything about Z)
-        j["fElemSelectorConvLogMinEkin"] = d->fElemSelectorConvLogMinEkin;
-        j["fElemSelectorConvEILDelta"]   = d->fElemSelectorConvEILDelta;
+        j["fElemSelectorConvLogMinEkin"] = d->fElemSelectorConvLogMinEkin.getValue();
+        j["fElemSelectorConvEILDelta"]   = d->fElemSelectorConvEILDelta.getValue();
         j["fElemSelectorConvStartIndexPerMat"] =
           make_span(d->fNumMaterials, d->fElemSelectorConvStartIndexPerMat);
 
@@ -772,16 +797,16 @@ namespace nlohmann
 
         j.at("fNumMaterials").get_to(d->fNumMaterials);
 
-        j.at("fConvLogMinEkin").get_to(d->fConvLogMinEkin);
-        j.at("fConvEILDelta").get_to(d->fConvEILDelta);
+        d->fConvLogMinEkin = j.at("fConvLogMinEkin").get<double>();
+        d->fConvEILDelta = j.at("fConvEILDelta").get<double>();
         // Get the array but ignore the size (fConvEnergyGridSize) as this is a
         // const (at time of writing)
         auto tmpConvEnergyGrid =
           j.at("fConvEnergyGrid").get<dynamic_array<G4double>>();
         d->fConvEnergyGrid = tmpConvEnergyGrid.data;
 
-        j.at("fCompLogMinEkin").get_to(d->fCompLogMinEkin);
-        j.at("fCompEILDelta").get_to(d->fCompEILDelta);
+        d->fCompLogMinEkin = j.at("fCompLogMinEkin").get<double>();
+        d->fCompEILDelta = j.at("fCompEILDelta").get<double>();
         // Get the array but ignore the size (fCompEnergyGridSize) as this is a
         // const (at time of writing)
         auto tmpCompEnergyGrid =
@@ -795,9 +820,9 @@ namespace nlohmann
           j.at("fConvCompMacXsecData").get<dynamic_array<G4double>>();
         d->fConvCompMacXsecData = tmpConvCompXsecData.data;
 
-        j.at("fElemSelectorConvLogMinEkin")
-          .get_to(d->fElemSelectorConvLogMinEkin);
-        j.at("fElemSelectorConvEILDelta").get_to(d->fElemSelectorConvEILDelta);
+        d->fElemSelectorConvLogMinEkin = j.at("fElemSelectorConvLogMinEkin")
+          .get<double>();
+        d->fElemSelectorConvEILDelta = j.at("fElemSelectorConvEILDelta").get<double>();
 
         // size of this array is d->fNumMaterial, which we store separately for
         // now
