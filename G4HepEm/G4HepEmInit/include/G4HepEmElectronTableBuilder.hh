@@ -35,10 +35,10 @@ void BuildElementSelectorTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerMod
                       struct G4HepEmParameters* hepEmParams, bool iselectron);
 
 
-void BuildElementSelector(double minEKin, double maxEKin, int numBinsPerDecade, double *data, int& indxCont, const struct G4HepEmMatData& matData, G4VEmModel* emModel, double cut, const G4ParticleDefinition* g4PartDef);
+void BuildElementSelector(G4double minEKin, G4double maxEKin, int numBinsPerDecade, G4double *data, int& indxCont, const struct G4HepEmMatData& matData, G4VEmModel* emModel, G4double cut, const G4ParticleDefinition* g4PartDef);
 
-int InitElementSelectorEnergyGrid(int binsperdecade, double* egrid, double mine, double maxe,
-                                  double& logMinEnergy, double& invLEDelta);
+int InitElementSelectorEnergyGrid(int binsperdecade, G4double* egrid, G4double mine, G4double maxe,
+                                  G4double& logMinEnergy, G4double& invLEDelta);
 
 void BuildSBBremSTables(struct G4HepEmData* hepEmData, struct G4HepEmParameters* hepEmPars, G4SeltzerBergerModel* sbModel);
 

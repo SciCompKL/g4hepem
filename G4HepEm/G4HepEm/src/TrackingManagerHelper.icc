@@ -364,8 +364,8 @@ G4double TrackingManagerHelper::ChargedNavigation::MakeStep(
   }
 
   // Update global, local, and proper time.
-  double velocity  = track.GetVelocity();
-  double deltaTime = 0;
+  G4double velocity  = track.GetVelocity();
+  G4double deltaTime = 0;
   if(velocity > 0)
   {
     deltaTime = physicalStep / velocity;
@@ -374,8 +374,8 @@ G4double TrackingManagerHelper::ChargedNavigation::MakeStep(
   postStepPoint.AddGlobalTime(deltaTime);
   postStepPoint.AddLocalTime(deltaTime);
 
-  double restMass        = track.GetDynamicParticle()->GetMass();
-  double deltaProperTime = deltaTime * (restMass / track.GetTotalEnergy());
+  G4double restMass        = track.GetDynamicParticle()->GetMass();
+  G4double deltaProperTime = deltaTime * (restMass / track.GetTotalEnergy());
   postStepPoint.AddProperTime(deltaProperTime);
 
   // Compute safety, including the call to safetyHelper, but don't set the
@@ -490,8 +490,8 @@ G4double TrackingManagerHelper::NeutralNavigation::MakeStep(
   postStepPoint.SetPosition(pos);
 
   // Update global, local, and proper time.
-  double velocity  = track.GetVelocity();
-  double deltaTime = 0;
+  G4double velocity  = track.GetVelocity();
+  G4double deltaTime = 0;
   if(velocity > 0)
   {
     deltaTime = physicalStep / velocity;
@@ -499,8 +499,8 @@ G4double TrackingManagerHelper::NeutralNavigation::MakeStep(
   postStepPoint.AddGlobalTime(deltaTime);
   postStepPoint.AddLocalTime(deltaTime);
 
-  double restMass        = track.GetDynamicParticle()->GetMass();
-  double deltaProperTime = deltaTime * (restMass / track.GetTotalEnergy());
+  G4double restMass        = track.GetDynamicParticle()->GetMass();
+  G4double deltaProperTime = deltaTime * (restMass / track.GetTotalEnergy());
   postStepPoint.AddProperTime(deltaProperTime);
 
   // Compute safety, but don't set the safety in the post-step point to

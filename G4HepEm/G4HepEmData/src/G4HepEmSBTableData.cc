@@ -22,7 +22,7 @@ G4HepEmSBTableData* MakeSBTableData(int numHepEmMatCuts, int numElemsInMC, int n
   }
 
   tmp->fNumSBTableData = numSBData;
-  tmp->fSBTableData    = new double[numSBData];
+  tmp->fSBTableData    = new G4double[numSBData];
 
   return tmp;
 }
@@ -62,11 +62,11 @@ void CopySBTableDataToDevice(struct G4HepEmSBTableData* onHOST, struct G4HepEmSB
   // allocate device side memory for the dynamic arrys
   gpuErrchk ( cudaMalloc ( &(sbTablesHTo_d->fGammaCutIndxStartIndexPerMC), sizeof( int )    * numHepEmMatCuts   ) );
   gpuErrchk ( cudaMalloc ( &(sbTablesHTo_d->fGammaCutIndices),             sizeof( int )    * numElemsInMatCuts ) );
-  gpuErrchk ( cudaMalloc ( &(sbTablesHTo_d->fSBTableData),                 sizeof( double ) * numSBTableData    ) );
+  gpuErrchk ( cudaMalloc ( &(sbTablesHTo_d->fSBTableData),                 sizeof( G4double ) * numSBTableData    ) );
   //
   gpuErrchk ( cudaMemcpy (   sbTablesHTo_d->fGammaCutIndxStartIndexPerMC,  onHOST->fGammaCutIndxStartIndexPerMC, sizeof( int )    * numHepEmMatCuts,   cudaMemcpyHostToDevice ) );
   gpuErrchk ( cudaMemcpy (   sbTablesHTo_d->fGammaCutIndices,              onHOST->fGammaCutIndices,             sizeof( int )    * numElemsInMatCuts, cudaMemcpyHostToDevice ) );
-  gpuErrchk ( cudaMemcpy (   sbTablesHTo_d->fSBTableData,                  onHOST->fSBTableData,                 sizeof( double ) * numSBTableData ,   cudaMemcpyHostToDevice ) );
+  gpuErrchk ( cudaMemcpy (   sbTablesHTo_d->fSBTableData,                  onHOST->fSBTableData,                 sizeof( G4double ) * numSBTableData ,   cudaMemcpyHostToDevice ) );
   //
   // Finaly copy the top level, i.e. the main struct with the already
   // appropriate pointers to device side memory locations but stored on the host

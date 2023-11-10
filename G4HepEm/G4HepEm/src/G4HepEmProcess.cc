@@ -144,7 +144,7 @@ G4double G4HepEmProcess::PostStepGetPhysicalInteractionLength ( const G4Track& t
     //thePrimaryTrack->SetSafety(theG4PreStepPoint->GetSafety());
     G4HepEmGammaManager::HowFar(fTheG4HepEmRunManager->GetHepEmData(), fTheG4HepEmRunManager->GetHepEmParameters(), theTLData);
   } else {
-    const double preSafety = onBoundary ? 0. : fSafetyHelper->ComputeSafety(track.GetPosition());
+    const G4double preSafety = onBoundary ? 0. : fSafetyHelper->ComputeSafety(track.GetPosition());
     thePrimaryTrack->SetSafety(preSafety);
     G4HepEmElectronManager::HowFar(fTheG4HepEmRunManager->GetHepEmData(), fTheG4HepEmRunManager->GetHepEmParameters(), theTLData);
   }
@@ -178,7 +178,7 @@ G4VParticleChange* G4HepEmProcess::PostStepDoIt( const G4Track& track, const G4S
   thePrimaryTrack->SetGStepLength(track.GetStepLength());
   thePrimaryTrack->SetOnBoundary(onBoundary);
   // invoke the physics interactions (all i.e. all along- and post-step as well as possible at rest)
-  double pStepLength = track.GetStepLength();
+  G4double pStepLength = track.GetStepLength();
   if (isGamma) {
     G4HepEmGammaManager::Perform(fTheG4HepEmRunManager->GetHepEmData(), fTheG4HepEmRunManager->GetHepEmParameters(), theTLData);
     //
@@ -215,8 +215,8 @@ G4VParticleChange* G4HepEmProcess::PostStepDoIt( const G4Track& track, const G4S
   fParticleChange->ProposeTrueStepLength(pStepLength);
 
   // energy, e-depo, momentum direction and status
-  const double ekin = thePrimaryTrack->GetEKin();
-  double edep = thePrimaryTrack->GetEnergyDeposit();
+  const G4double ekin = thePrimaryTrack->GetEKin();
+  G4double edep = thePrimaryTrack->GetEnergyDeposit();
   fParticleChange->ProposeEnergy(ekin);
   if (ekin<=0.0) {
     fParticleChange->ProposeTrackStatus(fStopAndKill);
@@ -225,16 +225,16 @@ G4VParticleChange* G4HepEmProcess::PostStepDoIt( const G4Track& track, const G4S
   bool isRelocate  = false;
   G4ThreeVector position = theG4PostStepPoint->GetPosition();
   if (!isGamma && !onBoundary) {
-    const double* displacement = theTLData->GetPrimaryElectronTrack()->GetMSCTrackData()->GetDisplacement();
-    const double dLength2 = displacement[0]*displacement[0] + displacement[1]*displacement[1] + displacement[2]*displacement[2];
-    const double kGeomMinLength  = 5.0e-8;  // 0.05 [nm]
-    const double kGeomMinLength2 = kGeomMinLength*kGeomMinLength; // (0.05 [nm])^2
+    const G4double* displacement = theTLData->GetPrimaryElectronTrack()->GetMSCTrackData()->GetDisplacement();
+    const G4double dLength2 = displacement[0]*displacement[0] + displacement[1]*displacement[1] + displacement[2]*displacement[2];
+    const G4double kGeomMinLength  = 5.0e-8;  // 0.05 [nm]
+    const G4double kGeomMinLength2 = kGeomMinLength*kGeomMinLength; // (0.05 [nm])^2
 //    G4ThreeVector position = step.GetPostStepPoint()->GetPosition();
     if (dLength2 > kGeomMinLength2) {
         // apply displacement
         bool isPositionChanged  = true;
-        const double      dispR = std::sqrt(dLength2);
-        const double postSafety = 0.99*fSafetyHelper->ComputeSafety(position, dispR);
+        const G4double      dispR = std::sqrt(dLength2);
+        const G4double postSafety = 0.99*fSafetyHelper->ComputeSafety(position, dispR);
         const G4ThreeVector theDisplacement(displacement[0], displacement[1], displacement[2]);
         // far away from geometry boundary
         if (postSafety > 0.0 && dispR <= postSafety) {
@@ -260,7 +260,7 @@ G4VParticleChange* G4HepEmProcess::PostStepDoIt( const G4Track& track, const G4S
     }
   }
   //
-  const double* pdir = thePrimaryTrack->GetDirection();
+  const G4double* pdir = thePrimaryTrack->GetDirection();
   fParticleChange->ProposeMomentumDirection(G4ThreeVector(pdir[0], pdir[1], pdir[2]));
 
   const int g4IMC = step.GetPreStepPoint()->GetMaterialCutsCouple()->GetIndex();
@@ -275,7 +275,7 @@ G4VParticleChange* G4HepEmProcess::PostStepDoIt( const G4Track& track, const G4S
     const G4TouchableHandle&   theG4TouchableHandle = track.GetTouchableHandle();
     for (int is=0; is<numSecElectron; ++is) {
       G4HepEmTrack* secTrack = theTLData->GetSecondaryElectronTrack(is)->GetTrack();
-      const double secEKin   = secTrack->GetEKin();
+      const G4double secEKin   = secTrack->GetEKin();
       const bool isElectron  = secTrack->GetCharge() < 0.0;
       if (applyCuts) {
         if (isElectron && secEKin < (*theCutsElectron)[g4IMC]) {
@@ -288,7 +288,7 @@ G4VParticleChange* G4HepEmProcess::PostStepDoIt( const G4Track& track, const G4S
         }
       }
 
-      const double*      dir = secTrack->GetDirection();
+      const G4double*      dir = secTrack->GetDirection();
       const G4ParticleDefinition* partDef = G4Electron::Definition();
       if (!isElectron) {
         partDef = G4Positron::Definition();
@@ -302,13 +302,13 @@ G4VParticleChange* G4HepEmProcess::PostStepDoIt( const G4Track& track, const G4S
 
     for (int is=0; is<numSecGamma; ++is) {
       G4HepEmTrack* secTrack = theTLData->GetSecondaryGammaTrack(is)->GetTrack();
-      const double secEKin   = secTrack->GetEKin();
+      const G4double secEKin   = secTrack->GetEKin();
       if (applyCuts && secEKin < (*theCutsGamma)[g4IMC]) {
         edep += secEKin;
         continue;
       }
 
-      const double*      dir = secTrack->GetDirection();
+      const G4double*      dir = secTrack->GetDirection();
       G4DynamicParticle*  dp = new G4DynamicParticle( G4Gamma::Definition(), G4ThreeVector( dir[0], dir[1], dir[2] ), secEKin );
       G4Track*     aG4Track  = new G4Track(  dp, theG4PostStepGlobalTime, theG4PostStepPointPosition );
       aG4Track->SetTouchableHandle( theG4TouchableHandle );

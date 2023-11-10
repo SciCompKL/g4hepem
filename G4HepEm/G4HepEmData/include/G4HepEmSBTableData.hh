@@ -11,14 +11,14 @@ struct G4HepEmSBTableData {
   const int               fNumElEnergy      = 65; // # e- kine (E_k) per Z
   const int               fNumKappa         = 54; // # red. photon eners per E_k
   // min/max electron kinetic energy usage limits
-  double                  fLogMinElEnergy = 0.0;
-  double                  fILDeltaElEnergy = 0.0;
+  G4double                  fLogMinElEnergy = 0.0;
+  G4double                  fILDeltaElEnergy = 0.0;
 
   // e- kinetic energy and reduced photon energy grids and tehir logarithms
-  double                  fElEnergyVect[65];   // [fNumElEnergy]
-  double                  fLElEnergyVect[65];  // [fNumElEnergy]
-  double                  fKappaVect[54];      // [fNumKappa]
-  double                  fLKappaVect[54];     // [fNumKappa]
+  G4double                  fElEnergyVect[65];   // [fNumElEnergy]
+  G4double                  fLElEnergyVect[65];  // [fNumElEnergy]
+  G4double                  fKappaVect[54];      // [fNumKappa]
+  G4double                  fLKappaVect[54];     // [fNumKappa]
 
   int                     fNumHepEmMatCuts = 0;              // #hepEm-MC
   int                     fNumElemsInMatCuts = 0;            // #elements-in-all-hepEm-MC
@@ -29,7 +29,7 @@ struct G4HepEmSBTableData {
   // data starts index for a given Z
   int                     fNumSBTableData = 0;     // # all data stored in fSBTableData
   int                     fSBTablesStartPerZ[121]; // max Z is 99 so all values above 99 will cast to 99 if any
-  double*                 fSBTableData = nullptr;  // [fNumSBTableData]
+  G4double*                 fSBTableData = nullptr;  // [fNumSBTableData]
   // for each Z:
   // - [0] #data
   // - [1] minE-grid index for table

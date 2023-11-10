@@ -47,7 +47,7 @@ class  G4SafetyHelper;
  *
  * @note
  * Don't assigne the same process twise, i.e. both the native `Geant4` versions
- * and `G4HepEm`, since it leads to `double counting`.
+ * and `G4HepEm`, since it leads to `G4double counting`.
  */
 
 

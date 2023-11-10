@@ -19,8 +19,8 @@ public:
 
   // Sampling of the post interaction photon energy and direction (already in the lab. frame)
   G4HepEmHostDevice
-  static double SamplePhotonEnergyAndDirection(const double primEkin, double* primDir,
-                                               const double* theOrgPrimGmDir, G4HepEmRandomEngine* rnge);
+  static G4double SamplePhotonEnergyAndDirection(const G4double primEkin, G4double* primDir,
+                                               const G4double* theOrgPrimGmDir, G4HepEmRandomEngine* rnge);
 };
 
 #endif  // G4HepEmGammaInteractionCompton_HH

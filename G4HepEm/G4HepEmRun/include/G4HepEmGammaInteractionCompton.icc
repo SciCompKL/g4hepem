@@ -16,33 +16,33 @@
 
 void G4HepEmGammaInteractionCompton::Perform(G4HepEmTLData* tlData, struct G4HepEmData* /*hepEmData*/) {
   G4HepEmTrack* thePrimaryTrack = tlData->GetPrimaryGammaTrack()->GetTrack();
-  const double       thePrimGmE = thePrimaryTrack->GetEKin();
+  const G4double       thePrimGmE = thePrimaryTrack->GetEKin();
   // low energy limit: both for the primary gamma and secondary e-
-  const double theLowEnergyThreshold = 0.0001; // 100 eV
+  const G4double theLowEnergyThreshold = 0.0001; // 100 eV
   if (thePrimGmE<theLowEnergyThreshold) {
     return;
   }
   // sample the post interaction photon energy and direction (already in lab frame)
   // note: we might need the original photon direction so we keep it here
-  double*        thePrimGmDir = thePrimaryTrack->GetDirection();
-  const double theOrgGmDir[3] = {thePrimGmDir[0], thePrimGmDir[1], thePrimGmDir[2]};
+  G4double*        thePrimGmDir = thePrimaryTrack->GetDirection();
+  const G4double theOrgGmDir[3] = {thePrimGmDir[0], thePrimGmDir[1], thePrimGmDir[2]};
   // the 'thePrimGmDir' will be updated
-  const double     thePostGmE = SamplePhotonEnergyAndDirection(thePrimGmE, thePrimGmDir, theOrgGmDir, tlData->GetRNGEngine());
+  const G4double     thePostGmE = SamplePhotonEnergyAndDirection(thePrimGmE, thePrimGmDir, theOrgGmDir, tlData->GetRNGEngine());
   // compute the secondary e- energy and check aganints the threshold:
   //  - if below threshold: simple deposit the corresponding energy
   //  - compute the secondary e- direction otherwise and create the secondary track
-  const double  theSecElE = thePrimGmE-thePostGmE;
+  const G4double  theSecElE = thePrimGmE-thePostGmE;
   // keep track of energy deposits due to particles killed below threshold
-  double theEnergyDeposit = 0.0;
+  G4double theEnergyDeposit = 0.0;
   if (theSecElE > theLowEnergyThreshold) {
     // get a secondary e- track and sample/compute directions (all will be already in lab. frame)
     G4HepEmTrack* theSecTrack = tlData->AddSecondaryElectronTrack()->GetTrack();
-    double*       theSecElDir = theSecTrack->GetDirection();
+    G4double*       theSecElDir = theSecTrack->GetDirection();
     theSecElDir[0] = thePrimGmE * theOrgGmDir[0] - thePostGmE * thePrimGmDir[0];
     theSecElDir[1] = thePrimGmE * theOrgGmDir[1] - thePostGmE * thePrimGmDir[1];
     theSecElDir[2] = thePrimGmE * theOrgGmDir[2] - thePostGmE * thePrimGmDir[2];
     // normalisation
-    const double  norm = 1.0 / std::sqrt(theSecElDir[0] * theSecElDir[0] + theSecElDir[1] * theSecElDir[1] + theSecElDir[2] * theSecElDir[2]);
+    const G4double  norm = 1.0 / std::sqrt(theSecElDir[0] * theSecElDir[0] + theSecElDir[1] * theSecElDir[1] + theSecElDir[2] * theSecElDir[2]);
     theSecElDir[0] *= norm;
     theSecElDir[1] *= norm;
     theSecElDir[2] *= norm;
@@ -64,17 +64,17 @@ void G4HepEmGammaInteractionCompton::Perform(G4HepEmTLData* tlData, struct G4Hep
   thePrimaryTrack->SetEnergyDeposit(theEnergyDeposit);
 }
 
-double G4HepEmGammaInteractionCompton::SamplePhotonEnergyAndDirection(
-    const double thePrimGmE, double* thePrimGmDir, const double* theOrgPrimGmDir, G4HepEmRandomEngine* rnge) {
+G4double G4HepEmGammaInteractionCompton::SamplePhotonEnergyAndDirection(
+    const G4double thePrimGmE, G4double* thePrimGmDir, const G4double* theOrgPrimGmDir, G4HepEmRandomEngine* rnge) {
   // sample the post interaction reduced photon energy according to the KN DCS
-  const double kappa = thePrimGmE * kInvElectronMassC2;
-  const double eps0  = 1. / (1. + 2. * kappa);
-  const double eps02 = eps0 * eps0;
-  const double al1   = -G4HepEmLog(eps0);
-  const double al2   = al1 + 0.5 * (1. - eps02);
-  double eps, eps2, gf;
-  double oneMinusCost, sint2;
-  double rndm[3];
+  const G4double kappa = thePrimGmE * kInvElectronMassC2;
+  const G4double eps0  = 1. / (1. + 2. * kappa);
+  const G4double eps02 = eps0 * eps0;
+  const G4double al1   = -G4HepEmLog(eps0);
+  const G4double al2   = al1 + 0.5 * (1. - eps02);
+  G4double eps, eps2, gf;
+  G4double oneMinusCost, sint2;
+  G4double rndm[3];
   do {
     rnge->flatArray(3, rndm);
     if (al1 > al2*rndm[0]) {
@@ -89,9 +89,9 @@ double G4HepEmGammaInteractionCompton::SamplePhotonEnergyAndDirection(
     gf       = 1. - eps * sint2 / (1. + eps2);
   } while (gf < rndm[2]);
   // compute the post interaction photon direction and transform to lab frame
-  const double cost = 1.0 - oneMinusCost;
-  const double sint = std::sqrt(G4HepEmMax(0., sint2));
-  const double phi  = k2Pi * rnge->flat();
+  const G4double cost = 1.0 - oneMinusCost;
+  const G4double sint = std::sqrt(G4HepEmMax(0., sint2));
+  const G4double phi  = k2Pi * rnge->flat();
   // direction of the scattered gamma in the scattering frame
   thePrimGmDir[0]   = sint * std::cos(phi);
   thePrimGmDir[1]   = sint * std::sin(phi);

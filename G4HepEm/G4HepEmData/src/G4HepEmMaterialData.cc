@@ -60,7 +60,7 @@ void CopyMaterialDataToGPU(struct G4HepEmMaterialData* onCPU, struct G4HepEmMate
   struct G4HepEmMatData* arrayHto_d;
   gpuErrchk ( cudaMalloc ( &arrayHto_d, sizeof( struct G4HepEmMatData )*numMatData ) );
   // fill in the structures on _d by copying the G4HepEmMatData one-by-one such that:
-  //  - for each G4HepEmMatData struct, first allocate the int and double arrays
+  //  - for each G4HepEmMatData struct, first allocate the int and G4double arrays
   //    on the device and set the corresponding _h reside pointers as the struct
   //    members (possile other members can be set by value such as fNumOfElement
   //    or fDensity)
@@ -76,16 +76,16 @@ void CopyMaterialDataToGPU(struct G4HepEmMaterialData* onCPU, struct G4HepEmMate
     gpuErrchk ( cudaMalloc ( &(dataHtoD_h->fElementVect), sizeof( int )*numElem ) );
     gpuErrchk ( cudaMemcpy ( dataHtoD_h->fElementVect, mData_h.fElementVect, sizeof( int )*numElem, cudaMemcpyHostToDevice ) );
     //
-    gpuErrchk ( cudaMalloc ( &(dataHtoD_h->fNumOfAtomsPerVolumeVect), sizeof( double)*numElem ) );
-    gpuErrchk ( cudaMemcpy ( dataHtoD_h->fNumOfAtomsPerVolumeVect, mData_h.fNumOfAtomsPerVolumeVect, sizeof( double )*numElem, cudaMemcpyHostToDevice ) );
+    gpuErrchk ( cudaMalloc ( &(dataHtoD_h->fNumOfAtomsPerVolumeVect), sizeof( G4double)*numElem ) );
+    gpuErrchk ( cudaMemcpy ( dataHtoD_h->fNumOfAtomsPerVolumeVect, mData_h.fNumOfAtomsPerVolumeVect, sizeof( G4double )*numElem, cudaMemcpyHostToDevice ) );
 
     int numSandiaIntervals = mData_h.fNumOfSandiaIntervals;
     //
-    gpuErrchk ( cudaMalloc ( &(dataHtoD_h->fSandiaEnergies), sizeof( double )*numSandiaIntervals ) );
-    gpuErrchk ( cudaMemcpy ( dataHtoD_h->fSandiaEnergies, mData_h.fSandiaEnergies, sizeof( double )*numSandiaIntervals, cudaMemcpyHostToDevice ) );
+    gpuErrchk ( cudaMalloc ( &(dataHtoD_h->fSandiaEnergies), sizeof( G4double )*numSandiaIntervals ) );
+    gpuErrchk ( cudaMemcpy ( dataHtoD_h->fSandiaEnergies, mData_h.fSandiaEnergies, sizeof( G4double )*numSandiaIntervals, cudaMemcpyHostToDevice ) );
     //
-    gpuErrchk ( cudaMalloc ( &(dataHtoD_h->fSandiaCoefficients), sizeof( double )*4*numSandiaIntervals ) );
-    gpuErrchk ( cudaMemcpy ( dataHtoD_h->fSandiaCoefficients, mData_h.fSandiaCoefficients, sizeof( double )*4*numSandiaIntervals, cudaMemcpyHostToDevice ) );
+    gpuErrchk ( cudaMalloc ( &(dataHtoD_h->fSandiaCoefficients), sizeof( G4double )*4*numSandiaIntervals ) );
+    gpuErrchk ( cudaMemcpy ( dataHtoD_h->fSandiaCoefficients, mData_h.fSandiaCoefficients, sizeof( G4double )*4*numSandiaIntervals, cudaMemcpyHostToDevice ) );
     //
     // copy this G4HepEmMatData structure to _d
     gpuErrchk ( cudaMemcpy ( &(arrayHto_d[imd]), dataHtoD_h, sizeof( struct G4HepEmMatData ), cudaMemcpyHostToDevice ) );
@@ -124,7 +124,7 @@ void FreeMaterialDataOnGPU ( struct G4HepEmMaterialData** onGPU) {
       gpuErrchk ( cudaMemcpy ( matData_h, *onGPU, sizeof( struct G4HepEmMaterialData ), cudaMemcpyDeviceToHost ) );
       int mumMaterialData = matData_h->fNumMaterialData;
       // Then copy each of the struct G4HepEmMatData structures of the array
-      // from _d to _h in order to have their int* and double* pointer members
+      // from _d to _h in order to have their int* and G4double* pointer members
       // on the host, then free the pointed device memory by using these _h side
       // pointer addresses to _d side memory locations.
       struct G4HepEmMatData* mData_h = new G4HepEmMatData;

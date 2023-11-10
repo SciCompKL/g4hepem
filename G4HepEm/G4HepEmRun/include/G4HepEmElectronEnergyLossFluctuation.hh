@@ -21,13 +21,13 @@ private:
 
 public:
   G4HepEmHostDevice
-  static double SampleEnergyLossFLuctuation(double ekin, double tcut, double tmax, double excEner,
-                                            double stepLength, double meanELoss, G4HepEmRandomEngine* rnge);
+  static G4double SampleEnergyLossFLuctuation(G4double ekin, G4double tcut, G4double tmax, G4double excEner,
+                                            G4double stepLength, G4double meanELoss, G4HepEmRandomEngine* rnge);
 
 
   //
   G4HepEmHostDevice
-  static double SampleGaussianLoss(double meanx, double sig2x, G4HepEmRandomEngine* rnge);
+  static G4double SampleGaussianLoss(G4double meanx, G4double sig2x, G4HepEmRandomEngine* rnge);
 
 };
 

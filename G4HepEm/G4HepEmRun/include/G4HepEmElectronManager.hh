@@ -192,7 +192,7 @@ public:
     * @return boolean whether a delta interaction happens
     */
   G4HepEmHostDevice
-  static bool CheckDelta(struct G4HepEmData* hepEmData, G4HepEmTrack* theTrack, double rand);
+  static bool CheckDelta(struct G4HepEmData* hepEmData, G4HepEmTrack* theTrack, G4double rand);
 
   /** Functions that performs the discrete interaction for a given e-/e+ particle.
     *
@@ -236,37 +236,37 @@ public:
     */
 
   G4HepEmHostDevice
-  static double GetRestRange(const struct G4HepEmElectronData* elData, const int imc, const double ekin, const double lekin);
+  static G4double GetRestRange(const struct G4HepEmElectronData* elData, const int imc, const G4double ekin, const G4double lekin);
 
   G4HepEmHostDevice
-  static double GetRestDEDX(const struct G4HepEmElectronData* elData, const int imc, const double ekin, const double lekin);
+  static G4double GetRestDEDX(const struct G4HepEmElectronData* elData, const int imc, const G4double ekin, const G4double lekin);
 
   G4HepEmHostDevice
-  static double GetInvRange(const struct G4HepEmElectronData* elData, int imc, double range);
+  static G4double GetInvRange(const struct G4HepEmElectronData* elData, int imc, G4double range);
 
   G4HepEmHostDevice
-  static double GetRestMacXSec(const struct G4HepEmElectronData* elData, const int imc, const double ekin,
-                               const double lekin, bool isioni);
+  static G4double GetRestMacXSec(const struct G4HepEmElectronData* elData, const int imc, const G4double ekin,
+                               const G4double lekin, bool isioni);
 
   G4HepEmHostDevice
-  static double GetRestMacXSecForStepping(const struct G4HepEmElectronData* elData, const int imc, double ekin,
-                                          double lekin, bool isioni);
+  static G4double GetRestMacXSecForStepping(const struct G4HepEmElectronData* elData, const int imc, G4double ekin,
+                                          G4double lekin, bool isioni);
 
   G4HepEmHostDevice
-  static double GetTransportMFP(const struct G4HepEmElectronData* elData, const int im, const double ekin, const double lekin);
+  static G4double GetTransportMFP(const struct G4HepEmElectronData* elData, const int im, const G4double ekin, const G4double lekin);
 
   G4HepEmHostDevice
-  static double ComputeMacXsecAnnihilation(const double ekin, const double electronDensity);
+  static G4double ComputeMacXsecAnnihilation(const G4double ekin, const G4double electronDensity);
 
   G4HepEmHostDevice
-  static double ComputeMacXsecAnnihilationForStepping(const double ekin, const double electronDensity);
+  static G4double ComputeMacXsecAnnihilationForStepping(const G4double ekin, const G4double electronDensity);
 
   G4HepEmHostDevice
   static void   ConvertTrueToGeometricLength(const G4HepEmData* hepEmData, G4HepEmMSCTrackData* mscData,
-                                             double ekin, double range, int imc, bool iselectron);
+                                             G4double ekin, G4double range, int imc, bool iselectron);
 
   G4HepEmHostDevice
-  static void   ConvertGeometricToTrueLength(G4HepEmMSCTrackData* mscData, double range, double gStepToConvert);
+  static void   ConvertGeometricToTrueLength(G4HepEmMSCTrackData* mscData, G4double range, G4double gStepToConvert);
 };
 
 

@@ -8,27 +8,27 @@ namespace {
 // get spline interpolation of y(x) between (x1, x2) given y_N = y(x_N), y''N(x_N) 
 // NB: named "GetSplineImpl" to avoid seeming ADL lookup errors if it is named "GetSpline"
 //     almost appears that compiler never even considers that name...
-double GetSplineImpl(double x1, double x2, double y1, double y2, double secderiv1, double secderiv2, double x)
+G4double GetSplineImpl(G4double x1, G4double x2, G4double y1, G4double y2, G4double secderiv1, G4double secderiv2, G4double x)
 {
   // Unchecked precondition: x1 < x < x2
-  const double dl = x2 - x1;
+  const G4double dl = x2 - x1;
   // note: all corner cases of the previous methods are covered and eventually
   //       gives b=0/1 that results in y=y0\y_{N-1} if e<=x[0]/e>=x[N-1] or
   //       y=y_i/y_{i+1} if e<x[i]/e>=x[i+1] due to small numerical errors
-  const double  b = std::max(0., std::min(1., (x - x1)/dl));
-  const double os = 0.166666666667; // 1./6.
-  const double  a = 1.0 - b;
-  const double c0 = (a*a*a-a)*secderiv1;
-  const double c1 = (b*b*b-b)*secderiv2;
+  const G4double  b = std::max(0., std::min(1., (x - x1)/dl));
+  const G4double os = 0.166666666667; // 1./6.
+  const G4double  a = 1.0 - b;
+  const G4double c0 = (a*a*a-a)*secderiv1;
+  const G4double c1 = (b*b*b-b)*secderiv2;
   return a*y1 + b*y2 + (c0+c1)*dl*dl*os;
 }
 }
 
-void G4HepEmInitUtils::GLIntegral(int npoints, double* abscissas, double* weights,
-                                  double min, double max) {
-  const double kPi      = 3.14159265358979323846;
-  const double kEpsilon = 1.0E-13;
-  double xm,xl,z,z1,p1,p2,p3,pp;
+void G4HepEmInitUtils::GLIntegral(int npoints, G4double* abscissas, G4double* weights,
+                                  G4double min, G4double max) {
+  const G4double kPi      = 3.14159265358979323846;
+  const G4double kEpsilon = 1.0E-13;
+  G4double xm,xl,z,z1,p1,p2,p3,pp;
   int m = (int)(0.5*(npoints + 1.));
   xm    = 0.5*(max+min);
   xl    = 0.5*(max-min);
@@ -54,11 +54,11 @@ void G4HepEmInitUtils::GLIntegral(int npoints, double* abscissas, double* weight
 }
 
 
-void G4HepEmInitUtils::PrepareSpline(int npoint, double* xdata, double* ydata, double* secderiv) {
+void G4HepEmInitUtils::PrepareSpline(int npoint, G4double* xdata, G4double* ydata, G4double* secderiv) {
   int     n   = npoint-1;
-  double *u   = new double[n]{};
-  double  p   = 0.0;
-  double  sig = 0.0;
+  G4double *u   = new G4double[n]{};
+  G4double  p   = 0.0;
+  G4double  sig = 0.0;
 
   u[1] = ((ydata[2]-ydata[1])/(xdata[2]-xdata[1]) - (ydata[1]-ydata[0])/(xdata[1]-xdata[0]));
   u[1] = 6.0*u[1]*(xdata[2]-xdata[1]) / ((xdata[2]-xdata[0])*(xdata[2]-xdata[0]));
@@ -98,9 +98,9 @@ void G4HepEmInitUtils::PrepareSpline(int npoint, double* xdata, double* ydata, d
 }
 
 
-void G4HepEmInitUtils::PrepareSpline(int npoint, double* xdata, double* ydata) {
-  double* secderiv = new double[npoint]{};
-  double*        y = new double[npoint]{};
+void G4HepEmInitUtils::PrepareSpline(int npoint, G4double* xdata, G4double* ydata) {
+  G4double* secderiv = new G4double[npoint]{};
+  G4double*        y = new G4double[npoint]{};
   for (int i=0; i<npoint; ++i) {
     y[i] = ydata[2*i];
   }
@@ -114,18 +114,18 @@ void G4HepEmInitUtils::PrepareSpline(int npoint, double* xdata, double* ydata) {
 
 
 // use the improved, robust spline interpolation that I put in G4 10.6
-double G4HepEmInitUtils::GetSplineLog(int ndata, double* xdata, double* ydata, double* secderiv, double x, double logx, double logxmin, double invLDBin) {
+G4double G4HepEmInitUtils::GetSplineLog(int ndata, G4double* xdata, G4double* ydata, G4double* secderiv, G4double x, G4double logx, G4double logxmin, G4double invLDBin) {
   // make sure that $x \in  [x[0],x[ndata-1]]$
-  const double xv = std::max(xdata[0], std::min(xdata[ndata-1], x));
+  const G4double xv = std::max(xdata[0], std::min(xdata[ndata-1], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
   const int   idx = (int)std::max(0., std::min((logx-logxmin)*invLDBin, ndata-2.));
   return GetSplineImpl(xdata[idx], xdata[idx+1], ydata[idx], ydata[idx+1], secderiv[idx], secderiv[idx+1], xv);
 }
 
 // same as above but both ydata and secderiv are stored in ydata array
-double G4HepEmInitUtils::GetSplineLog(int ndata, double* xdata, double* ydata, double x, double logx, double logxmin, double invLDBin) {
+G4double G4HepEmInitUtils::GetSplineLog(int ndata, G4double* xdata, G4double* ydata, G4double x, G4double logx, G4double logxmin, G4double invLDBin) {
   // make sure that $x \in  [x[0],x[ndata-1]]$
-  const double xv = std::max(xdata[0], std::min(xdata[ndata-1], x));
+  const G4double xv = std::max(xdata[0], std::min(xdata[ndata-1], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
   const int   idx = (int)std::max(0., std::min((logx-logxmin)*invLDBin, ndata-2.));
   const int  idx2 = 2*idx;
@@ -134,9 +134,9 @@ double G4HepEmInitUtils::GetSplineLog(int ndata, double* xdata, double* ydata, d
 
 
 // same as above but all xdata, ydata and secderiv are stored in data array
-double G4HepEmInitUtils::GetSplineLog(int ndata, double* data, double x, double logx, double logxmin, double invLDBin) {
+G4double G4HepEmInitUtils::GetSplineLog(int ndata, G4double* data, G4double x, G4double logx, G4double logxmin, G4double invLDBin) {
   // make sure that $x \in  [x[0],x[ndata-1]]$
-  const double xv = std::max(data[0], std::min(data[3*(ndata-1)], x));
+  const G4double xv = std::max(data[0], std::min(data[3*(ndata-1)], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
   const int   idx = (int)std::max(0., std::min((logx-logxmin)*invLDBin, ndata-2.));
   const int  idx3 = 3*idx;
@@ -148,18 +148,18 @@ double G4HepEmInitUtils::GetSplineLog(int ndata, double* data, double x, double 
 
 
 // this is used for getting inverse-range on host
-double G4HepEmInitUtils::GetSpline(double* xdata, double* ydata, double* secderiv, double x, int idx, int step) {
+G4double G4HepEmInitUtils::GetSpline(G4double* xdata, G4double* ydata, G4double* secderiv, G4double x, int idx, int step) {
   return GetSplineImpl(xdata[step*idx], xdata[step*(idx+1)], ydata[idx], ydata[idx+1], secderiv[idx], secderiv[idx+1], x);
 }
 
 // same as above but both ydata and secderiv are stored in ydata array
-double G4HepEmInitUtils::GetSpline(double* xdata, double* ydata, double x, int idx) {
+G4double G4HepEmInitUtils::GetSpline(G4double* xdata, G4double* ydata, G4double x, int idx) {
   const int  idx2 = 2*idx;
   return GetSplineImpl(xdata[idx], xdata[idx+1], ydata[idx2], ydata[idx2+2], ydata[idx2+1], ydata[idx2+3], x);
 }
 
 // same as above but both xdata, ydata and secderiv are stored in data array
-double G4HepEmInitUtils::GetSpline(double* data, double x, int idx) {
+G4double G4HepEmInitUtils::GetSpline(G4double* data, G4double x, int idx) {
   const int  idx3 = 3*idx;
   return GetSplineImpl(data[idx3], data[idx3+3], data[idx3+1], data[idx3+4], data[idx3+2], data[idx3+5], x);
 }
@@ -167,7 +167,7 @@ double G4HepEmInitUtils::GetSpline(double* data, double x, int idx) {
 // this is used to get index for inverse range on host
 // NOTE: it is assumed that x[0] <= x and x < x[step*(num-1)]
 // step: the delta with which   the x values are located in xdata (i.e. =1 by default)
-int    G4HepEmInitUtils::FindLowerBinIndex(double* xdata, int num, double x, int step) {
+int    G4HepEmInitUtils::FindLowerBinIndex(G4double* xdata, int num, G4double x, int step) {
   // Perform a binary search to find the interval val is in
   int ml = -1;
   int mu = num-1;
@@ -180,9 +180,9 @@ int    G4HepEmInitUtils::FindLowerBinIndex(double* xdata, int num, double x, int
 }
 
 
-void G4HepEmInitUtils::FillLogarithmicGrid(const double emin, const double emax, const int npoints, double& log_min_value, double& inverse_log_delta, double* grid)
+void G4HepEmInitUtils::FillLogarithmicGrid(const G4double emin, const G4double emax, const int npoints, G4double& log_min_value, G4double& inverse_log_delta, G4double* grid)
 {
-  double delta = std::log(emax/emin) / (npoints - 1);
+  G4double delta = std::log(emax/emin) / (npoints - 1);
   log_min_value = std::log(emin);
   inverse_log_delta = 1.0 / delta;
   grid[0] = emin;

@@ -45,17 +45,17 @@ public:
   G4HepEmMSCTrackData*  GetMSCTrackData()  { return &fMSCData; }
 
   G4HepEmHostDevice
-  double  GetCharge() const { return fTrack.GetCharge(); }
+  G4double  GetCharge() const { return fTrack.GetCharge(); }
 
   G4HepEmHostDevice
-  void    SetRange(double r) { fRange = r; }
+  void    SetRange(G4double r) { fRange = r; }
   G4HepEmHostDevice
-  double  GetRange()         { return fRange; }
+  G4double  GetRange()         { return fRange; }
 
   G4HepEmHostDevice
-  void    SetPStepLength(double psl)   { fPStepLength = psl;  }
+  void    SetPStepLength(G4double psl)   { fPStepLength = psl;  }
   G4HepEmHostDevice
-  double  GetPStepLength()             { return fPStepLength; }
+  G4double  GetPStepLength()             { return fPStepLength; }
 
   G4HepEmHostDevice
   void SavePreStepEKin()  {
@@ -63,15 +63,15 @@ public:
     fPreStepLogEKin = fTrack.GetLogEKin();
   }
   G4HepEmHostDevice
-  void SetPreStepEKin(double ekin, double lekin) {
+  void SetPreStepEKin(G4double ekin, G4double lekin) {
     fPreStepEKin    = ekin;
     fPreStepLogEKin = lekin;
   }
 
   G4HepEmHostDevice
-  double GetPreStepEKin() const { return fPreStepEKin; }
+  G4double GetPreStepEKin() const { return fPreStepEKin; }
   G4HepEmHostDevice
-  double GetPreStepLogEKin() const { return fPreStepLogEKin; }
+  G4double GetPreStepLogEKin() const { return fPreStepLogEKin; }
 
   // Reset all member values
   G4HepEmHostDevice
@@ -86,10 +86,10 @@ public:
 private:
   G4HepEmTrack        fTrack;
   G4HepEmMSCTrackData fMSCData;
-  double              fRange;
-  double              fPStepLength;  // physical step length >= fTrack.fGStepLength
-  double              fPreStepEKin;
-  double              fPreStepLogEKin;
+  G4double              fRange;
+  G4double              fPStepLength;  // physical step length >= fTrack.fGStepLength
+  G4double              fPreStepEKin;
+  G4double              fPreStepLogEKin;
 };
 
 

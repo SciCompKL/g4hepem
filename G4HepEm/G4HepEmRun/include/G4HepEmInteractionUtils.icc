@@ -8,14 +8,14 @@
 #include <cmath>
 
 G4HepEmHostDevice
-double SampleCostModifiedTsai(const double thePrimEkin, G4HepEmRandomEngine* rnge) {
+G4double SampleCostModifiedTsai(const G4double thePrimEkin, G4HepEmRandomEngine* rnge) {
   // sample photon direction (modified Tsai sampling):
-  const double uMax = 2.0*(1.0 + thePrimEkin*kInvElectronMassC2);
-  double rndm3[3];
-  double u;
+  const G4double uMax = 2.0*(1.0 + thePrimEkin*kInvElectronMassC2);
+  G4double rndm3[3];
+  G4double u;
   do {
     rnge->flatArray(3, rndm3);
-    const double uu = -G4HepEmLog(rndm3[0]*rndm3[1]);
+    const G4double uu = -G4HepEmLog(rndm3[0]*rndm3[1]);
     u = (0.25 > rndm3[2]) ? uu*1.6 : uu*0.533333333;
   } while (u > uMax);
   // cost = 1.0 - 2.0*u*u/(uMax*uMax);
@@ -25,25 +25,25 @@ double SampleCostModifiedTsai(const double thePrimEkin, G4HepEmRandomEngine* rng
 // times = 1.0 for Brem and -1.0 for Pair production
 // densityCor = 0.0  for Pair production
 G4HepEmHostDevice
-void EvaluateLPMFunctions(double& funcXiS, double& funcGS, double& funcPhiS, const double egamma,
-     const double etotal, const double elpm, const double z23, const double ilVarS1,
-     const double ilVarS1Cond, const double densityCor, const double times) {
-  const double     sqrt2 = 1.414213562373095;
-  const double redegamma = egamma / etotal;
-  const double varSprime = std::sqrt( 0.125 * redegamma * elpm / ( times*( 1.0 - redegamma ) * etotal ) );
-  const double     varS1 = z23 / ( 184.15 * 184.15 );
-  const double condition = sqrt2*varS1;
-  double funcXiSprime = 2.0;
+void EvaluateLPMFunctions(G4double& funcXiS, G4double& funcGS, G4double& funcPhiS, const G4double egamma,
+     const G4double etotal, const G4double elpm, const G4double z23, const G4double ilVarS1,
+     const G4double ilVarS1Cond, const G4double densityCor, const G4double times) {
+  const G4double     sqrt2 = 1.414213562373095;
+  const G4double redegamma = egamma / etotal;
+  const G4double varSprime = std::sqrt( 0.125 * redegamma * elpm / ( times*( 1.0 - redegamma ) * etotal ) );
+  const G4double     varS1 = z23 / ( 184.15 * 184.15 );
+  const G4double condition = sqrt2*varS1;
+  G4double funcXiSprime = 2.0;
   if (varSprime > 1.0) {
     funcXiSprime = 1.0;
   } else if (varSprime > condition) {
-    const double funcHSprime = G4HepEmLog(varSprime)*ilVarS1Cond;
+    const G4double funcHSprime = G4HepEmLog(varSprime)*ilVarS1Cond;
     funcXiSprime = 1.0 + funcHSprime - 0.08*(1.0-funcHSprime)*funcHSprime*(2.0-funcHSprime)*ilVarS1Cond;
   }
   funcXiS = funcXiSprime;
-  const double    varS = varSprime / std::sqrt( funcXiSprime );
+  const G4double    varS = varSprime / std::sqrt( funcXiSprime );
   // - include dielectric suppression effect into s according to Migdal (only in case of Brem !)
-  double varShat = varS;
+  G4double varShat = varS;
   if (densityCor != 0.0) {
     varShat *= ( 1.0 + densityCor / (egamma*egamma) );
     funcXiS = 2.0;
@@ -54,17 +54,17 @@ void EvaluateLPMFunctions(double& funcXiS, double& funcGS, double& funcPhiS, con
     }
   }
   // avluate the LPM G(s) and Phi(s) function (approximations) at s = s-hat
-  const double lpmSLimit =  2.0;
-  const double lpmISDelt = 20.0;
+  const G4double lpmSLimit =  2.0;
+  const G4double lpmISDelt = 20.0;
   if (varShat < lpmSLimit) {
-    double  val = varShat*lpmISDelt;
+    G4double  val = varShat*lpmISDelt;
     int    ilow = (int)val;
     val        -= ilow;
     ilow       *= 2;
     funcGS      = ( kFuncLPM[ilow+2] - kFuncLPM[ilow]   ) * val + kFuncLPM[ilow];
     funcPhiS    = ( kFuncLPM[ilow+3] - kFuncLPM[ilow+1] ) * val + kFuncLPM[ilow+1];
   } else {
-    double ss = 1.0/(varShat*varShat);
+    G4double ss = 1.0/(varShat*varShat);
     ss *= ss;
     funcGS   = 1.0-0.0230655*ss;
     funcPhiS = 1.0-0.01190476*ss;

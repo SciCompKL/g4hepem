@@ -19,22 +19,22 @@
 void G4HepEmElectronInteractionIoni::Perform(G4HepEmTLData* tlData, struct G4HepEmData* hepEmData, bool iselectron) {
   G4HepEmElectronTrack* thePrimaryElTrack = tlData->GetPrimaryElectronTrack();
   G4HepEmTrack* thePrimaryTrack = thePrimaryElTrack->GetTrack();
-  double    thePrimEkin = thePrimaryTrack->GetEKin();
+  G4double    thePrimEkin = thePrimaryTrack->GetEKin();
   const int   theMCIndx = thePrimaryTrack->GetMCIndex();
-  const double theElCut = hepEmData->fTheMatCutData->fMatCutData[theMCIndx].fSecElProdCutE;
+  const G4double theElCut = hepEmData->fTheMatCutData->fMatCutData[theMCIndx].fSecElProdCutE;
 
-  const double maxETransfer = (iselectron) ? 0.5*thePrimEkin : thePrimEkin;
+  const G4double maxETransfer = (iselectron) ? 0.5*thePrimEkin : thePrimEkin;
   if (maxETransfer <= theElCut) return;
 
   //
   // sample energy transfer and compute direction
-  const double  deltaEkin = (iselectron)
+  const G4double  deltaEkin = (iselectron)
                             ? SampleETransferMoller(theElCut, thePrimEkin, tlData->GetRNGEngine())
                             : SampleETransferBhabha(theElCut, thePrimEkin, tlData->GetRNGEngine());
   // get a secondary e- track and sample/compute directions (all will be already in lab. frame)
   G4HepEmTrack* theSecTrack = tlData->AddSecondaryElectronTrack()->GetTrack();
-  double*     theSecElecDir = theSecTrack->GetDirection();
-  double*    thePrimElecDir = thePrimaryTrack->GetDirection();
+  G4double*     theSecElecDir = theSecTrack->GetDirection();
+  G4double*    thePrimElecDir = thePrimaryTrack->GetDirection();
   //
   // == Sample/copute the emitted secondary e- and post interaction primary e-/e+ directions
   SampleDirections(thePrimEkin, deltaEkin, theSecElecDir, thePrimElecDir, tlData->GetRNGEngine());
@@ -47,78 +47,78 @@ void G4HepEmElectronInteractionIoni::Perform(G4HepEmTLData* tlData, struct G4Hep
 }
 
 
-double G4HepEmElectronInteractionIoni::SampleETransferMoller(const double elCut, const double primEkin,
+G4double G4HepEmElectronInteractionIoni::SampleETransferMoller(const G4double elCut, const G4double primEkin,
                                                              G4HepEmRandomEngine* rnge) {
-  const double tmin    = elCut;
-  const double tmax    = 0.5*primEkin;
-  const double xmin    = tmin / primEkin;
-  const double xmax    = tmax / primEkin;
-  const double gamma   = primEkin * kInvElectronMassC2 + 1.0;
-  const double gamma2  = gamma * gamma;
-  const double xminmax = xmin * xmax;
+  const G4double tmin    = elCut;
+  const G4double tmax    = 0.5*primEkin;
+  const G4double xmin    = tmin / primEkin;
+  const G4double xmax    = tmax / primEkin;
+  const G4double gamma   = primEkin * kInvElectronMassC2 + 1.0;
+  const G4double gamma2  = gamma * gamma;
+  const G4double xminmax = xmin * xmax;
   // Moller (e-e-) scattering
-  const double gg      = (2.0 * gamma - 1.0) / gamma2;
-  const double y       = 1. - xmax;
-  const double gf      = 1.0 - gg * xmax + xmax * xmax * (1.0 - gg + (1.0 - gg * y) / (y * y));
+  const G4double gg      = (2.0 * gamma - 1.0) / gamma2;
+  const G4double y       = 1. - xmax;
+  const G4double gf      = 1.0 - gg * xmax + xmax * xmax * (1.0 - gg + (1.0 - gg * y) / (y * y));
   //
-  double dum;
-  double rndArray[2];
-  double deltaEkin  = 0.;
+  G4double dum;
+  G4double rndArray[2];
+  G4double deltaEkin  = 0.;
   do {
     rnge->flatArray(2, rndArray);
     deltaEkin       = xminmax / (xmin * (1.0 - rndArray[0]) + xmax * rndArray[0]);
-    const double xx = 1.0 - deltaEkin;
+    const G4double xx = 1.0 - deltaEkin;
     dum             = 1.0 - gg * deltaEkin + deltaEkin * deltaEkin * (1.0 - gg + (1.0 - gg * xx) / (xx * xx));
   } while (gf * rndArray[1] > dum);
   return deltaEkin * primEkin;
 }
 
-double G4HepEmElectronInteractionIoni::SampleETransferBhabha(const double elCut, const double primEkin,
+G4double G4HepEmElectronInteractionIoni::SampleETransferBhabha(const G4double elCut, const G4double primEkin,
                                                              G4HepEmRandomEngine* rnge) {
-  const double tmin    = elCut;
-  const double tmax    = primEkin;
-  const double xmin    = tmin / primEkin;
-  const double xmax    = tmax / primEkin;
-  const double gamma   = primEkin * kInvElectronMassC2 + 1.0;
-  const double gamma2  = gamma * gamma;
-  const double beta2   = 1. - 1. / gamma2;
-  const double xminmax = xmin * xmax;
+  const G4double tmin    = elCut;
+  const G4double tmax    = primEkin;
+  const G4double xmin    = tmin / primEkin;
+  const G4double xmax    = tmax / primEkin;
+  const G4double gamma   = primEkin * kInvElectronMassC2 + 1.0;
+  const G4double gamma2  = gamma * gamma;
+  const G4double beta2   = 1. - 1. / gamma2;
+  const G4double xminmax = xmin * xmax;
   // Bhabha (e+e-) scattering
-  const double y       = 1.0 / (1.0 + gamma);
-  const double y2      = y * y;
-  const double y12     = 1.0 - 2.0 * y;
-  const double b1      = 2.0 - y2;
-  const double b2      = y12 * (3.0 + y2);
-  const double y122    = y12 * y12;
-  const double b4      = y122 * y12;
-  const double b3      = b4 + y122;
-  const double xmax2   = xmax * xmax;
-  const double gf      = 1.0 + (xmax2 * b4 - xmin * xmin * xmin * b3 + xmax2 * b2 - xmin * b1) * beta2;
+  const G4double y       = 1.0 / (1.0 + gamma);
+  const G4double y2      = y * y;
+  const G4double y12     = 1.0 - 2.0 * y;
+  const G4double b1      = 2.0 - y2;
+  const G4double b2      = y12 * (3.0 + y2);
+  const G4double y122    = y12 * y12;
+  const G4double b4      = y122 * y12;
+  const G4double b3      = b4 + y122;
+  const G4double xmax2   = xmax * xmax;
+  const G4double gf      = 1.0 + (xmax2 * b4 - xmin * xmin * xmin * b3 + xmax2 * b2 - xmin * b1) * beta2;
   //
-  double dum;
-  double rndArray[2];
-  double deltaEkin  = 0.;
+  G4double dum;
+  G4double rndArray[2];
+  G4double deltaEkin  = 0.;
   do {
     rnge->flatArray(2, rndArray);
     deltaEkin       = xminmax / (xmin * (1.0 - rndArray[0]) + xmax * rndArray[0]);
-    const double xx = deltaEkin * deltaEkin;
+    const G4double xx = deltaEkin * deltaEkin;
     dum             = 1.0 + (xx * xx * b4 - deltaEkin * xx * b3 + xx * b2 - deltaEkin * b1) * beta2;
   } while (gf * rndArray[1] > dum);
   return deltaEkin * primEkin;
 }
 
 
-void G4HepEmElectronInteractionIoni::SampleDirections(const double thePrimEkin, const double deltaEkin,
-                                                      double* theSecElecDir, double* thePrimElecDir,
+void G4HepEmElectronInteractionIoni::SampleDirections(const G4double thePrimEkin, const G4double deltaEkin,
+                                                      G4double* theSecElecDir, G4double* thePrimElecDir,
                                                       G4HepEmRandomEngine* rnge) {
-    const double elInitETot = thePrimEkin + kElectronMassC2;
-    const double elInitPTot = std::sqrt(thePrimEkin * (elInitETot + kElectronMassC2));
-    const double  deltaPTot = std::sqrt(deltaEkin * (deltaEkin + 2.0 * kElectronMassC2));
-    const double       cost = deltaEkin * (elInitETot + kElectronMassC2) / (deltaPTot * elInitPTot);
+    const G4double elInitETot = thePrimEkin + kElectronMassC2;
+    const G4double elInitPTot = std::sqrt(thePrimEkin * (elInitETot + kElectronMassC2));
+    const G4double  deltaPTot = std::sqrt(deltaEkin * (deltaEkin + 2.0 * kElectronMassC2));
+    const G4double       cost = deltaEkin * (elInitETot + kElectronMassC2) / (deltaPTot * elInitPTot);
     // check cosTheta limit
-    const double   cosTheta = G4HepEmMax(-1.0, G4HepEmMin(cost, 1.0));
-    const double   sinTheta = std::sqrt((1.0 - cosTheta) * (1.0 + cosTheta));
-    const double        phi = k2Pi * rnge->flat();     // spherical symmetry
+    const G4double   cosTheta = G4HepEmMax(-1.0, G4HepEmMin(cost, 1.0));
+    const G4double   sinTheta = std::sqrt((1.0 - cosTheta) * (1.0 + cosTheta));
+    const G4double        phi = k2Pi * rnge->flat();     // spherical symmetry
     //
     theSecElecDir[0]  = sinTheta * std::cos(phi);
     theSecElecDir[1]  = sinTheta * std::sin(phi);
@@ -131,7 +131,7 @@ void G4HepEmElectronInteractionIoni::SampleDirections(const double thePrimEkin, 
     thePrimElecDir[1] = elInitPTot * thePrimElecDir[1] - deltaPTot * theSecElecDir[1];
     thePrimElecDir[2] = elInitPTot * thePrimElecDir[2] - deltaPTot * theSecElecDir[2];
     // normalisation
-    const double  norm = 1.0 / std::sqrt(thePrimElecDir[0] * thePrimElecDir[0] + thePrimElecDir[1] * thePrimElecDir[1] + thePrimElecDir[2] * thePrimElecDir[2]);
+    const G4double  norm = 1.0 / std::sqrt(thePrimElecDir[0] * thePrimElecDir[0] + thePrimElecDir[1] * thePrimElecDir[1] + thePrimElecDir[2] * thePrimElecDir[2]);
     thePrimElecDir[0] *= norm;
     thePrimElecDir[1] *= norm;
     thePrimElecDir[2] *= norm;

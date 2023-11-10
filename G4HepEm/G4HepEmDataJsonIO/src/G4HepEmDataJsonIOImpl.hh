@@ -158,16 +158,16 @@ namespace nlohmann
       {
         auto* d = new G4HepEmParameters;
 
-        d->fElectronTrackingCut  = j.at("fElectronTrackingCut").get<double>();
-        d->fMinLossTableEnergy   = j.at("fMinLossTableEnergy").get<double>();
-        d->fMaxLossTableEnergy   = j.at("fMaxLossTableEnergy").get<double>();
+        d->fElectronTrackingCut  = j.at("fElectronTrackingCut").get<G4double>();
+        d->fMinLossTableEnergy   = j.at("fMinLossTableEnergy").get<G4double>();
+        d->fMaxLossTableEnergy   = j.at("fMaxLossTableEnergy").get<G4double>();
         d->fNumLossTableBins     = j.at("fNumLossTableBins").get<int>();
-        d->fFinalRange           = j.at("fFinalRange").get<double>();
-        d->fDRoverRange          = j.at("fDRoverRange").get<double>();
-        d->fLinELossLimit        = j.at("fLinELossLimit").get<double>();
-        d->fElectronBremModelLim = j.at("fElectronBremModelLim").get<double>();
-        d->fMSCRangeFactor       = j.at("fMSCRangeFactor").get<double>();
-        d->fMSCSafetyFactor      = j.at("fMSCSafetyFactor").get<double>();
+        d->fFinalRange           = j.at("fFinalRange").get<G4double>();
+        d->fDRoverRange          = j.at("fDRoverRange").get<G4double>();
+        d->fLinELossLimit        = j.at("fLinELossLimit").get<G4double>();
+        d->fElectronBremModelLim = j.at("fElectronBremModelLim").get<G4double>();
+        d->fMSCRangeFactor       = j.at("fMSCRangeFactor").get<G4double>();
+        d->fMSCSafetyFactor      = j.at("fMSCSafetyFactor").get<G4double>();
         return d;
       }
     }
@@ -229,12 +229,12 @@ namespace nlohmann
       j.at("fILVarS1Cond").get_to(d.fILVarS1Cond);
 
       auto tmpSandiaEnergies =
-        j.at("fSandiaEnergies").get<dynamic_array<double>>();
+        j.at("fSandiaEnergies").get<dynamic_array<G4double>>();
       d.fNumOfSandiaIntervals = tmpSandiaEnergies.N;
       d.fSandiaEnergies       = tmpSandiaEnergies.data;
 
       auto tmpSandiaCoefficients =
-        j.at("fSandiaCoefficients").get<dynamic_array<double>>();
+        j.at("fSandiaCoefficients").get<dynamic_array<G4double>>();
       d.fSandiaCoefficients = tmpSandiaCoefficients.data;
 
       j.at("fKShellBindingEnergy").get_to(d.fKShellBindingEnergy);
@@ -343,7 +343,7 @@ namespace nlohmann
       d.fElementVect   = tmpElemVect.data;
 
       auto tmpAtomsPerVolumeVect =
-        j.at("fNumOfAtomsPerVolumeVect").get<dynamic_array<double>>();
+        j.at("fNumOfAtomsPerVolumeVect").get<dynamic_array<G4double>>();
       d.fNumOfAtomsPerVolumeVect = tmpAtomsPerVolumeVect.data;
 
       j.at("fDensity").get_to(d.fDensity);
@@ -353,12 +353,12 @@ namespace nlohmann
       j.at("fMeanExEnergy").get_to(d.fMeanExEnergy);
 
       auto tmpSandiaEnergies =
-        j.at("fSandiaEnergies").get<dynamic_array<double>>();
+        j.at("fSandiaEnergies").get<dynamic_array<G4double>>();
       d.fNumOfSandiaIntervals = tmpSandiaEnergies.N;
       d.fSandiaEnergies       = tmpSandiaEnergies.data;
 
       auto tmpSandiaCoefficients =
-        j.at("fSandiaCoefficients").get<dynamic_array<double>>();
+        j.at("fSandiaCoefficients").get<dynamic_array<G4double>>();
       d.fSandiaCoefficients = tmpSandiaCoefficients.data;
 
       j.at("fZeff").get_to(d.fZeff);
@@ -564,11 +564,11 @@ namespace nlohmann
         j.at("fELossEILDelta").get_to(d->fELossEILDelta);
 
         auto tmpElossGrid =
-          j.at("fELossEnergyGrid").get<dynamic_array<double>>();
+          j.at("fELossEnergyGrid").get<dynamic_array<G4double>>();
         d->fELossEnergyGridSize = tmpElossGrid.N;
         d->fELossEnergyGrid     = tmpElossGrid.data;
 
-        auto tmpELossData = j.at("fELossData").get<dynamic_array<double>>();
+        auto tmpELossData = j.at("fELossData").get<dynamic_array<G4double>>();
         d->fELossData     = tmpELossData.data;
         // To validate, tmpELossData == 5 * (d->fELossEnergyGridSize) *
         // (d->fNumMatCuts);
@@ -578,11 +578,11 @@ namespace nlohmann
           d->fResMacXSecStartIndexPerMatCut = tmpIndex.data;
           // To validate, tmpIndex.N == d->fNumMatCuts;
 
-          auto tmpData = j.at("fResMacXSecData").get<dynamic_array<double>>();
+          auto tmpData = j.at("fResMacXSecData").get<dynamic_array<G4double>>();
           d->fResMacXSecNumData = tmpData.N;
           d->fResMacXSecData    = tmpData.data;
 
-          auto tmpTr1Data = j.at("fTr1MacXSecData").get<dynamic_array<double>>();
+          auto tmpTr1Data = j.at("fTr1MacXSecData").get<dynamic_array<G4double>>();
           d->fTr1MacXSecData    = tmpTr1Data.data;
         }
 
@@ -593,7 +593,7 @@ namespace nlohmann
           // To validate, tmpIndex.N == d->fNumMatCuts;
 
           auto tmpData =
-            j.at("fElemSelectorIoniData").get<dynamic_array<double>>();
+            j.at("fElemSelectorIoniData").get<dynamic_array<G4double>>();
           d->fElemSelectorIoniNumData = tmpData.N;
           d->fElemSelectorIoniData    = tmpData.data;
         }
@@ -605,7 +605,7 @@ namespace nlohmann
           // To validate, tmpIndex.N == d->fNumMatCuts;
 
           auto tmpData =
-            j.at("fElemSelectorBremSBData").get<dynamic_array<double>>();
+            j.at("fElemSelectorBremSBData").get<dynamic_array<G4double>>();
           d->fElemSelectorBremSBNumData = tmpData.N;
           d->fElemSelectorBremSBData    = tmpData.data;
         }
@@ -617,7 +617,7 @@ namespace nlohmann
           // To validate, tmpIndex.N == d->fNumMatCuts;
 
           auto tmpData =
-            j.at("fElemSelectorBremRBData").get<dynamic_array<double>>();
+            j.at("fElemSelectorBremRBData").get<dynamic_array<G4double>>();
           d->fElemSelectorBremRBNumData = tmpData.N;
           d->fElemSelectorBremRBData    = tmpData.data;
         }
@@ -776,7 +776,7 @@ namespace nlohmann
         // Get the array but ignore the size (fConvEnergyGridSize) as this is a
         // const (at time of writing)
         auto tmpConvEnergyGrid =
-          j.at("fConvEnergyGrid").get<dynamic_array<double>>();
+          j.at("fConvEnergyGrid").get<dynamic_array<G4double>>();
         d->fConvEnergyGrid = tmpConvEnergyGrid.data;
 
         j.at("fCompLogMinEkin").get_to(d->fCompLogMinEkin);
@@ -784,14 +784,14 @@ namespace nlohmann
         // Get the array but ignore the size (fCompEnergyGridSize) as this is a
         // const (at time of writing)
         auto tmpCompEnergyGrid =
-          j.at("fCompEnergyGrid").get<dynamic_array<double>>();
+          j.at("fCompEnergyGrid").get<dynamic_array<G4double>>();
         d->fCompEnergyGrid = tmpCompEnergyGrid.data;
 
         // We don't store the size of the following array, rather should
         // validate that it is expected size: d->fNumMaterials * 2 *
         // (d->fConvEnergyGridSize + d->fCompEnergyGridSize);
         auto tmpConvCompXsecData =
-          j.at("fConvCompMacXsecData").get<dynamic_array<double>>();
+          j.at("fConvCompMacXsecData").get<dynamic_array<G4double>>();
         d->fConvCompMacXsecData = tmpConvCompXsecData.data;
 
         j.at("fElemSelectorConvLogMinEkin")
@@ -805,12 +805,12 @@ namespace nlohmann
         d->fElemSelectorConvStartIndexPerMat = tmpConvStartIndexPerMat.data;
 
         auto tmpConvEgrid =
-          j.at("fElemSelectorConvEgrid").get<dynamic_array<double>>();
+          j.at("fElemSelectorConvEgrid").get<dynamic_array<G4double>>();
         d->fElemSelectorConvEgridSize = tmpConvEgrid.N;
         d->fElemSelectorConvEgrid     = tmpConvEgrid.data;
 
         auto tmpConvData =
-          j.at("fElemSelectorConvData").get<dynamic_array<double>>();
+          j.at("fElemSelectorConvData").get<dynamic_array<G4double>>();
         d->fElemSelectorConvNumData = tmpConvData.N;
         d->fElemSelectorConvData    = tmpConvData.data;
 

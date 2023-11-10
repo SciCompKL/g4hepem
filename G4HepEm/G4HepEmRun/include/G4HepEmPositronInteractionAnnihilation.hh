@@ -23,9 +23,9 @@ public:
   static void AnnihilateInFlight(G4HepEmTLData* tlData);
 
   G4HepEmHostDevice
-  static void SampleEnergyAndDirectionsInFlight(const double thePrimEkin, const double *thePrimDir,
-                                                double *theGamma1Ekin, double *theGamma1Dir,
-                                                double *theGamma2Ekin, double *theGamma2Dir,
+  static void SampleEnergyAndDirectionsInFlight(const G4double thePrimEkin, const G4double *thePrimDir,
+                                                G4double *theGamma1Ekin, G4double *theGamma1Dir,
+                                                G4double *theGamma2Ekin, G4double *theGamma2Dir,
                                                 G4HepEmRandomEngine* rnge);
 };
 

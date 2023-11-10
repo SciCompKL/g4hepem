@@ -31,32 +31,32 @@ public:
   // Sampling of the energy transferred to the emitted photon using the numerical
   // Seltzer-Berger DCS.
   G4HepEmHostDevice
-  static double SampleETransferSB(struct G4HepEmData* hepEmData, double thePrimEkin, double theLogEkin,
+  static G4double SampleETransferSB(struct G4HepEmData* hepEmData, G4double thePrimEkin, G4double theLogEkin,
                                   int theIMCIndx, G4HepEmRandomEngine* rnge, bool iselectron);
 
   // Sampling of the energy transferred to the emitted photon using the Bethe-Heitler
   // DCS.
   G4HepEmHostDevice
-  static double SampleETransferRB(struct G4HepEmData* hepEmData, double thePrimEkin, double theLogEkin,
+  static G4double SampleETransferRB(struct G4HepEmData* hepEmData, G4double thePrimEkin, G4double theLogEkin,
                                   int theIMCIndx, G4HepEmRandomEngine* rnge, bool iselectron);
 
 
   // Target atom selector for the above bremsstrahlung intercations in case of
   // materials composed from multiple elements.
   G4HepEmHostDevice
-  static int SelectTargetAtom(const struct G4HepEmElectronData* elData, const int imc, const double ekin,
-                              const double lekin, const double urndn, const bool isbremSB);
+  static int SelectTargetAtom(const struct G4HepEmElectronData* elData, const int imc, const G4double ekin,
+                              const G4double lekin, const G4double urndn, const bool isbremSB);
 
 
   G4HepEmHostDevice
-  static void SampleDirections(const double thePrimEkin, const double theSecGammaEkin, double* theSecGammaDir,
-                               double* thePrimElecDir, G4HepEmRandomEngine* rnge);
+  static void SampleDirections(const G4double thePrimEkin, const G4double theSecGammaEkin, G4double* theSecGammaDir,
+                               G4double* thePrimElecDir, G4HepEmRandomEngine* rnge);
 
 
   // Simple linear search (with step of 3!) used in the photon energy sampling part
   // of the SB (Seltzer-Berger) brem model.
   G4HepEmHostDevice
-  static int LinSearch(const double* vect, const int size, const double val);
+  static int LinSearch(const G4double* vect, const int size, const G4double val);
 };
 
 #endif // G4HepEmElectronInteractionBrem_HH

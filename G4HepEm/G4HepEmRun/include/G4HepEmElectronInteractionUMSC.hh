@@ -27,12 +27,12 @@ public:
 
   G4HepEmHostDevice
   static void StepLimit(G4HepEmData* hepEmData, G4HepEmParameters* hepEmPars, G4HepEmMSCTrackData* mscData,
-                        double ekin, int imat, double range, double presafety,
+                        G4double ekin, int imat, G4double range, G4double presafety,
                         bool onBoundary, bool iselectron, G4HepEmRandomEngine* rnge);
 
   G4HepEmHostDevice
-  static void SampleScattering(G4HepEmData* hepEmData, G4HepEmMSCTrackData* mscData, double pStepLength,
-                               double preStepEkin, double preStepTr1mfp, double postStepEkin, double postStepTr1mfp,
+  static void SampleScattering(G4HepEmData* hepEmData, G4HepEmMSCTrackData* mscData, G4double pStepLength,
+                               G4double preStepEkin, G4double preStepTr1mfp, G4double postStepEkin, G4double postStepTr1mfp,
                                int imat, bool isElectron, G4HepEmRandomEngine* rnge);
 
 
@@ -40,28 +40,28 @@ public:
 
   // auxilary method for sampling Urban MSC cos(theta) in the given step (used in the above `SampleScattering`)
   G4HepEmHostDevice
-  static double SampleCosineTheta(double pStepLengt, double preStepEkin, double preStepTr1mfp,
-                                  double postStepEkin, double postStepTr1mfp, double umscTlimitMin,
-                                  double radLength, double zeff, const double* umscTailCoeff, const double* umscThetaCoeff,
+  static G4double SampleCosineTheta(G4double pStepLengt, G4double preStepEkin, G4double preStepTr1mfp,
+                                  G4double postStepEkin, G4double postStepTr1mfp, G4double umscTlimitMin,
+                                  G4double radLength, G4double zeff, const G4double* umscTailCoeff, const G4double* umscThetaCoeff,
                                   bool isElectron, G4HepEmRandomEngine* rnge);
 
   // auxilary method for sampling cos(theta) in a simplified way: using an arbitrary pdf with correct mean and stdev
   // (used in the above `SampleCosineTheta`)
   G4HepEmHostDevice
-  static double SimpleScattering(double xmeanth, double x2meanth, G4HepEmRandomEngine* rnge);
+  static G4double SimpleScattering(G4double xmeanth, G4double x2meanth, G4HepEmRandomEngine* rnge);
 
   // auxilary method for computing theta0 (used in the above `SampleCosineTheta`)
   G4HepEmHostDevice
-  static double ComputeTheta0(double stepInRadLength, double postStepEkin, double preStepEkin,
-                              double zeff, const double* umscThetaCoeff, bool isElectron);
+  static G4double ComputeTheta0(G4double stepInRadLength, G4double postStepEkin, G4double preStepEkin,
+                              G4double zeff, const G4double* umscThetaCoeff, bool isElectron);
 
   // auxilary method for computing the e+ correction to theta0 (used in the above `ComputeTheta0` but only in case of e+)
   G4HepEmHostDevice
-  static double Theta0PositronCorrection(double eekin, double zeff);
+  static G4double Theta0PositronCorrection(G4double eekin, G4double zeff);
 
   // auxilary method for sampling the lateral displacement vector (x,y,0) on a rather approximate way
   G4HepEmHostDevice
-  static void   SampleDisplacement(double pStepLengt, double thePhi, G4HepEmMSCTrackData* mscData, G4HepEmRandomEngine* rnge);
+  static void   SampleDisplacement(G4double pStepLengt, G4double thePhi, G4HepEmMSCTrackData* mscData, G4HepEmRandomEngine* rnge);
 
 };
 

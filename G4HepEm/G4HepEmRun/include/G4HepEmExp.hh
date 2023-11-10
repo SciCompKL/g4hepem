@@ -64,7 +64,7 @@
  *
  * @brief Just a copy of `G4Exp`, that's in fact a simplified version of VDT exp.
  *
- * That's why the function names are `VDTExp` and `VDTExpf` for double and float.
+ * That's why the function names are `VDTExp` and `VDTExpf` for G4double and float.
  *
  */
 
@@ -78,17 +78,17 @@
 #include <stdint.h>
 
 namespace DVTExpConsts {
-  const double EXP_LIMIT = 708;
+  const G4double EXP_LIMIT = 708;
 
-  const double PX1exp = 1.26177193074810590878E-4;
-  const double PX2exp = 3.02994407707441961300E-2;
-  const double PX3exp = 9.99999999999999999910E-1;
-  const double QX1exp = 3.00198505138664455042E-6;
-  const double QX2exp = 2.52448340349684104192E-3;
-  const double QX3exp = 2.27265548208155028766E-1;
-  const double QX4exp = 2.00000000000000000009E0;
+  const G4double PX1exp = 1.26177193074810590878E-4;
+  const G4double PX2exp = 3.02994407707441961300E-2;
+  const G4double PX3exp = 9.99999999999999999910E-1;
+  const G4double QX1exp = 3.00198505138664455042E-6;
+  const G4double QX2exp = 2.52448340349684104192E-3;
+  const G4double QX3exp = 2.27265548208155028766E-1;
+  const G4double QX4exp = 2.00000000000000000009E0;
 
-  const double LOG2E = 1.4426950408889634073599;  // 1/log(2)
+  const G4double LOG2E = 1.4426950408889634073599;  // 1/log(2)
 
   const float MAXLOGF = 88.72283905206835f;
   const float MINLOGF = -88.f;
@@ -111,11 +111,11 @@ namespace DVTExpConsts {
   //
   union ieee754 {
     ieee754(){};
-    ieee754(double thed) { d = thed; };
+    ieee754(G4double thed) { d = thed; };
     ieee754(uint64_t thell) { ll = thell; };
     ieee754(float thef) { f[0] = thef; };
     ieee754(uint32_t thei) { i[0] = thei; };
-    double d;
+    G4double d;
     float f[2];
     uint32_t i[2];
     uint64_t ll;
@@ -123,9 +123,9 @@ namespace DVTExpConsts {
   };
 
   //----------------------------------------------------------------------------
-  // Converts an unsigned long long to a double
+  // Converts an unsigned long long to a G4double
   //
-  inline double uint642dp(uint64_t ll) {
+  inline G4double uint642dp(uint64_t ll) {
     ieee754 tmp;
     tmp.ll = ll;
     return tmp.d;
@@ -155,7 +155,7 @@ namespace DVTExpConsts {
    * These functions do not distinguish between -0.0 and 0.0, so are not IEC6509
    * compliant for argument -0.0
    **/
-  inline double fpfloor(const double x) {
+  inline G4double fpfloor(const G4double x) {
     // no problem since exp is defined between -708 and 708. Int is enough for
     // it!
     int32_t ret = int32_t(x);
@@ -176,19 +176,19 @@ namespace DVTExpConsts {
   }
 }  // namespace DVTExpConsts
 
-// Exp double precision --------------------------------------------------------
+// Exp G4double precision --------------------------------------------------------
 
-/// Exponential Function double precision
-inline double VDTExp(double initial_x) {
-  double x  = initial_x;
-  double px = DVTExpConsts::fpfloor(DVTExpConsts::LOG2E * x + 0.5);
+/// Exponential Function G4double precision
+inline G4double VDTExp(G4double initial_x) {
+  G4double x  = initial_x;
+  G4double px = DVTExpConsts::fpfloor(DVTExpConsts::LOG2E * x + 0.5);
 
   const int32_t n = int32_t(px);
 
   x -= px * 6.93145751953125E-1;
   x -= px * 1.42860682030941723212E-6;
 
-  const double xx = x * x;
+  const G4double xx = x * x;
 
   // px = x * P(x**2).
   px = DVTExpConsts::PX1exp;
@@ -199,7 +199,7 @@ inline double VDTExp(double initial_x) {
   px *= x;
 
   // Evaluate Q(x**2).
-  double qx = DVTExpConsts::QX1exp;
+  G4double qx = DVTExpConsts::QX1exp;
   qx *= xx;
   qx += DVTExpConsts::QX2exp;
   qx *= xx;
@@ -211,11 +211,11 @@ inline double VDTExp(double initial_x) {
   x = px / (qx - px);
   x = 1.0 + 2.0 * x;
 
-  // Build 2^n in double.
+  // Build 2^n in G4double.
   x *= DVTExpConsts::uint642dp((((uint64_t) n) + 1023) << 52);
 
   if(initial_x > DVTExpConsts::EXP_LIMIT)
-    x = std::numeric_limits<double>::infinity();
+    x = std::numeric_limits<G4double>::infinity();
   if(initial_x < -DVTExpConsts::EXP_LIMIT)
     x = 0.;
 
@@ -262,8 +262,8 @@ inline float VDTExpf(float initial_x) {
 
 //------------------------------------------------------------------------------
 
-void expv(const uint32_t size, double const* __restrict__ iarray,
-          double* __restrict__ oarray);
+void expv(const uint32_t size, G4double const* __restrict__ iarray,
+          G4double* __restrict__ oarray);
 void expfv(const uint32_t size, float const* __restrict__ iarray,
            float* __restrict__ oarray);
 

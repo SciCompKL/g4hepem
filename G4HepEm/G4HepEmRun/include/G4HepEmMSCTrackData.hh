@@ -45,22 +45,22 @@ public:
   }
 
   G4HepEmHostDevice
-  void SetDisplacement(double x, double y, double z) {
+  void SetDisplacement(G4double x, G4double y, G4double z) {
     fDisplacement[0] = x;
     fDisplacement[1] = y;
     fDisplacement[2] = z;
   }
   G4HepEmHostDevice
-  double* GetDisplacement() { return fDisplacement; }
+  G4double* GetDisplacement() { return fDisplacement; }
 
   G4HepEmHostDevice
-  void SetNewDirection(double x, double y, double z) {
+  void SetNewDirection(G4double x, G4double y, G4double z) {
     fDirection[0] = x;
     fDirection[1] = y;
     fDirection[2] = z;
   }
   G4HepEmHostDevice
-  double* GetDirection() { return fDirection; }
+  G4double* GetDirection() { return fDirection; }
 
 
   // reset all member values
@@ -92,20 +92,20 @@ public:
   }
 
 public:
-  double fLambtr1;            // first transport mfp
+  G4double fLambtr1;            // first transport mfp
 
-  double fTrueStepLength;     // the true, i.e. physical step Length
-  double fZPathLength;        // projection of the transport distance along the org. dir.
-  double fDisplacement[3];    // the displacement vector
-  double fDirection[3];       // direction proposed by MSC
+  G4double fTrueStepLength;     // the true, i.e. physical step Length
+  G4double fZPathLength;        // projection of the transport distance along the org. dir.
+  G4double fDisplacement[3];    // the displacement vector
+  G4double fDirection[3];       // direction proposed by MSC
 
-  double fInitialRange;       // initial range value (entering in the volume)
-  double fDynamicRangeFactor; // dynamic range factor i.e. `fr`
-  double fTlimitMin;          // minimum true step length i.e. `tlimitmin`
+  G4double fInitialRange;       // initial range value (entering in the volume)
+  G4double fDynamicRangeFactor; // dynamic range factor i.e. `fr`
+  G4double fTlimitMin;          // minimum true step length i.e. `tlimitmin`
 
-  double fPar1;               // parameters used in the true - > geom conversion
-  double fPar2;
-  double fPar3;
+  G4double fPar1;               // parameters used in the true - > geom conversion
+  G4double fPar2;
+  G4double fPar3;
 
   bool   fIsNoScatteringInMSC; // indicates that no scattering happend
   bool   fIsDisplace;          // indicates that displacement needs to be done

@@ -17,10 +17,10 @@ public:
   static void Perform(G4HepEmTLData* tlData, struct G4HepEmData* hepEmData);
 
   G4HepEmHostDevice
-  static double SelectElementBindingEnergy(const struct G4HepEmData* hepEmData, const int imc, const double mxsec, const double ekin, G4HepEmRandomEngine* rnge);
+  static G4double SelectElementBindingEnergy(const struct G4HepEmData* hepEmData, const int imc, const G4double mxsec, const G4double ekin, G4HepEmRandomEngine* rnge);
 
   G4HepEmHostDevice
-  static void SamplePhotoElectronDirection(const double theGammaE, const double* theGammaDir, double* theDir, G4HepEmRandomEngine* rnge);
+  static void SamplePhotoElectronDirection(const G4double theGammaE, const G4double* theGammaDir, G4double* theDir, G4HepEmRandomEngine* rnge);
 };
 
 #endif // G4HepEmGammaInteractionPhotoelectric_HH

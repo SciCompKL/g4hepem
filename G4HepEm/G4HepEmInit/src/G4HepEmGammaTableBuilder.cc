@@ -31,11 +31,11 @@ void BuildLambdaTables(G4PairProductionRelModel* ppModel, G4KleinNishinaCompton*
   struct G4HepEmGammaData* gmData = hepEmData->fTheGammaData;
   //
   // == Generate the enegry grid for Conversion
-  double emin = 2.0*CLHEP::electron_mass_c2;
-  double emax = 100.0*CLHEP::TeV;
+  G4double emin = 2.0*CLHEP::electron_mass_c2;
+  G4double emax = 100.0*CLHEP::TeV;
   int numConvEkin = gmData->fConvEnergyGridSize;
   delete [] gmData->fConvEnergyGrid;
-  gmData->fConvEnergyGrid = new double[numConvEkin]{};
+  gmData->fConvEnergyGrid = new G4double[numConvEkin]{};
   G4HepEmInitUtils::FillLogarithmicGrid(emin, emax, numConvEkin, gmData->fConvLogMinEkin, gmData->fConvEILDelta, gmData->fConvEnergyGrid);
 
   // == Generate the enegry grid for Compton
@@ -43,7 +43,7 @@ void BuildLambdaTables(G4PairProductionRelModel* ppModel, G4KleinNishinaCompton*
   emax = 100.0*CLHEP::TeV;
   int numCompEkin = gmData->fCompEnergyGridSize;
   delete [] gmData->fCompEnergyGrid;
-  gmData->fCompEnergyGrid = new double[numCompEkin]{};
+  gmData->fCompEnergyGrid = new G4double[numCompEkin]{};
   G4HepEmInitUtils::FillLogarithmicGrid(emin, emax, numCompEkin, gmData->fCompLogMinEkin, gmData->fCompEILDelta, gmData->fCompEnergyGrid);
 
   //
@@ -57,7 +57,7 @@ void BuildLambdaTables(G4PairProductionRelModel* ppModel, G4KleinNishinaCompton*
   int numHepEmMCCData   = hepEmMCData->fNumMatCutData;
   int numHepEmMatData   = hepEmMatData->fNumMaterialData;
   gmData->fNumMaterials = numHepEmMatData;
-  gmData->fConvCompMacXsecData    = new double[numHepEmMatData*2*(numConvEkin + numCompEkin)]{};
+  gmData->fConvCompMacXsecData    = new G4double[numHepEmMatData*2*(numConvEkin + numCompEkin)]{};
   std::vector<bool> isThisMatDone = std::vector<bool>(numHepEmMatData,false);
   //
   // copute the macroscopic cross sections
@@ -66,8 +66,8 @@ void BuildLambdaTables(G4PairProductionRelModel* ppModel, G4KleinNishinaCompton*
   // we will need to obtain the correspondig G4MaterialCutsCouple object pointers
   G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
   // a temporary container for the mxsec data and for their second deriv
-  double* macXSec   = new double[std::max(numConvEkin,numCompEkin)]{};
-  double* secDerivs = new double[std::max(numConvEkin,numCompEkin)]{};
+  G4double* macXSec   = new G4double[std::max(numConvEkin,numCompEkin)]{};
+  G4double* secDerivs = new G4double[std::max(numConvEkin,numCompEkin)]{};
   for (int imc=0; imc<numHepEmMCCData; ++imc) {
     const struct G4HepEmMCCData& mccData = hepEmMCData->fMatCutData[imc];
     int hepEmMatIndx = mccData.fHepEmMatIndex;
@@ -78,7 +78,7 @@ void BuildLambdaTables(G4PairProductionRelModel* ppModel, G4KleinNishinaCompton*
     const G4MaterialCutsCouple* g4MatCut = theCoupleTable->GetMaterialCutsCouple(mccData.fG4MatCutIndex);
     // == Conversion
     for (int ie=0; ie<numConvEkin; ++ie) {
-      const double theEKin = gmData->fConvEnergyGrid[ie];
+      const G4double theEKin = gmData->fConvEnergyGrid[ie];
       macXSec[ie] = std::max(0.0, ppModel->CrossSection(g4MatCut, g4PartDef, theEKin));
     }
     // prepare for sline by computing the second derivatives
@@ -93,7 +93,7 @@ void BuildLambdaTables(G4PairProductionRelModel* ppModel, G4KleinNishinaCompton*
     // == Compton
 //    std::cout << " ===== Material = " << g4MatCut->GetMaterial()->GetName() << std::endl;
     for (int ie=0; ie<numCompEkin; ++ie) {
-      const double theEKin = gmData->fCompEnergyGrid[ie];
+      const G4double theEKin = gmData->fCompEnergyGrid[ie];
       macXSec[ie] = std::max(0.0, knModel->CrossSection(g4MatCut, g4PartDef, theEKin));
 //      std::cout << " E = " << theEKin << " [MeV] Sigam-Compton(E) = " << macXSec[ie] << std::endl;
     }
@@ -121,12 +121,12 @@ void BuildElementSelectorTables(G4PairProductionRelModel* ppModel, struct G4HepE
   struct G4HepEmGammaData* gmData = hepEmData->fTheGammaData;
   //
   // == Generate the enegry grid for Conversion-element selectors
-  const double emin      = gmData->fConvEnergyGrid[0];
-  const double emax      = gmData->fConvEnergyGrid[gmData->fConvEnergyGridSize-1];
-  const double invlog106 = 1.0/(6.0*std::log(10.0));
+  const G4double emin      = gmData->fConvEnergyGrid[0];
+  const G4double emax      = gmData->fConvEnergyGrid[gmData->fConvEnergyGridSize-1];
+  const G4double invlog106 = 1.0/(6.0*std::log(10.0));
   int numConvEkin = (int)(G4EmParameters::Instance()->NumberOfBinsPerDecade()*std::log(emax/emin)*invlog106);
   gmData->fElemSelectorConvEgridSize = numConvEkin;
-  gmData->fElemSelectorConvEgrid = new double[numConvEkin]{};
+  gmData->fElemSelectorConvEgrid = new G4double[numConvEkin]{};
   G4HepEmInitUtils::FillLogarithmicGrid(emin, emax, numConvEkin,
                                         gmData->fElemSelectorConvLogMinEkin, gmData->fElemSelectorConvEILDelta, gmData->fElemSelectorConvEgrid);
 
@@ -157,7 +157,7 @@ void BuildElementSelectorTables(G4PairProductionRelModel* ppModel, struct G4HepE
   if (size == 0) {
     return;
   }
-  gmData->fElemSelectorConvData = new double[size]{};
+  gmData->fElemSelectorConvData = new G4double[size]{};
   G4VEmModel* emModel = ppModel;
   int indxCont = 0;
   for (int im=0; im<numHepEmMatData; ++im) {
@@ -172,15 +172,15 @@ void BuildElementSelectorTables(G4PairProductionRelModel* ppModel, struct G4HepE
     // build element selector for this material starting the data from indxCont:
     // loop over the kinetic energy grid
     for (int ie=0; ie<numConvEkin; ++ie) {
-      double      ekin = gmData->fElemSelectorConvEgrid[ie];
-      double       sum = 0.0;
+      G4double      ekin = gmData->fElemSelectorConvEgrid[ie];
+      G4double       sum = 0.0;
       int          ist = indxCont;
       for (int iz=0; iz<numElem; ++iz) {
         // compute atomic cross section x number of atoms per volume
         int      izet = matData.fElementVect[iz];
-        double natoms = matData.fNumOfAtomsPerVolumeVect[iz];
+        G4double natoms = matData.fNumOfAtomsPerVolumeVect[iz];
         const G4Element* g4Elem  = G4NistManager::Instance()->FindOrBuildElement(izet);
-        double   xsec = std::max(0.0, emModel->ComputeCrossSectionPerAtom(G4Gamma::Gamma(), g4Elem, ekin));
+        G4double   xsec = std::max(0.0, emModel->ComputeCrossSectionPerAtom(G4Gamma::Gamma(), g4Elem, ekin));
         sum += natoms*xsec;
         if (iz<numElem-1) {
           gmData->fElemSelectorConvData[indxCont++] = sum;

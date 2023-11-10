@@ -18,30 +18,30 @@ struct G4HepEmGammaData {
 
 //// === conversion related data. Grid: 146 bins form 2mc^2 - 100 TeV
   const int     fConvEnergyGridSize = 147;
-  double        fConvLogMinEkin = 0.0;    // = 0.021759358706830;  // log(2mc^2)
-  double        fConvEILDelta = 0.0;      // = 7.935247775833226;  // 1./[log(emax/emin)/146]
-  double*       fConvEnergyGrid = nullptr;    // [fConvEnergyGrid]
+  G4double        fConvLogMinEkin = 0.0;    // = 0.021759358706830;  // log(2mc^2)
+  G4double        fConvEILDelta = 0.0;      // = 7.935247775833226;  // 1./[log(emax/emin)/146]
+  G4double*       fConvEnergyGrid = nullptr;    // [fConvEnergyGrid]
 
 //// === compton related data. 84 bins (7 per decades) from 100 eV - 100 TeV
   const int     fCompEnergyGridSize = 85;
-  double        fCompLogMinEkin = 0.0;     // = -9.210340371976182; // log(0.0001) i.e. log(100 eV)
-  double        fCompEILDelta = 0.0;       // =  3.040061373322763; // 1./[log(emax/emin)/84]
-  double*       fCompEnergyGrid = nullptr;     // [fCompEnergyGridSize]
+  G4double        fCompLogMinEkin = 0.0;     // = -9.210340371976182; // log(0.0001) i.e. log(100 eV)
+  G4double        fCompEILDelta = 0.0;       // =  3.040061373322763; // 1./[log(emax/emin)/84]
+  G4double*       fCompEnergyGrid = nullptr;     // [fCompEnergyGridSize]
 
   // the macroscopic cross sections for all materials and for [conversion,compton]
   // at each material
-  double*       fConvCompMacXsecData = nullptr;   // [#materials*2*(fConvEnergyGridSize+fCompEnergyGridSize)]
+  G4double*       fConvCompMacXsecData = nullptr;   // [#materials*2*(fConvEnergyGridSize+fCompEnergyGridSize)]
 
 //// === element selector for conversion (note: KN compton interaction do not know anything about Z)
   int           fElemSelectorConvEgridSize = 0;
   int           fElemSelectorConvNumData = 0;          // total number of data i.e. lenght of fElemSelectorConvData
-  double        fElemSelectorConvLogMinEkin = 0.0;
-  double        fElemSelectorConvEILDelta = 0.0;         //
+  G4double        fElemSelectorConvLogMinEkin = 0.0;
+  G4double        fElemSelectorConvEILDelta = 0.0;         //
   int*          fElemSelectorConvStartIndexPerMat = nullptr; // [fNumMaterials]
-  double*       fElemSelectorConvEgrid = nullptr;            // [fElemSelectorConvEgridSize]
+  G4double*       fElemSelectorConvEgrid = nullptr;            // [fElemSelectorConvEgridSize]
 
   /** Element selector data for all materials */
-  double*       fElemSelectorConvData = nullptr;             // [fElemSelectorConvNumData]
+  G4double*       fElemSelectorConvData = nullptr;             // [fElemSelectorConvNumData]
 };
 
 /**

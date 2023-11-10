@@ -96,11 +96,11 @@ struct G4HepEmElectronData {
   /** Number of discrete kinetic energy values in the grid (\f$N\f$). */
   int        fELossEnergyGridSize = 0;
   /** Logarithm of the minimum kinetic energy value of the grid (\f$\ln(E_0)\f$)*/
-  double     fELossLogMinEkin = 0.0;     // log of the E_0
+  G4double     fELossLogMinEkin = 0.0;     // log of the E_0
   /** Inverse of the log-scale delta value (\f$ 1/[log(E_{N-1}/E_0)/(N-1)]\f$). */
-  double     fELossEILDelta = 0.0;
+  G4double     fELossEILDelta = 0.0;
   /** The grid of the discrete kinetic energy values (\f$E_0, E_1,\ldots, E_{N-1}\f$).*/
-  double*    fELossEnergyGrid = nullptr; // [fELossEnergyGridSize]
+  G4double*    fELossEnergyGrid = nullptr; // [fELossEnergyGridSize]
   /** The energy loss data: **restricted dE/dx, range and inverse range** data.
     *
     * The restricted dE/dx, range (and corresponding inverse range) data values,
@@ -152,7 +152,7 @@ struct G4HepEmElectronData {
     * terms of memory consumption and speed) when accessing the restricted energy loss
     * related, i.e. stopping power, range and inverse range data in the \f$e^-/e^+\f$ stepping.
     */
-  double*    fELossData = nullptr; // [5xfELossEnergyGridSize x fNumMatCuts]
+  G4double*    fELossData = nullptr; // [5xfELossEnergyGridSize x fNumMatCuts]
 /// @} */ // end: eloss
   //
 
@@ -231,7 +231,7 @@ struct G4HepEmElectronData {
    * accessing the restricted macroscopic cross section data in the \f$e^-/e^+\f$ stepping.
    *
    */
-  double*    fResMacXSecData = nullptr; // [fResMacXSecNumData]
+  G4double*    fResMacXSecData = nullptr; // [fResMacXSecNumData]
 /// @} */ // end: restricted macroscopic cross section
 
   /**
@@ -262,7 +262,7 @@ struct G4HepEmElectronData {
    * for the above pattern used to store the dE/dx and range data. Using this
    * function **ensures optimal** data **cache utilisation at run-time**.
    */
-  double*    fTr1MacXSecData = nullptr; // [2xfELossEnergyGridSize x fNumMaterials]
+  G4double*    fTr1MacXSecData = nullptr; // [2xfELossEnergyGridSize x fNumMaterials]
 /// @} */ // end: macroscopic first transport cross section
 
 
@@ -324,21 +324,21 @@ struct G4HepEmElectronData {
   /** Indices, at which data starts for a given material - cuts couple.*/
   int*      fElemSelectorIoniStartIndexPerMatCut = nullptr;     // [fNumMatCuts]
   /** Element selector data for all material - cuts couples with multiple element material.*/
-  double*   fElemSelectorIoniData = nullptr;                    // [fElemSelectorIoniNumData]
+  G4double*   fElemSelectorIoniData = nullptr;                    // [fElemSelectorIoniNumData]
 
   /** Total number of element selector data for the Seltzer-Berger model for e-/e+ bremsstrahlung.*/
   int       fElemSelectorBremSBNumData = 0;
   /** Indices, at which data starts for a given material - cuts couple.*/
   int*      fElemSelectorBremSBStartIndexPerMatCut = nullptr;   // [fNumMatCuts]
   /** Element selector data for all material - cuts couples with multiple element material.*/
-  double*   fElemSelectorBremSBData = nullptr;                  // [fElemSelectorBremSBNumData]
+  G4double*   fElemSelectorBremSBData = nullptr;                  // [fElemSelectorBremSBNumData]
 
   /** Total number of element selector data for the relativistic (improved Bethe-Heitler) model for e-/e+ bremsstrahlung.*/
   int       fElemSelectorBremRBNumData = 0;
   /** Indices, at which data starts for a given material - cuts couple.*/
   int*      fElemSelectorBremRBStartIndexPerMatCut = nullptr;   // [fNumMatCuts]
   /** Element selector data for all material - cuts couples with multiple element material.*/
-  double*   fElemSelectorBremRBData = nullptr;                  // [fElemSelectorBremRBNumData]
+  G4double*   fElemSelectorBremRBData = nullptr;                  // [fElemSelectorBremRBNumData]
 /// @} */ // end: target element selectors
 };
 

@@ -63,52 +63,52 @@ public:
 
   // Position
   G4HepEmHostDevice
-  void    SetPosition(double* posv) {
+  void    SetPosition(G4double* posv) {
     fPosition[0] = posv[0];
     fPosition[1] = posv[1];
     fPosition[2] = posv[2];
   }
 
   G4HepEmHostDevice
-  void    SetPosition(double x, double y, double z) {
+  void    SetPosition(G4double x, G4double y, G4double z) {
     fPosition[0] = x;
     fPosition[1] = y;
     fPosition[2] = z;
   }
 
   G4HepEmHostDevice
-  double* GetPosition() { return fPosition; }
+  G4double* GetPosition() { return fPosition; }
 
   // Direction
   G4HepEmHostDevice
-  void    SetDirection(double* dirv) {
+  void    SetDirection(G4double* dirv) {
     fDirection[0] = dirv[0];
     fDirection[1] = dirv[1];
     fDirection[2] = dirv[2];
   }
 
   G4HepEmHostDevice
-  void    SetDirection(double x, double y, double z) {
+  void    SetDirection(G4double x, G4double y, G4double z) {
     fDirection[0] = x;
     fDirection[1] = y;
     fDirection[2] = z;
   }
 
   G4HepEmHostDevice
-  double* GetDirection() {return fDirection; }
+  G4double* GetDirection() {return fDirection; }
 
   // Kinetic energy
   G4HepEmHostDevice
-  void    SetEKin(double ekin)  {
+  void    SetEKin(G4double ekin)  {
     fEKin    = ekin;
     fLogEKin = 100.0;
   }
 
   // !!! should be used only with special caution !!!
   G4HepEmHostDevice
-  void    SetLEKin(double lekin)  { fLogEKin = lekin; }
+  void    SetLEKin(G4double lekin)  { fLogEKin = lekin; }
   G4HepEmHostDevice
-  void    SetEKin(double ekin, double lekin)  {
+  void    SetEKin(G4double ekin, G4double lekin)  {
     fEKin    = ekin;
     fLogEKin = lekin;
   }
@@ -116,9 +116,9 @@ public:
 
 
   G4HepEmHostDevice
-  double  GetEKin()    const { return fEKin; }
+  G4double  GetEKin()    const { return fEKin; }
   G4HepEmHostDevice
-  double  GetLogEKin() {
+  G4double  GetLogEKin() {
     if (fLogEKin > 99.0) {
       fLogEKin = (fEKin > 0.) ? G4HepEmLog(fEKin) : -30;
     }
@@ -127,45 +127,45 @@ public:
 
   // Charge
   G4HepEmHostDevice
-  void    SetCharge(double ch) { fCharge = ch; }
+  void    SetCharge(G4double ch) { fCharge = ch; }
 
   G4HepEmHostDevice
-  double  GetCharge() const { return fCharge; }
+  G4double  GetCharge() const { return fCharge; }
 
   //Energy deposit
   G4HepEmHostDevice
-  void    SetEnergyDeposit(double val) { fEDeposit  = val; }
+  void    SetEnergyDeposit(G4double val) { fEDeposit  = val; }
   G4HepEmHostDevice
-  void    AddEnergyDeposit(double val) { fEDeposit += val; }
+  void    AddEnergyDeposit(G4double val) { fEDeposit += val; }
   G4HepEmHostDevice
-  double  GetEnergyDeposit()  const    { return fEDeposit; }
+  G4double  GetEnergyDeposit()  const    { return fEDeposit; }
 
   G4HepEmHostDevice
-  void    SetGStepLength(double gsl)   { fGStepLength = gsl;  }
+  void    SetGStepLength(G4double gsl)   { fGStepLength = gsl;  }
   G4HepEmHostDevice
-  double  GetGStepLength()    const    { return fGStepLength; }
+  G4double  GetGStepLength()    const    { return fGStepLength; }
 
   // Macroscopic cross section
   G4HepEmHostDevice
-  void    SetMFP(double val, int pindx) { fMFPs[pindx] = val; }
+  void    SetMFP(G4double val, int pindx) { fMFPs[pindx] = val; }
   G4HepEmHostDevice
-  double  GetMFP(int pindx)   const     { return fMFPs[pindx]; }
+  G4double  GetMFP(int pindx)   const     { return fMFPs[pindx]; }
   G4HepEmHostDevice
-  double* GetMFP()                      { return fMFPs; }
+  G4double* GetMFP()                      { return fMFPs; }
 
   // Number of intercation left for the processes with mac-xsec above
   G4HepEmHostDevice
-  void    SetNumIALeft(double val, int pindx) {fNumIALeft[pindx] = val; }
+  void    SetNumIALeft(G4double val, int pindx) {fNumIALeft[pindx] = val; }
   G4HepEmHostDevice
-  double  GetNumIALeft(int pindx) const       {return fNumIALeft[pindx]; }
+  G4double  GetNumIALeft(int pindx) const       {return fNumIALeft[pindx]; }
   G4HepEmHostDevice
-  double* GetNumIALeft()                      {return fNumIALeft; }
+  G4double* GetNumIALeft()                      {return fNumIALeft; }
 
 
   G4HepEmHostDevice
-  void    SetSafety(double s) { fSafety = s; }
+  void    SetSafety(G4double s) { fSafety = s; }
   G4HepEmHostDevice
-  double  GetSafety() const   { return fSafety; }
+  G4double  GetSafety() const   { return fSafety; }
 
 
   // ID
@@ -239,16 +239,16 @@ public:
 
 private:
 
-  double   fPosition[3];
-  double   fDirection[3];
-  double   fEKin;
-  double   fLogEKin;
-  double   fCharge;
-  double   fEDeposit;
-  double   fGStepLength;   // step length along the original direction (straight line)
-  double   fMFPs[3];       // pair, compton, photo-electric in case of photon
-  double   fNumIALeft[3];  // ioni, brem, (e+-e- annihilation) in case of e- (e+)
-  double   fSafety;
+  G4double   fPosition[3];
+  G4double   fDirection[3];
+  G4double   fEKin;
+  G4double   fLogEKin;
+  G4double   fCharge;
+  G4double   fEDeposit;
+  G4double   fGStepLength;   // step length along the original direction (straight line)
+  G4double   fMFPs[3];       // pair, compton, photo-electric in case of photon
+  G4double   fNumIALeft[3];  // ioni, brem, (e+-e- annihilation) in case of e- (e+)
+  G4double   fSafety;
 
   int      fID;
   int      fIDParent;

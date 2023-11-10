@@ -13,13 +13,13 @@
 // original direction, the real original direction [u1,u2,u3] in the lab frame
 // needs to be accounted and the final new direction, i.e. in the lab frame is
 // computed.
-void RotateToReferenceFrame(double &u, double &v, double &w, const double* refDir) {
-  double up = refDir[0]*refDir[0] + refDir[1]*refDir[1];
+void RotateToReferenceFrame(G4double &u, G4double &v, G4double &w, const G4double* refDir) {
+  G4double up = refDir[0]*refDir[0] + refDir[1]*refDir[1];
   if (up>0.) {
     up = std::sqrt(up);
-    const double px = u;
-    const double py = v;
-    const double pz = w;
+    const G4double px = u;
+    const G4double py = v;
+    const G4double pz = w;
     u = (refDir[0]*refDir[2]*px - refDir[1]*py)/up + refDir[0]*pz;
     v = (refDir[1]*refDir[2]*px + refDir[0]*py)/up + refDir[1]*pz;
     w =    -up*px +             refDir[2]*pz;
@@ -29,13 +29,13 @@ void RotateToReferenceFrame(double &u, double &v, double &w, const double* refDi
   }
 }
 
-void RotateToReferenceFrame(double* dir, const double* refDir) {
-  double up = refDir[0]*refDir[0] + refDir[1]*refDir[1];
+void RotateToReferenceFrame(G4double* dir, const G4double* refDir) {
+  G4double up = refDir[0]*refDir[0] + refDir[1]*refDir[1];
   if (up>0.) {
     up = std::sqrt(up);
-    const double px = dir[0];
-    const double py = dir[1];
-    const double pz = dir[2];
+    const G4double px = dir[0];
+    const G4double py = dir[1];
+    const G4double pz = dir[2];
     dir[0] = (refDir[0]*refDir[2]*px - refDir[1]*py)/up + refDir[0]*pz;
     dir[1] = (refDir[1]*refDir[2]*px + refDir[0]*py)/up + refDir[1]*pz;
     dir[2] =    -up*px +             refDir[2]*pz;
@@ -46,33 +46,33 @@ void RotateToReferenceFrame(double* dir, const double* refDir) {
 }
 
 // use the improved, robust spline interpolation that I put in G4 10.6
-double GetSpline(double x1, double x2, double y1, double y2, double secderiv1, double secderiv2, double x)
+G4double GetSpline(G4double x1, G4double x2, G4double y1, G4double y2, G4double secderiv1, G4double secderiv2, G4double x)
 {
   // Unchecked precondition: x1 < x < x2
-  const double dl = x2 - x1;
+  const G4double dl = x2 - x1;
   // note: all corner cases of the previous methods are covered and eventually
   //       gives b=0/1 that results in y=y0\y_{N-1} if e<=x[0]/e>=x[N-1] or
   //       y=y_i/y_{i+1} if e<x[i]/e>=x[i+1] due to small numerical errors
-  const double  b = G4HepEmMax(0., G4HepEmMin(1., (x - x1)/dl));
-  const double os = 0.166666666667; // 1./6.
-  const double c0 = (2.0 - b)*secderiv1;
-  const double c1 = (1.0 + b)*secderiv2;
+  const G4double  b = G4HepEmMax(0., G4HepEmMin(1., (x - x1)/dl));
+  const G4double os = 0.166666666667; // 1./6.
+  const G4double c0 = (2.0 - b)*secderiv1;
+  const G4double c1 = (1.0 + b)*secderiv2;
   return y1 + b*(y2 - y1) + (b*(b-1.0))*(c0+c1)*(dl*dl*os);
 }
 
 // use the improved, robust spline interpolation that I put in G4 10.6
-double GetSplineLog(int ndata, double* xdata, double* ydata, double* secderiv, double x, double logx, double logxmin, double invLDBin) {
+G4double GetSplineLog(int ndata, G4double* xdata, G4double* ydata, G4double* secderiv, G4double x, G4double logx, G4double logxmin, G4double invLDBin) {
   // make sure that $x \in  [x[0],x[ndata-1]]$
-  const double xv = G4HepEmMax(xdata[0], G4HepEmMin(xdata[ndata-1], x));
+  const G4double xv = G4HepEmMax(xdata[0], G4HepEmMin(xdata[ndata-1], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
   const int   idx = (int)G4HepEmMax(0., G4HepEmMin((logx-logxmin)*invLDBin, ndata-2.));
   return GetSpline(xdata[idx], xdata[idx+1], ydata[idx], ydata[idx+1], secderiv[idx], secderiv[idx+1], xv);
 }
 
 // same as above but both ydata and secderiv are stored in ydata array
-double GetSplineLog(int ndata, double* xdata, double* ydata, double x, double logx, double logxmin, double invLDBin) {
+G4double GetSplineLog(int ndata, G4double* xdata, G4double* ydata, G4double x, G4double logx, G4double logxmin, G4double invLDBin) {
   // make sure that $x \in  [x[0],x[ndata-1]]$
-  const double xv = G4HepEmMax(xdata[0], G4HepEmMin(xdata[ndata-1], x));
+  const G4double xv = G4HepEmMax(xdata[0], G4HepEmMin(xdata[ndata-1], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
   const int   idx = (int)G4HepEmMax(0., G4HepEmMin((logx-logxmin)*invLDBin, ndata-2.));
   const int  idx2 = 2*idx; 
@@ -81,9 +81,9 @@ double GetSplineLog(int ndata, double* xdata, double* ydata, double x, double lo
 
 
 // same as above but all xdata, ydata and secderiv are stored in data array
-double GetSplineLog(int ndata, double* data, double x, double logx, double logxmin, double invLDBin) {
+G4double GetSplineLog(int ndata, G4double* data, G4double x, G4double logx, G4double logxmin, G4double invLDBin) {
   // make sure that $x \in  [x[0],x[ndata-1]]$
-  const double xv = G4HepEmMax(data[0], G4HepEmMin(data[3*(ndata-1)], x));
+  const G4double xv = G4HepEmMax(data[0], G4HepEmMin(data[3*(ndata-1)], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
   const int   idx = (int)G4HepEmMax(0., G4HepEmMin((logx-logxmin)*invLDBin, ndata-2.));
   const int  idx3 = 3*idx;
@@ -92,18 +92,18 @@ double GetSplineLog(int ndata, double* data, double x, double logx, double logxm
 
 
 // this is used for getting inverse-range on host
-double GetSpline(double* xdata, double* ydata, double* secderiv, double x, int idx, int step) {
+G4double GetSpline(G4double* xdata, G4double* ydata, G4double* secderiv, G4double x, int idx, int step) {
   return GetSpline(xdata[step*idx], xdata[step*(idx+1)], ydata[idx], ydata[idx+1], secderiv[idx], secderiv[idx+1], x);
 }
 
 // same as above but both ydata and secderiv are stored in ydata array
-double GetSpline(double* xdata, double* ydata, double x, int idx) {
+G4double GetSpline(G4double* xdata, G4double* ydata, G4double x, int idx) {
   const int  idx2 = 2*idx;
   return GetSpline(xdata[idx], xdata[idx+1], ydata[idx2], ydata[idx2+2], ydata[idx2+1], ydata[idx2+3], x);
 }
 
 // same as above but both xdata, ydata and secderiv are stored in data array
-double GetSpline(double* data, double x, int idx) {
+G4double GetSpline(G4double* data, G4double x, int idx) {
   const int  idx3 = 3*idx;
   return GetSpline(data[idx3], data[idx3+3], data[idx3+1], data[idx3+4], data[idx3+2], data[idx3+5], x);
 }
@@ -111,7 +111,7 @@ double GetSpline(double* data, double x, int idx) {
 // this is used to get index for inverse range on host
 // NOTE: it is assumed that x[0] <= x and x < x[step*(num-1)]
 // step: the delta with which   the x values are located in xdata (i.e. =1 by default)
-int    FindLowerBinIndex(double* xdata, int num, double x, int step) {
+int    FindLowerBinIndex(G4double* xdata, int num, G4double x, int step) {
   // Perform a binary search to find the interval val is in
   int ml = -1;
   int mu = num-1;

@@ -68,8 +68,8 @@ public:
 
 // access of data structures 
     const SamplingTablePerZ* GetSamplingTablesForZ(int iz) { return fSBSamplingTables[iz]; }
-    const double*            GetElEnergyVect()             { return fElEnergyVect.data(); }
-    const double*            GetKappaVect()                { return fKappaVect.data(); }
+    const G4double*            GetElEnergyVect()             { return fElEnergyVect.data(); }
+    const G4double*            GetKappaVect()                { return fKappaVect.data(); }
 
 
 private:

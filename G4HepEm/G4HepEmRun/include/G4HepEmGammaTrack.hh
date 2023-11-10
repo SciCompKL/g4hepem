@@ -29,9 +29,9 @@ public:
   G4HepEmTrack*  GetTrack()  { return &fTrack; }
 
   G4HepEmHostDevice
-  void   SetPEmxSec(double mxsec) { fPEmxSec = mxsec; }
+  void   SetPEmxSec(G4double mxsec) { fPEmxSec = mxsec; }
   G4HepEmHostDevice
-  double GetPEmxSec() const       { return fPEmxSec; }
+  G4double GetPEmxSec() const       { return fPEmxSec; }
 
   G4HepEmHostDevice
   void ReSet() {
@@ -42,7 +42,7 @@ public:
     
 private:
   G4HepEmTrack  fTrack;
-  double        fPEmxSec;
+  G4double        fPEmxSec;
 };
 
 

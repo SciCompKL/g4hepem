@@ -7,18 +7,18 @@ class  G4HepEmRandomEngine;
 
 
 G4HepEmHostDevice
-double SampleCostModifiedTsai(const double thePrimEkin, G4HepEmRandomEngine* rnge);
+G4double SampleCostModifiedTsai(const G4double thePrimEkin, G4HepEmRandomEngine* rnge);
 
 
 G4HepEmHostDevice
-void EvaluateLPMFunctions(double& funcXiS, double& funcGS, double& funcPhiS,
-                     const double egamma, const double etotal, const double elpm,
-                     const double z23, const double ilVarS1, const double ilVarS1Cond,
-                     const double densityCor, const double times);
+void EvaluateLPMFunctions(G4double& funcXiS, G4double& funcGS, G4double& funcPhiS,
+                     const G4double egamma, const G4double etotal, const G4double elpm,
+                     const G4double z23, const G4double ilVarS1, const G4double ilVarS1Cond,
+                     const G4double densityCor, const G4double times);
 
 // LPM functions G(s) and Phi(s) over an s-value grid of: ds=0.05 on [0:2.0] (2x41)
 G4HepEmHostDeviceConstant
-const double kFuncLPM[] = {
+const G4double kFuncLPM[] = {
   0.0000E+00, 0.0000E+00,  6.9163E-02, 2.5747E-01,  2.0597E-01, 4.4573E-01,
   3.5098E-01, 5.8373E-01,  4.8095E-01, 6.8530E-01,  5.8926E-01, 7.6040E-01,
   6.7626E-01, 8.1626E-01,  7.4479E-01, 8.5805E-01,  7.9826E-01, 8.8952E-01,

@@ -36,12 +36,12 @@ void InitMaterialAndCoupleData(struct G4HepEmData* hepEmData, struct G4HepEmPara
   //  G4cout << *theMaterialTable;
   //
   // Allocate temporary vectors to query the Sandia coefficients per atom.
-  std::vector<double> sandiaCofsPerAtom(4, 0.0);
-  std::vector<double> lastSandiaCofsPerAtom(4, 0.0);
+  std::vector<G4double> sandiaCofsPerAtom(4, 0.0);
+  std::vector<G4double> lastSandiaCofsPerAtom(4, 0.0);
   // Allocate temporary vectors to store the energy intervals and coefficients
   // for the current element.
-  std::vector<double> sandiaEnergies;
-  std::vector<double> sandiaCoefficients;
+  std::vector<G4double> sandiaEnergies;
+  std::vector<G4double> sandiaCoefficients;
   //
   // 0. count G4MaterialCutsCouple and unique G4Material objects that are used in
   //    the courrent geometry. Record the indices of the used, unique materials.
@@ -69,8 +69,8 @@ void InitMaterialAndCoupleData(struct G4HepEmData* hepEmData, struct G4HepEmPara
   AllocateElementData  (&(hepEmData->fTheElementData));
   //
   // auxiliary arrays for screening: complete coherent and incoherent screening constant computed by using the DF model of the atom.
-  const double kFelLowZet  [] = { 0.0, 5.3104, 4.7935, 4.7402, 4.7112, 4.6694, 4.6134, 4.5520 };
-  const double kFinelLowZet[] = { 0.0, 5.9173, 5.6125, 5.5377, 5.4728, 5.4174, 5.3688, 5.3236 };
+  const G4double kFelLowZet  [] = { 0.0, 5.3104, 4.7935, 4.7402, 4.7112, 4.6694, 4.6134, 4.5520 };
+  const G4double kFinelLowZet[] = { 0.0, 5.9173, 5.6125, 5.5377, 5.4728, 5.4174, 5.3688, 5.3236 };
   // 2. Fill them in
   numUsedG4MatCuts = 0;
   numUsedG4Mat     = 0;
@@ -112,7 +112,7 @@ void InitMaterialAndCoupleData(struct G4HepEmData* hepEmData, struct G4HepEmPara
       matData.fG4MatIndex              = matIndx;
       matData.fNumOfElement            = numOfElement;
       matData.fElementVect             = new int[numOfElement]{};
-      matData.fNumOfAtomsPerVolumeVect = new double[numOfElement]{};
+      matData.fNumOfAtomsPerVolumeVect = new G4double[numOfElement]{};
       matData.fDensity                 = mat->GetDensity();
       matData.fDensityCorFactor        = 4.0*CLHEP::pi*CLHEP::classic_electr_radius*CLHEP::electron_Compton_length*CLHEP::electron_Compton_length*mat->GetElectronDensity();
       matData.fElectronDensity         = mat->GetElectronDensity();
@@ -120,9 +120,9 @@ void InitMaterialAndCoupleData(struct G4HepEmData* hepEmData, struct G4HepEmPara
       matData.fMeanExEnergy            = mat->GetIonisation()->GetMeanExcitationEnergy();
 
       // go for some U-msc related data per materials
-      const double zeff                = mat->GetIonisation()->GetZeffective();
-      const double zeff16              = std::pow(zeff, 1.0/6.0);
-      const double zeff13              = zeff16*zeff16;
+      const G4double zeff                = mat->GetIonisation()->GetZeffective();
+      const G4double zeff16              = std::pow(zeff, 1.0/6.0);
+      const G4double zeff13              = zeff16*zeff16;
       matData.fZeff                    = zeff;
       matData.fZeff23                  = zeff13*zeff13;
       matData.fZeffSqrt                = std::sqrt(zeff);
@@ -138,7 +138,7 @@ void InitMaterialAndCoupleData(struct G4HepEmData* hepEmData, struct G4HepEmPara
       matData.fUMSCStepMinPars[0]      = 15.99/(1. + 0.119*zeff);
       matData.fUMSCStepMinPars[1]      = 4.390/(1. + 0.079*zeff);
 #endif
-      const double dum0                = 9.90395E-1 + zeff16*(-1.68386E-1 + zeff16*9.3286E-2);
+      const G4double dum0                = 9.90395E-1 + zeff16*(-1.68386E-1 + zeff16*9.3286E-2);
       matData.fUMSCThetaCoeff[0]       = dum0*(1.0 - 8.7780E-2/zeff);
       matData.fUMSCThetaCoeff[1]       = dum0*(4.0780E-2 + 1.7315E-4*zeff);
       matData.fUMSCTailCoeff[0]        = 2.3785    - zeff13*(4.1981E-1 - zeff13*6.3100E-2);
@@ -150,8 +150,8 @@ void InitMaterialAndCoupleData(struct G4HepEmData* hepEmData, struct G4HepEmPara
       G4SandiaTable* sandia         = mat->GetSandiaTable();
       int matNbOfSandiaIntervals    = sandia->GetMatNbOfIntervals();
       matData.fNumOfSandiaIntervals = matNbOfSandiaIntervals;
-      matData.fSandiaEnergies       = new double[matNbOfSandiaIntervals]{};
-      matData.fSandiaCoefficients   = new double[4 * matNbOfSandiaIntervals]{};
+      matData.fSandiaEnergies       = new G4double[matNbOfSandiaIntervals]{};
+      matData.fSandiaCoefficients   = new G4double[4 * matNbOfSandiaIntervals]{};
       for (int i = 0; i < matNbOfSandiaIntervals; i++) {
         matData.fSandiaEnergies[i] = sandia->GetSandiaCofForMaterial(i, 0);
         for (int j = 0; j < 4; j++) {
@@ -168,20 +168,20 @@ void InitMaterialAndCoupleData(struct G4HepEmData* hepEmData, struct G4HepEmPara
         izet = std::min ( izet, (G4int)hepEmData->fTheElementData->fMaxZet );
         struct G4HepEmElemData& elData = hepEmData->fTheElementData->fElementData[izet];
         if (elData.fZet<0) {
-          double dZet          = (double)izet;
+          G4double dZet          = (G4double)izet;
           elData.fZet          = dZet;
           elData.fZet13        = std::pow(dZet, 1.0/3.0);
           elData.fZet23        = std::pow(dZet, 2.0/3.0);
           elData.fCoulomb      = ((*elmVec)[ie])->GetfCoulomb();
           elData.fLogZ         = std::log(dZet);
-          double Fel           = (izet<5) ? kFelLowZet[izet]   : std::log(184.15) -     elData.fLogZ/3.0;
-          double Finel         = (izet<5) ? kFinelLowZet[izet] : std::log(1194.0) - 2.0*elData.fLogZ/3.0;
+          G4double Fel           = (izet<5) ? kFelLowZet[izet]   : std::log(184.15) -     elData.fLogZ/3.0;
+          G4double Finel         = (izet<5) ? kFinelLowZet[izet] : std::log(1194.0) - 2.0*elData.fLogZ/3.0;
           elData.fZFactor1     = (Fel-elData.fCoulomb) + Finel/dZet;
-          const double FZLow   = 8.0*elData.fLogZ/3.0;
-          const double FZHigh  = 8.0*(elData.fLogZ/3.0 + elData.fCoulomb);
+          const G4double FZLow   = 8.0*elData.fLogZ/3.0;
+          const G4double FZHigh  = 8.0*(elData.fLogZ/3.0 + elData.fCoulomb);
           elData.fDeltaMaxLow  = std::exp((42.038 - FZLow)/8.29) - 0.958;
           elData.fDeltaMaxHigh = std::exp((42.038 - FZHigh)/8.29) - 0.958;
-          double varS1         = elData.fZet23/(184.15*184.15);
+          G4double varS1         = elData.fZet23/(184.15*184.15);
           elData.fILVarS1Cond  = 1./(std::log(std::sqrt(2.0)*varS1));
           elData.fILVarS1      = 1./std::log(varS1);
 
@@ -191,7 +191,7 @@ void InitMaterialAndCoupleData(struct G4HepEmData* hepEmData, struct G4HepEmPara
           // element, and discard / skip over duplicate intervals. A complication is
           // that GetSandiaCofPerAtom returns zeros if the energy is exactly Emin,
           // so add a small epsilon.
-          constexpr double kEpsilon = 1e-9;
+          constexpr G4double kEpsilon = 1e-9;
           // Now clear the last coefficients to make sure the first interval with
           // non-zero coefficients is taken.
           for (int i = 0; i < 4; i++) {
@@ -202,7 +202,7 @@ void InitMaterialAndCoupleData(struct G4HepEmData* hepEmData, struct G4HepEmPara
           sandiaEnergies.clear();
           sandiaCoefficients.clear();
           for (int i = 0; i < matNbOfSandiaIntervals; i++) {
-            const double energy = matData.fSandiaEnergies[i];
+            const G4double energy = matData.fSandiaEnergies[i];
             sandia->GetSandiaCofPerAtom(izet, energy + kEpsilon, sandiaCofsPerAtom);
             if (sandiaCofsPerAtom == lastSandiaCofsPerAtom) {
               continue;
@@ -217,8 +217,8 @@ void InitMaterialAndCoupleData(struct G4HepEmData* hepEmData, struct G4HepEmPara
           }
 
           elData.fNumOfSandiaIntervals = numberOfIntervals;
-          elData.fSandiaEnergies       = new double[numberOfIntervals]{};
-          elData.fSandiaCoefficients   = new double[4 * numberOfIntervals]{};
+          elData.fSandiaEnergies       = new G4double[numberOfIntervals]{};
+          elData.fSandiaCoefficients   = new G4double[4 * numberOfIntervals]{};
           for (int i = 0; i < numberOfIntervals; i++) {
             elData.fSandiaEnergies[i] = sandiaEnergies[i];
             for (int j = 0; j < 4; j++) {

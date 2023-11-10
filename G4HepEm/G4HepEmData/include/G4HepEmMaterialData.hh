@@ -46,35 +46,35 @@ struct G4HepEmMatData {
   /** The list of element indices in G4HepEmElemData (their atomic number Z), this material is composed of.*/
   int*      fElementVect = nullptr; // [fNumOfElement]
   /** The list of number-of-atoms-per-unit-volume for each element this material is composed of.*/
-  double*   fNumOfAtomsPerVolumeVect = nullptr; // [fNumOfElement]
+  G4double*   fNumOfAtomsPerVolumeVect = nullptr; // [fNumOfElement]
   /** The mass density (\f$\rho\f$) of the material in Geant4 internal units. */
-  double    fDensity = 0.0;
+  G4double    fDensity = 0.0;
   /** Density correction factor (\f$C_{Mg}\rho_{e^-}\f$) used in the `dielectric suppression`
     * of bremsstrahlung photon emission (\f$C_{Mg}=4\pi r_0 \hbar c/(mc^2)\f$ is the `Migdal constant`
     * and \f$\rho_{e^-}\f$ is the electron density of the material). */
-  double    fDensityCorFactor = 0.0;
+  G4double    fDensityCorFactor = 0.0;
   /** Electron density (\f$\rho_{e^-}\f$) of the material in Geant4 internal units.*/
-  double    fElectronDensity = 0.0;
+  G4double    fElectronDensity = 0.0;
   /** Radiation length. */
-  double    fRadiationLength = 0.0;
+  G4double    fRadiationLength = 0.0;
   /** Mean excition energy */
-  double    fMeanExEnergy    = 0.0;
+  G4double    fMeanExEnergy    = 0.0;
   //
   /** Number of intervals in the Sandia table */
   int       fNumOfSandiaIntervals = 0;
   /** Starting energy of the intervals */
-  double*   fSandiaEnergies = nullptr; // [fNumOfSandiaIntervals]
+  G4double*   fSandiaEnergies = nullptr; // [fNumOfSandiaIntervals]
   /** Coefficients for the interval (four per energy range) */
-  double*   fSandiaCoefficients = nullptr; // [4 x fNumOfSandiaIntervals]
+  G4double*   fSandiaCoefficients = nullptr; // [4 x fNumOfSandiaIntervals]
   //
-  double    fZeff;
-  double    fZeff23;
-  double    fZeffSqrt;
+  G4double    fZeff;
+  G4double    fZeff23;
+  G4double    fZeffSqrt;
   //
-  double    fUMSCPar;
-  double    fUMSCStepMinPars[2];
-  double    fUMSCTailCoeff[4];
-  double    fUMSCThetaCoeff[2];
+  G4double    fUMSCPar;
+  G4double    fUMSCStepMinPars[2];
+  G4double    fUMSCTailCoeff[4];
+  G4double    fUMSCThetaCoeff[2];
 };
 
 // Data for all materials used in the current geometry.

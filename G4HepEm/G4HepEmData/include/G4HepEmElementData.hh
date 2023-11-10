@@ -36,44 +36,44 @@
 struct G4HepEmElemData {
 
   /** The atomic number (Z) of the element. */
-  double  fZet = -1.0;
+  G4double  fZet = -1.0;
 
   /** \f$Z^{1/3}\f$ */
-  double  fZet13 = 0.0;
+  G4double  fZet13 = 0.0;
 
   /** \f$Z^{2/3}\f$ */
-  double  fZet23 = 0.0;
+  G4double  fZet23 = 0.0;
 
   /** Coulomb correction \f$ f_C \f$ */
-  double  fCoulomb = 0.0;
+  G4double  fCoulomb = 0.0;
 
   /** \f$ \ln(Z) \f$  */
-  double  fLogZ = 0.0;
+  G4double  fLogZ = 0.0;
 
   /** \f$ F_{\text{el}}-f_c+F_{\text{inel}}/Z \f$  */
-  double  fZFactor1 = 0.0;
+  G4double  fZFactor1 = 0.0;
 
   /** \f$ \exp \left[ \frac{42.038-F_{\text{low}}}{8.29} \right] -0.958 \f$ with \f$ Z_{\text{low}} = \frac{8}{3}\log(Z) \f$ */
-  double  fDeltaMaxLow = 0.0;
+  G4double  fDeltaMaxLow = 0.0;
 
   /** \f$ \exp \left[ \frac{42.038-F_{\text{high}}}{8.29} \right] -0.958 \f$ with \f$ F_{\text{high}} = 8[\log(Z)/3 + f_C] \f$ */
-  double  fDeltaMaxHigh = 0.0;
+  G4double  fDeltaMaxHigh = 0.0;
 
   /** LPM variable \f$ 1/ln [ \sqrt{2}s1 ] \f$ */
-  double  fILVarS1 = 0.0;
+  G4double  fILVarS1 = 0.0;
 
   /** LPM variable \f$ 1/ln[s1] \f$ */
-  double  fILVarS1Cond = 0.0;
+  G4double  fILVarS1Cond = 0.0;
 
   /** Number of intervals in the Sandia table */
   int     fNumOfSandiaIntervals = 0;
   /** Starting energy of the intervals */
-  double* fSandiaEnergies = nullptr; // [fNumOfSandiaIntervals]
+  G4double* fSandiaEnergies = nullptr; // [fNumOfSandiaIntervals]
   /** Coefficients for the interval (four per energy range) */
-  double* fSandiaCoefficients = nullptr; // [4 x fNumOfSandiaIntervals]
+  G4double* fSandiaCoefficients = nullptr; // [4 x fNumOfSandiaIntervals]
 
   /** Binding energy of the k-shell */
-  double  fKShellBindingEnergy = 0;
+  G4double  fKShellBindingEnergy = 0;
 };
 
 // Data for all elements that are used by G4HepEm.

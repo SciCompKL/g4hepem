@@ -61,26 +61,26 @@ void CopyElectronDataToDevice(struct G4HepEmElectronData* onHOST, struct G4HepEm
   // allocate memory on _d for the ELoss energy grid and all ELoss data and copy
   // them from form _h
   const int numELossData = 5*numELossGridData*numHepEmMatCuts;
-  gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fELossEnergyGrid), sizeof( double ) * numELossGridData ) );
-  gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fELossData),       sizeof( double ) * numELossData     ) );
-  gpuErrchk ( cudaMemcpy (   elDataHTo_d->fELossEnergyGrid,  onHOST->fELossEnergyGrid, sizeof( double ) * numELossGridData, cudaMemcpyHostToDevice ) );
-  gpuErrchk ( cudaMemcpy (   elDataHTo_d->fELossData,        onHOST->fELossData,       sizeof( double ) * numELossData,     cudaMemcpyHostToDevice ) );
+  gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fELossEnergyGrid), sizeof( G4double ) * numELossGridData ) );
+  gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fELossData),       sizeof( G4double ) * numELossData     ) );
+  gpuErrchk ( cudaMemcpy (   elDataHTo_d->fELossEnergyGrid,  onHOST->fELossEnergyGrid, sizeof( G4double ) * numELossGridData, cudaMemcpyHostToDevice ) );
+  gpuErrchk ( cudaMemcpy (   elDataHTo_d->fELossData,        onHOST->fELossData,       sizeof( G4double ) * numELossData,     cudaMemcpyHostToDevice ) );
   //
   // === Restricted macroscopic scross section data:
   //
   // allocate memory for all the macroscopic cross section related data on _d and compy from _h
   const int numResMacXSecs = onHOST->fResMacXSecNumData;
   gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fResMacXSecStartIndexPerMatCut), sizeof( int )    * numHepEmMatCuts ) );
-  gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fResMacXSecData),                sizeof( double ) * numResMacXSecs  ) );
+  gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fResMacXSecData),                sizeof( G4double ) * numResMacXSecs  ) );
   gpuErrchk ( cudaMemcpy (   elDataHTo_d->fResMacXSecStartIndexPerMatCut,  onHOST->fResMacXSecStartIndexPerMatCut, sizeof( int )    * numHepEmMatCuts, cudaMemcpyHostToDevice ) );
-  gpuErrchk ( cudaMemcpy (   elDataHTo_d->fResMacXSecData,                 onHOST->fResMacXSecData,                sizeof( double ) * numResMacXSecs,  cudaMemcpyHostToDevice ) );
+  gpuErrchk ( cudaMemcpy (   elDataHTo_d->fResMacXSecData,                 onHOST->fResMacXSecData,                sizeof( G4double ) * numResMacXSecs,  cudaMemcpyHostToDevice ) );
   //
   // === First macroscopic transport scross section data:
   //
   // allocate memory for all the tr1-mxsec data on _d and compy from _h
   const int numTr1MacXSecs = 2 * numELossGridData * numHepEmMats;
-  gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fTr1MacXSecData), sizeof( double ) * numTr1MacXSecs ) );
-  gpuErrchk ( cudaMemcpy (   elDataHTo_d->fTr1MacXSecData,  onHOST->fTr1MacXSecData, sizeof( double ) * numTr1MacXSecs,  cudaMemcpyHostToDevice ) ); 
+  gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fTr1MacXSecData), sizeof( G4double ) * numTr1MacXSecs ) );
+  gpuErrchk ( cudaMemcpy (   elDataHTo_d->fTr1MacXSecData,  onHOST->fTr1MacXSecData, sizeof( G4double ) * numTr1MacXSecs,  cudaMemcpyHostToDevice ) ); 
   //
   //  === Target element selector data (for ioni and brem EM models)
   //
@@ -88,9 +88,9 @@ void CopyElectronDataToDevice(struct G4HepEmElectronData* onHOST, struct G4HepEm
   const int numIoniData = onHOST->fElemSelectorIoniNumData;
   if (numIoniData > 0) {
     gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fElemSelectorIoniStartIndexPerMatCut), sizeof( int )    * numHepEmMatCuts ) );
-    gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fElemSelectorIoniData),                sizeof( double ) * numIoniData     ) );
+    gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fElemSelectorIoniData),                sizeof( G4double ) * numIoniData     ) );
     gpuErrchk ( cudaMemcpy (   elDataHTo_d->fElemSelectorIoniStartIndexPerMatCut,  onHOST->fElemSelectorIoniStartIndexPerMatCut, sizeof( int )    * numHepEmMatCuts, cudaMemcpyHostToDevice ) );
-    gpuErrchk ( cudaMemcpy (   elDataHTo_d->fElemSelectorIoniData,                 onHOST->fElemSelectorIoniData,                sizeof( double ) * numIoniData,     cudaMemcpyHostToDevice ) );
+    gpuErrchk ( cudaMemcpy (   elDataHTo_d->fElemSelectorIoniData,                 onHOST->fElemSelectorIoniData,                sizeof( G4double ) * numIoniData,     cudaMemcpyHostToDevice ) );
   } else {
     elDataHTo_d->fElemSelectorIoniStartIndexPerMatCut = nullptr;
     elDataHTo_d->fElemSelectorIoniData = nullptr;
@@ -99,9 +99,9 @@ void CopyElectronDataToDevice(struct G4HepEmElectronData* onHOST, struct G4HepEm
   const int numBremSBData = onHOST->fElemSelectorBremSBNumData;
   if (numBremSBData > 0) {
     gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fElemSelectorBremSBStartIndexPerMatCut), sizeof( int )    * numHepEmMatCuts ) );
-    gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fElemSelectorBremSBData),                sizeof( double ) * numBremSBData   ) );
+    gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fElemSelectorBremSBData),                sizeof( G4double ) * numBremSBData   ) );
     gpuErrchk ( cudaMemcpy (   elDataHTo_d->fElemSelectorBremSBStartIndexPerMatCut,  onHOST->fElemSelectorBremSBStartIndexPerMatCut, sizeof( int )    * numHepEmMatCuts, cudaMemcpyHostToDevice ) );
-    gpuErrchk ( cudaMemcpy (   elDataHTo_d->fElemSelectorBremSBData,                 onHOST->fElemSelectorBremSBData,                sizeof( double ) * numBremSBData,   cudaMemcpyHostToDevice ) );
+    gpuErrchk ( cudaMemcpy (   elDataHTo_d->fElemSelectorBremSBData,                 onHOST->fElemSelectorBremSBData,                sizeof( G4double ) * numBremSBData,   cudaMemcpyHostToDevice ) );
   } else {
     elDataHTo_d->fElemSelectorBremSBStartIndexPerMatCut = nullptr;
     elDataHTo_d->fElemSelectorBremSBData = nullptr;
@@ -110,9 +110,9 @@ void CopyElectronDataToDevice(struct G4HepEmElectronData* onHOST, struct G4HepEm
   const int numBremRBData = onHOST->fElemSelectorBremRBNumData;
   if (numBremRBData > 0) {
     gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fElemSelectorBremRBStartIndexPerMatCut), sizeof( int )    * numHepEmMatCuts ) );
-    gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fElemSelectorBremRBData),                sizeof( double ) * numBremRBData   ) );
+    gpuErrchk ( cudaMalloc ( &(elDataHTo_d->fElemSelectorBremRBData),                sizeof( G4double ) * numBremRBData   ) );
     gpuErrchk ( cudaMemcpy (   elDataHTo_d->fElemSelectorBremRBStartIndexPerMatCut,  onHOST->fElemSelectorBremRBStartIndexPerMatCut, sizeof( int )    * numHepEmMatCuts, cudaMemcpyHostToDevice ) );
-    gpuErrchk ( cudaMemcpy (   elDataHTo_d->fElemSelectorBremRBData,                 onHOST->fElemSelectorBremRBData,                sizeof( double ) * numBremRBData,   cudaMemcpyHostToDevice ) );
+    gpuErrchk ( cudaMemcpy (   elDataHTo_d->fElemSelectorBremRBData,                 onHOST->fElemSelectorBremRBData,                sizeof( G4double ) * numBremRBData,   cudaMemcpyHostToDevice ) );
   } else {
     elDataHTo_d->fElemSelectorBremRBStartIndexPerMatCut = nullptr;
     elDataHTo_d->fElemSelectorBremRBData = nullptr;

@@ -47,7 +47,7 @@ void BuildELossTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMode
   const int numELoss = hepEmParams->fNumLossTableBins+1;
   elData->fELossEnergyGridSize = numELoss;
   delete [] elData->fELossEnergyGrid;
-  elData->fELossEnergyGrid = new double[numELoss]{};
+  elData->fELossEnergyGrid = new G4double[numELoss]{};
   G4HepEmInitUtils::FillLogarithmicGrid(hepEmParams->fMinLossTableEnergy, hepEmParams->fMaxLossTableEnergy, numELoss,
                                         elData->fELossLogMinEkin, elData->fELossEILDelta, elData->fELossEnergyGrid);
 
@@ -70,11 +70,11 @@ void BuildELossTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMode
   //    their second derivative for a spline interpolation
   //  - fill these 4 later data into the elData structure for this mat-cut
   //
-  double* theDEDXArray       = new double[numELoss]{};
-  double* theRangeArray      = new double[numELoss]{};
-  double* theDEDXSDArray     = new double[numELoss]{};  // second derivatives for dedx
-  double* theRangeSDArray    = new double[numELoss]{};  // second derivatives for range
-  double* theInvRangeSDArray = new double[numELoss]{};  // second derivatives for inverse range
+  G4double* theDEDXArray       = new G4double[numELoss]{};
+  G4double* theRangeArray      = new G4double[numELoss]{};
+  G4double* theDEDXSDArray     = new G4double[numELoss]{};  // second derivatives for dedx
+  G4double* theRangeSDArray    = new G4double[numELoss]{};  // second derivatives for range
+  G4double* theInvRangeSDArray = new G4double[numELoss]{};  // second derivatives for inverse range
   //
   int numHepEmMCCData   = hepEmMCData->fNumMatCutData;
   elData->fNumMatCuts   = numHepEmMCCData;
@@ -83,33 +83,33 @@ void BuildELossTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMode
   // allocate array to store the [range, sec-deriv, dedx, sec-deriv, in-range-sec-deriv]
   // (numELoss values each) for all matrial-cuts couple
 //
-//  std::out << " ==== Allocating " << 5.0*numELoss*numHepEmMCCData*sizeof(double)/1024/1024
+//  std::out << " ==== Allocating " << 5.0*numELoss*numHepEmMCCData*sizeof(G4double)/1024/1024
 //            << " [MB] memory in G4HepEmELossTableBuilder::BuildELossTables \n"
 //            << " for Range, dE/dx and inv-Range for the " << numHepEmMCCData
 //            << "\n material-cuts couples used in the geometry. ( 5x " << numELoss
-//            << " `double` value for each)." << std::endl;
-  elData->fELossData = new double[5*numELoss*numHepEmMCCData]{};
+//            << " `G4double` value for each)." << std::endl;
+  elData->fELossData = new G4double[5*numELoss*numHepEmMCCData]{};
   //
   // starts the computations for all mat-cut couples
   for (int imc=0; imc<numHepEmMCCData; ++imc) {
     const struct G4HepEmMCCData& mccData = hepEmMCData->fMatCutData[imc];
     const G4MaterialCutsCouple* g4MatCut = theCoupleTable->GetMaterialCutsCouple(mccData.fG4MatCutIndex);
-    const double     elCutE = mccData.fSecElProdCutE;  // already includes e- tracking cut
-    const double    gamCutE = mccData.fSecGamProdCutE;
+    const G4double     elCutE = mccData.fSecElProdCutE;  // already includes e- tracking cut
+    const G4double    gamCutE = mccData.fSecGamProdCutE;
     // loop over the eloss-energy grid
     for (int ie=0; ie<numELoss; ++ie) {
-      double ekin = elData->fELossEnergyGrid[ie];
+      G4double ekin = elData->fELossEnergyGrid[ie];
       // compute the electronic dE/dx
-      double dedxIoni = std::max(0.0, mbModel->ComputeDEDX(g4MatCut, g4PartDef, ekin, elCutE));
+      G4double dedxIoni = std::max(0.0, mbModel->ComputeDEDX(g4MatCut, g4PartDef, ekin, elCutE));
       // compute the radiative dE/dx: smoothing of the high energy model value
-      double dlta = 0.0;
+      G4double dlta = 0.0;
       if ( ekin > hepEmParams->fElectronBremModelLim ) {
-        double dedx1  = sbModel->ComputeDEDX(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE);
-        double dedx2  = rbModel->ComputeDEDX(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE);
+        G4double dedx1  = sbModel->ComputeDEDX(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE);
+        G4double dedx2  = rbModel->ComputeDEDX(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE);
         dlta = dedx2 > 0.0 ? (dedx1/dedx2-1.0)*hepEmParams->fElectronBremModelLim : 0.0;
       }
       //sbModel->SetupForMaterial(g4PartDef, g4MatCut->GetMaterial(), ekin);
-      double dedxBrem = ekin > hepEmParams->fElectronBremModelLim
+      G4double dedxBrem = ekin > hepEmParams->fElectronBremModelLim
                         ? rbModel->ComputeDEDX(g4MatCut, g4PartDef, ekin, gamCutE)
                         : sbModel->ComputeDEDX(g4MatCut, g4PartDef, ekin, gamCutE);
       dedxBrem *= (1.0+dlta/ekin);
@@ -124,18 +124,18 @@ void BuildELossTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMode
     theRangeArray[0] = 2.0*elData->fELossEnergyGrid[0]/theDEDXArray[0];
     // - integrate the dE/dx by using a 16 point GL integral on [0,1] at each bin
     int ngl     = 16;
-    double* glX = new double[ngl]{};
-    double* glW = new double[ngl]{};
+    G4double* glX = new G4double[ngl]{};
+    G4double* glW = new G4double[ngl]{};
     G4HepEmInitUtils::GLIntegral(ngl, glX, glW);
     for (int i=0; i<numELoss-1; ++i) {
       // for each E_i, E_i+1 interval apply the GL by substitution
-      const double emin  = elData->fELossEnergyGrid[i];
-      const double emax  = elData->fELossEnergyGrid[i+1];
-      const double del   = (emax-emin);
-      double res   = 0.0;
+      const G4double emin  = elData->fELossEnergyGrid[i];
+      const G4double emax  = elData->fELossEnergyGrid[i+1];
+      const G4double del   = (emax-emin);
+      G4double res   = 0.0;
       for (int j=0; j<ngl; ++j) {
-        const double xi = del*glX[j]+emin;
-        double dedx = G4HepEmInitUtils::GetSpline(elData->fELossEnergyGrid, theDEDXArray, theDEDXSDArray, xi, i); // i is the low Energy bin index
+        const G4double xi = del*glX[j]+emin;
+        G4double dedx = G4HepEmInitUtils::GetSpline(elData->fELossEnergyGrid, theDEDXArray, theDEDXSDArray, xi, i); // i is the low Energy bin index
         if (dedx>0.0) {
           res += glW[j]/dedx;
         }
@@ -216,9 +216,9 @@ void BuildLambdaTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMod
   // ON GPU, first the ioni energy grid, ioni sigmas, their sec-derive, then for brem
 
   // prepare some space (for sure enough) to store an energy grid and mac-xsec
-  double*  energyGrid = new double[hepEmParams->fNumLossTableBins+2]{};
-  double*  macXSec    = new double[hepEmParams->fNumLossTableBins+2]{};
-  double*  secDerivs  = new double[hepEmParams->fNumLossTableBins+2]{};
+  G4double*  energyGrid = new G4double[hepEmParams->fNumLossTableBins+2]{};
+  G4double*  macXSec    = new G4double[hepEmParams->fNumLossTableBins+2]{};
+  G4double*  secDerivs  = new G4double[hepEmParams->fNumLossTableBins+2]{};
   // also prepare a maximal size array: 2 x 3 x (N+2) for each mat-cuts where
   // the 2 is for ioni + brem, the 3 is for E,Sig,SD and N+2 is the max number
   // of possible such entires and the + 5 is the #data, max value and energy grid related
@@ -227,7 +227,7 @@ void BuildLambdaTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMod
   // get the HepEm Material-cut couple data
   const struct G4HepEmMatCutData*  hepEmMCData = hepEmData->fTheMatCutData;
   int numHepEmMCCData = hepEmMCData->fNumMatCutData;
-  double*    xsecData = new double[2*3*(hepEmParams->fNumLossTableBins+2+5)*numHepEmMCCData]{};
+  G4double*    xsecData = new G4double[2*3*(hepEmParams->fNumLossTableBins+2+5)*numHepEmMCCData]{};
   //
   // allocate the arrays to store start indices per matrial-cuts couples
   elData->fResMacXSecStartIndexPerMatCut = new int[numHepEmMCCData]{};
@@ -237,35 +237,35 @@ void BuildLambdaTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMod
     // ====== Common data
     const struct G4HepEmMCCData& mccData = hepEmMCData->fMatCutData[imc];
     const G4MaterialCutsCouple* g4MatCut = theCoupleTable->GetMaterialCutsCouple(mccData.fG4MatCutIndex);
-    const double     elCutE = mccData.fSecElProdCutE;  // already includes e- tracking cut
-    const double    gamCutE = mccData.fSecGamProdCutE;
+    const G4double     elCutE = mccData.fSecElProdCutE;  // already includes e- tracking cut
+    const G4double    gamCutE = mccData.fSecGamProdCutE;
 
     // Energy grid in/out parameters
-    const double       emax = hepEmParams->fMaxLossTableEnergy;
+    const G4double       emax = hepEmParams->fMaxLossTableEnergy;
     const int    numDefEkin = hepEmParams->fNumLossTableBins+1;
-    const double      scale = std::log(hepEmParams->fMaxLossTableEnergy/hepEmParams->fMinLossTableEnergy);
+    const G4double      scale = std::log(hepEmParams->fMaxLossTableEnergy/hepEmParams->fMinLossTableEnergy);
 
-    double logEmin  = -1.0;
-    double invLEDel = -1.0;
+    G4double logEmin  = -1.0;
+    G4double invLEDel = -1.0;
 
     //
     // ===== Ionisation
     //
     // Fill the energy grid for Ioni
     // find out the lowest energy of the ioni Ekin grid and the number of entries
-    const double   eminIoni = iselectron ? 2*elCutE : elCutE;
-    const double  scaleIoni = std::log(emax/eminIoni);
+    const G4double   eminIoni = iselectron ? 2*elCutE : elCutE;
+    const G4double  scaleIoni = std::log(emax/eminIoni);
     const int      numEIoni = std::max(4, (int)std::lrint(numDefEkin*scaleIoni/scale)+1);
     G4HepEmInitUtils::FillLogarithmicGrid(eminIoni, emax, numEIoni, logEmin, invLEDel, energyGrid);
 
     // compute macroscopic cross section for Ioni.
     // track macroscopic cross section max and its energy
-    double       macXSecMax = -1.0;
-    double   macXSecMaxEner = -1.0;
+    G4double       macXSecMax = -1.0;
+    G4double   macXSecMaxEner = -1.0;
 
     for (int ie=0; ie<numEIoni; ++ie) {
-      const double theEKin  = energyGrid[ie];
-      const double theXSec  = std::max(0.0, mbModel->CrossSection(g4MatCut, g4PartDef, theEKin, elCutE, theEKin));
+      const G4double theEKin  = energyGrid[ie];
+      const G4double theXSec  = std::max(0.0, mbModel->CrossSection(g4MatCut, g4PartDef, theEKin, elCutE, theEKin));
       if (theXSec>macXSecMax) {
         macXSecMax     = theXSec;
         macXSecMaxEner = theEKin;
@@ -293,8 +293,8 @@ void BuildLambdaTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMod
     // ===== Bremsstrahlung
     //
     // Fill the energy grid for Brem:
-    const double   eminBrem = gamCutE;
-    const double  scaleBrem = std::log(emax/eminBrem);
+    const G4double   eminBrem = gamCutE;
+    const G4double  scaleBrem = std::log(emax/eminBrem);
     const int      numEBrem = std::max(4, (int)std::lrint(numDefEkin*scaleBrem/scale)+1);
     G4HepEmInitUtils::FillLogarithmicGrid(eminBrem, emax, numEBrem, logEmin, invLEDel, energyGrid);
 
@@ -304,14 +304,14 @@ void BuildLambdaTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMod
     macXSecMaxEner          = -1.0;
 
     for (int ie=0; ie<numEBrem; ++ie) {
-      const double theEKin  = energyGrid[ie];
-      double dlta = 0.0;
+      const G4double theEKin  = energyGrid[ie];
+      G4double dlta = 0.0;
       if ( theEKin > hepEmParams->fElectronBremModelLim ) {
-        double xsec1  = std::max(0.0, sbModel->CrossSection(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE, hepEmParams->fElectronBremModelLim));
-        double xsec2  = std::max(0.0, rbModel->CrossSection(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE, hepEmParams->fElectronBremModelLim));
+        G4double xsec1  = std::max(0.0, sbModel->CrossSection(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE, hepEmParams->fElectronBremModelLim));
+        G4double xsec2  = std::max(0.0, rbModel->CrossSection(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE, hepEmParams->fElectronBremModelLim));
         dlta = xsec2 > 0.0 ? (xsec1/xsec2-1.0)*hepEmParams->fElectronBremModelLim : 0.0;
       }
-      double theXSec = theEKin > hepEmParams->fElectronBremModelLim
+      G4double theXSec = theEKin > hepEmParams->fElectronBremModelLim
                         ? std::max(0.0, rbModel->CrossSection(g4MatCut, g4PartDef, theEKin, gamCutE, theEKin))
                         : std::max(0.0, sbModel->CrossSection(g4MatCut, g4PartDef, theEKin, gamCutE, theEKin));
       theXSec *= (1.0+dlta/theEKin);
@@ -341,13 +341,13 @@ void BuildLambdaTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMod
   if (elData->fResMacXSecData) {
     delete[] elData->fResMacXSecData;
   }
-//  std::cerr << " ==== Allocating " << indxCont*sizeof(double)/1024./1024.
+//  std::cerr << " ==== Allocating " << indxCont*sizeof(G4double)/1024./1024.
 //            << " [MB] memory in G4HepEmELossTableBuilder::BuildLambdaTables \n"
 //            << " for Ioni and Brem macroscopic scross secion for the " << numHepEmMCCData
 //            << "\n material-cuts couples used in the geometry. "
 //            << std::endl;
   elData->fResMacXSecNumData = indxCont;
-  elData->fResMacXSecData = new double[indxCont]{};
+  elData->fResMacXSecData = new G4double[indxCont]{};
   for (int i=0; i<indxCont; ++i) {
     elData->fResMacXSecData[i] = xsecData[i];
   }
@@ -380,10 +380,10 @@ void BuildTransportXSectionTables(G4VEmModel* mscModel, struct G4HepEmData* hepE
   //
   // allocate some array for intermediate storage of the TR1 MXsec and its second
   // derivatives for a given material
-  double* theTr1MXsec     = new double[numEner]{};
-  double* theTr1MXsecSD   = new double[numEner]{};
+  G4double* theTr1MXsec     = new G4double[numEner]{};
+  G4double* theTr1MXsecSD   = new G4double[numEner]{};
   // allocate the array to store (continuously) all macroscopic first tr. xsec
-  elData->fTr1MacXSecData = new double[2*numEner*numMaterials]{};
+  elData->fTr1MacXSecData = new G4double[2*numEner*numMaterials]{};
   //
   // loop over the HepEm materials and for each:
   // - get the corresponding G4Material
@@ -401,13 +401,13 @@ void BuildTransportXSectionTables(G4VEmModel* mscModel, struct G4HepEmData* hepE
     const G4Material* g4Mat = (*theG4MaterialTable)[matData.fG4MatIndex];
     // loop over the kinetic energies and comput the tr1 mxsec
     for (int ie=0; ie<numEner; ++ie) {
-      double ekin = elData->fELossEnergyGrid[ie];
+      G4double ekin = elData->fELossEnergyGrid[ie];
 #if G4VERSION_NUMBER >= 1100
       if (std::abs(ekin - 10.0) < 1.0E-6) {
         ekin = 10.0;
       }
 #endif
-      double tr1mxsec   = std::max(0.0, mscModel->CrossSectionPerVolume(g4Mat, g4PartDef, ekin));
+      G4double tr1mxsec   = std::max(0.0, mscModel->CrossSectionPerVolume(g4Mat, g4PartDef, ekin));
       theTr1MXsec[ie]   = tr1mxsec;
       theTr1MXsecSD[ie] = 0.0;
     }
@@ -455,9 +455,9 @@ void BuildElementSelectorTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerMod
     }
   }
   // allocate buffer
-  double* ioniData   = new double[(hepEmParams->fNumLossTableBins+4)*num]{};
-  double* bremSBData = new double[(hepEmParams->fNumLossTableBins+4)*num]{};
-  double* bremRBData = new double[(hepEmParams->fNumLossTableBins+4)*num]{};
+  G4double* ioniData   = new G4double[(hepEmParams->fNumLossTableBins+4)*num]{};
+  G4double* bremSBData = new G4double[(hepEmParams->fNumLossTableBins+4)*num]{};
+  G4double* bremRBData = new G4double[(hepEmParams->fNumLossTableBins+4)*num]{};
   //
   // allocate the arrays to store start indices per matrial-cuts couples
   elData->fElemSelectorIoniStartIndexPerMatCut   = new int[numHepEmMCCData]{};
@@ -483,14 +483,14 @@ void BuildElementSelectorTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerMod
     }
 
     // get the the secondary e- and gamma production energy thresholds
-    const double     elCutE = mccData.fSecElProdCutE;  // already includes e- tracking cut
-    const double    gamCutE = mccData.fSecGamProdCutE;
+    const G4double     elCutE = mccData.fSecElProdCutE;  // already includes e- tracking cut
+    const G4double    gamCutE = mccData.fSecGamProdCutE;
     //
     // ===== Ionisation
     //
     // generate the kinetic energy grid for this material-cut for ioni
-    double    minEKin = iselectron ? 2*elCutE : elCutE;
-    double    maxEKin = hepEmParams->fMaxLossTableEnergy;
+    G4double    minEKin = iselectron ? 2*elCutE : elCutE;
+    G4double    maxEKin = hepEmParams->fMaxLossTableEnergy;
     if (minEKin>=maxEKin) {
       elData->fElemSelectorIoniStartIndexPerMatCut[imc] = -1;
     } else {
@@ -530,7 +530,7 @@ void BuildElementSelectorTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerMod
   // write data to the final destination and clean all dynamically allocated auxilary memory
   elData->fElemSelectorIoniNumData = indxContIoni;
   if (indxContIoni > 0) {
-    elData->fElemSelectorIoniData    = new double[indxContIoni]{};
+    elData->fElemSelectorIoniData    = new G4double[indxContIoni]{};
     for (int i=0; i<indxContIoni; ++i) {
       elData->fElemSelectorIoniData[i] = ioniData[i];
     }
@@ -538,7 +538,7 @@ void BuildElementSelectorTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerMod
 
   elData->fElemSelectorBremSBNumData = indxContBremSB;
   if (indxContBremSB > 0) {
-    elData->fElemSelectorBremSBData    = new double[indxContBremSB]{};
+    elData->fElemSelectorBremSBData    = new G4double[indxContBremSB]{};
     for (int i=0; i<indxContBremSB; ++i) {
       elData->fElemSelectorBremSBData[i] = bremSBData[i];
     }
@@ -546,7 +546,7 @@ void BuildElementSelectorTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerMod
 
   elData->fElemSelectorBremRBNumData = indxContBremRB;
   if (indxContBremRB > 0) {
-    elData->fElemSelectorBremRBData    = new double[indxContBremRB]{};
+    elData->fElemSelectorBremRBData    = new G4double[indxContBremRB]{};
     for (int i=0; i<indxContBremRB; ++i) {
       elData->fElemSelectorBremRBData[i] = bremRBData[i];
     }
@@ -559,11 +559,11 @@ void BuildElementSelectorTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerMod
 }
 
 
-void BuildElementSelector(double minEKin, double maxEKin, int numBinsPerDecade, double *data, int& indxCont, const struct G4HepEmMatData& matData, G4VEmModel* emModel, double cut, const G4ParticleDefinition* g4PartDef) {
+void BuildElementSelector(G4double minEKin, G4double maxEKin, int numBinsPerDecade, G4double *data, int& indxCont, const struct G4HepEmMatData& matData, G4VEmModel* emModel, G4double cut, const G4ParticleDefinition* g4PartDef) {
   int     numElem    = matData.fNumOfElement;
-  double  logMinEKin = 0.0;
-  double  invLEDelta = 0.0;
-  double egridData[500];
+  G4double  logMinEKin = 0.0;
+  G4double  invLEDelta = 0.0;
+  G4double egridData[500];
   int       numEKins = InitElementSelectorEnergyGrid(numBinsPerDecade, egridData, minEKin, maxEKin, logMinEKin, invLEDelta);
   // fill in the first 3 values as #data, logMinEKin, and invLodEDelta
   data[indxCont++]   = numEKins;
@@ -572,16 +572,16 @@ void BuildElementSelector(double minEKin, double maxEKin, int numBinsPerDecade, 
   data[indxCont++]   = invLEDelta;
   // loop over the kinetic energy grid
   for (int ie=0; ie<numEKins; ++ie) {
-    double      ekin = egridData[ie];
+    G4double      ekin = egridData[ie];
     data[indxCont++] = ekin;
     int          ist = indxCont;
-    double       sum = 0.0;
+    G4double       sum = 0.0;
     for (int iz=0; iz<numElem; ++iz) {
       // compute atomic cross section x number of atoms per volume
       int      izet = matData.fElementVect[iz];
-      double natoms = matData.fNumOfAtomsPerVolumeVect[iz];
+      G4double natoms = matData.fNumOfAtomsPerVolumeVect[iz];
       const G4Element* g4Elem  = G4NistManager::Instance()->FindOrBuildElement(izet);
-      double   xsec = std::max(0.0, emModel->ComputeCrossSectionPerAtom(g4PartDef, g4Elem, ekin, cut, ekin));
+      G4double   xsec = std::max(0.0, emModel->ComputeCrossSectionPerAtom(g4PartDef, g4Elem, ekin, cut, ekin));
       sum += natoms*xsec;
       if (iz<numElem-1) {
         data[indxCont++] = sum;
@@ -596,8 +596,8 @@ void BuildElementSelector(double minEKin, double maxEKin, int numBinsPerDecade, 
   }
 }
 
-int InitElementSelectorEnergyGrid(int binsperdecade, double* egrid, double mine, double maxe, double& logMinEnergy, double& invLEDelta) {
-  const double invlog106 = 1.0/(6.0*std::log(10.0));
+int InitElementSelectorEnergyGrid(int binsperdecade, G4double* egrid, G4double mine, G4double maxe, G4double& logMinEnergy, G4double& invLEDelta) {
+  const G4double invlog106 = 1.0/(6.0*std::log(10.0));
   int numEnergyBins = (int)(binsperdecade*std::log(maxe/mine)*invlog106);
   if (numEnergyBins<3) {
     numEnergyBins = 3;

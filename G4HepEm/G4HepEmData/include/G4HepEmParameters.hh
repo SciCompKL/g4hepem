@@ -25,34 +25,34 @@ struct G4HepEmParameters {
     * \f$e^-/e^+\f$ tracks are stopped when their energy drops below this threshold,
     * their kinetic energy is deposited and annihilation to two \f$\gamma\f$-s interaction
     * is invoked for in case of \f$e^+\f$.*/
-  double fElectronTrackingCut;
+  G4double fElectronTrackingCut;
 
   // The configuration of the kinetic energy grid of the energy loss related tables:
   /** Minimum of the kinetic energy grid used to build the sub-(secondary-production)threshold
     * related energy loss quantity tables such as the *restricted stopping power*, *range* and
     * *inverse range* tables. */
-  double fMinLossTableEnergy;
+  G4double fMinLossTableEnergy;
   /** Maximum of the kinetic energy grid for loss tables.*/
-  double fMaxLossTableEnergy;
+  G4double fMaxLossTableEnergy;
   /** Number of bins (equally spaced on log scale) of the loss table kinetic energy grid. */
   int    fNumLossTableBins;
 
   /** The *final range* parameter of the sub-threshold energy loss related step limit function.*/
-  double fFinalRange;
+  G4double fFinalRange;
   /** The *rover range* parameter of the sub-threshold energy loss related step limit function.*/
-  double fDRoverRange;
+  G4double fDRoverRange;
   /** Maximum allowed *linear* energy loss along step due to sub-threshold (continuous) energy losses
     * given as fraction of the intial kinetic energy. Proper integral is used to compute the mean energy loss
     * when the energy loss, according to linear approximation, is over this threshold.*/
-  double fLinELossLimit;
+  G4double fLinELossLimit;
 
   /** Kinetic energy limit between the two (Seltzer-Berger and Relativistic) models for bremsstrahlung photon emission
     * in case of \f$e^-/e^+\f$ primary particles.*/
-  double fElectronBremModelLim;
+  G4double fElectronBremModelLim;
 
   // MSC range and safety factor parameters
-  double fMSCRangeFactor;
-  double fMSCSafetyFactor;
+  G4double fMSCRangeFactor;
+  G4double fMSCSafetyFactor;
 
 };
 

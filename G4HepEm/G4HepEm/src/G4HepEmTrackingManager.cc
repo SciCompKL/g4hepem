@@ -196,7 +196,7 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
   const G4int trackID = aTrack->GetTrackID();
 
   // Init state that never changes for a track.
-  const double charge = aTrack->GetParticleDefinition()->GetPDGCharge();
+  const G4double charge = aTrack->GetParticleDefinition()->GetPDGCharge();
   const bool isElectron = (charge < 0.0);
   thePrimaryTrack->SetCharge(charge);
   // === StartTracking ===
@@ -228,7 +228,7 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
     bool preStepOnBoundary =
         preStepPoint.GetStepStatus() == G4StepStatus::fGeomBoundary;
     thePrimaryTrack->SetOnBoundary(preStepOnBoundary);
-    const double preSafety =
+    const G4double preSafety =
         preStepOnBoundary ? 0.
                    : fSafetyHelper->ComputeSafety(aTrack->GetPosition());
     thePrimaryTrack->SetSafety(preSafety);
@@ -244,8 +244,8 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
     // Remember which process was selected - MSC might limit the sub-steps.
     const int iDProc = thePrimaryTrack->GetWinnerProcessIndex();
 
-    double stepLimitLeft = theElTrack->GetPStepLength();
-    double totalTruePathLength = 0, totalEloss = 0;
+    G4double stepLimitLeft = theElTrack->GetPStepLength();
+    G4double totalTruePathLength = 0, totalEloss = 0;
     bool continueStepping = fMultipleSteps, stopped = false;
 
     theElTrack->SavePreStepEKin();
@@ -299,7 +299,7 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
           //
           // === 1. MSC should be invoked to obtain the physics step Length
           G4HepEmElectronManager::UpdatePStepLength(theElTrack);
-          const double pStepLength = theElTrack->GetPStepLength();
+          const G4double pStepLength = theElTrack->GetPStepLength();
           totalTruePathLength += pStepLength;
 
           if (pStepLength<=0.0) {
@@ -325,7 +325,7 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
           // === 4. Sample MSC direction change and displacement.
           G4HepEmElectronManager::SampleMSC(theHepEmData, theHepEmPars, theElTrack, rnge);
 
-          const double *pdir = thePrimaryTrack->GetDirection();
+          const G4double *pdir = thePrimaryTrack->GetDirection();
           postStepPoint.SetMomentumDirection(
               G4ThreeVector(pdir[0], pdir[1], pdir[2]));
 
@@ -333,19 +333,19 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
           // are not on boundary
           G4ThreeVector position = postStepPoint.GetPosition();
           if (!postStepOnBoundary) {
-            const double *displacement =
+            const G4double *displacement =
                 theElTrack->GetMSCTrackData()->GetDisplacement();
-            const double dLength2 = displacement[0] * displacement[0] +
+            const G4double dLength2 = displacement[0] * displacement[0] +
                                     displacement[1] * displacement[1] +
                                     displacement[2] * displacement[2];
-            const double kGeomMinLength = 5.0e-8; // 0.05 [nm]
-            const double kGeomMinLength2 =
+            const G4double kGeomMinLength = 5.0e-8; // 0.05 [nm]
+            const G4double kGeomMinLength2 =
                 kGeomMinLength * kGeomMinLength; // (0.05 [nm])^2
             if (dLength2 > kGeomMinLength2) {
               // apply displacement
               bool isPositionChanged = true;
-              const double dispR = std::sqrt(dLength2);
-              const double postSafety =
+              const G4double dispR = std::sqrt(dLength2);
+              const G4double postSafety =
                   0.99 * fSafetyHelper->ComputeSafety(position, dispR);
               const G4ThreeVector theDisplacement(displacement[0], displacement[1],
                                                   displacement[2]);
@@ -388,13 +388,13 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
 
           // Subtract the path length we just traveled, and set this as the next
           // attempted sub-step.
-          const double pStepLength = theElTrack->GetPStepLength();
+          const G4double pStepLength = theElTrack->GetPStepLength();
           stepLimitLeft -= pStepLength;
           theElTrack->SetPStepLength(stepLimitLeft);
           thePrimaryTrack->SetGStepLength(stepLimitLeft);
 
           // Also reduce the range accordingly.
-          const double range = theElTrack->GetRange() - pStepLength;
+          const G4double range = theElTrack->GetRange() - pStepLength;
           theElTrack->SetRange(range);
         }
 
@@ -424,7 +424,7 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
     } else if (aTrack->GetTrackStatus() != fStopAndKill) {
       // === 4. Discrete part of the interaction (if any)
       G4HepEmElectronManager::PerformDiscrete(theHepEmData, theHepEmPars, theTLData);
-      const double *pdir = thePrimaryTrack->GetDirection();
+      const G4double *pdir = thePrimaryTrack->GetDirection();
       postStepPoint.SetMomentumDirection(
           G4ThreeVector(pdir[0], pdir[1], pdir[2]));
 
@@ -449,8 +449,8 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
     step.SetStepLength(totalTruePathLength);
 
     // energy, e-depo and status
-    const double ekin = thePrimaryTrack->GetEKin();
-    double edep = thePrimaryTrack->GetEnergyDeposit();
+    const G4double ekin = thePrimaryTrack->GetEKin();
+    G4double edep = thePrimaryTrack->GetEnergyDeposit();
     postStepPoint.SetKineticEnergy(ekin);
     if (ekin <= 0.0) {
       aTrack->SetTrackStatus(fStopAndKill);
@@ -468,7 +468,7 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
       for (int is = 0; is < numSecElectron; ++is) {
         G4HepEmTrack *secTrack =
             theTLData->GetSecondaryElectronTrack(is)->GetTrack();
-        const double secEKin = secTrack->GetEKin();
+        const G4double secEKin = secTrack->GetEKin();
         const bool isElectron = secTrack->GetCharge() < 0.0;
         if (applyCuts) {
           if (isElectron && secEKin < (*theCutsElectron)[g4IMC]) {
@@ -482,7 +482,7 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
           }
         }
 
-        const double *dir = secTrack->GetDirection();
+        const G4double *dir = secTrack->GetDirection();
         const G4ParticleDefinition *partDef = G4Electron::Definition();
         if (!isElectron) {
           partDef = G4Positron::Definition();
@@ -501,13 +501,13 @@ void G4HepEmTrackingManager::TrackElectron(G4Track *aTrack) {
       for (int is = 0; is < numSecGamma; ++is) {
         G4HepEmTrack *secTrack =
             theTLData->GetSecondaryGammaTrack(is)->GetTrack();
-        const double secEKin = secTrack->GetEKin();
+        const G4double secEKin = secTrack->GetEKin();
         if (applyCuts && secEKin < (*theCutsGamma)[g4IMC]) {
           edep += secEKin;
           continue;
         }
 
-        const double *dir = secTrack->GetDirection();
+        const G4double *dir = secTrack->GetDirection();
         G4DynamicParticle *dp = new G4DynamicParticle(
             G4Gamma::Definition(), G4ThreeVector(dir[0], dir[1], dir[2]),
             secEKin);
@@ -636,13 +636,13 @@ void G4HepEmTrackingManager::TrackGamma(G4Track *aTrack) {
       theG4PostStepPoint->SetProcessDefinedStep(proc);
 
       // energy, e-depo, momentum direction and status
-      const double ekin = thePrimaryTrack->GetEKin();
-      double edep = thePrimaryTrack->GetEnergyDeposit();
+      const G4double ekin = thePrimaryTrack->GetEKin();
+      G4double edep = thePrimaryTrack->GetEnergyDeposit();
       theG4PostStepPoint->SetKineticEnergy(ekin);
       if (ekin <= 0.0) {
         track.SetTrackStatus(fStopAndKill);
       }
-      const double *pdir = thePrimaryTrack->GetDirection();
+      const G4double *pdir = thePrimaryTrack->GetDirection();
       theG4PostStepPoint->SetMomentumDirection(
           G4ThreeVector(pdir[0], pdir[1], pdir[2]));
 
@@ -664,7 +664,7 @@ void G4HepEmTrackingManager::TrackGamma(G4Track *aTrack) {
         for (int is = 0; is < numSecElectron; ++is) {
           G4HepEmTrack *secTrack =
               theTLData->GetSecondaryElectronTrack(is)->GetTrack();
-          const double secEKin = secTrack->GetEKin();
+          const G4double secEKin = secTrack->GetEKin();
           const bool isElectron = secTrack->GetCharge() < 0.0;
           if (fMgr.applyCuts) {
             if (isElectron && secEKin < (*fMgr.theCutsElectron)[g4IMC]) {
@@ -678,7 +678,7 @@ void G4HepEmTrackingManager::TrackGamma(G4Track *aTrack) {
             }
           }
 
-          const double *dir = secTrack->GetDirection();
+          const G4double *dir = secTrack->GetDirection();
           const G4ParticleDefinition *partDef = G4Electron::Definition();
           if (!isElectron) {
             partDef = G4Positron::Definition();
@@ -697,13 +697,13 @@ void G4HepEmTrackingManager::TrackGamma(G4Track *aTrack) {
         for (int is = 0; is < numSecGamma; ++is) {
           G4HepEmTrack *secTrack =
               theTLData->GetSecondaryGammaTrack(is)->GetTrack();
-          const double secEKin = secTrack->GetEKin();
+          const G4double secEKin = secTrack->GetEKin();
           if (fMgr.applyCuts && secEKin < (*fMgr.theCutsGamma)[g4IMC]) {
             edep += secEKin;
             continue;
           }
 
-          const double *dir = secTrack->GetDirection();
+          const G4double *dir = secTrack->GetDirection();
           G4DynamicParticle *dp = new G4DynamicParticle(
               G4Gamma::Definition(), G4ThreeVector(dir[0], dir[1], dir[2]),
               secEKin);

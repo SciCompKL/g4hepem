@@ -72,7 +72,7 @@ void G4HepEmSBBremTableBuilder::BuildSamplingTables() {
       }
       // add current gamma cut to the list of this element data (only if this
       // cut value is still not tehre)
-      const std::vector<double> &cVect = fSBSamplingTables[izet]->fGammaECuts;
+      const std::vector<G4double> &cVect = fSBSamplingTables[izet]->fGammaECuts;
       size_t indx = std::find(cVect.begin(), cVect.end(), gamCut)-cVect.begin();
       if (indx==cVect.size()) {
         vtmp[0] = imc;

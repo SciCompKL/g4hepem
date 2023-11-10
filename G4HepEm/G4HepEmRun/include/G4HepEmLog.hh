@@ -64,7 +64,7 @@
  *
  * @brief Just a copy of `G4Log` that's in fact a simplified version of VDT log.
  *
- * That's why the function names are `VDTLog` and `VDTLogf` for double and float.
+ * That's why the function names are `VDTLog` and `VDTLogf` for G4double and float.
  *
  */
 
@@ -81,10 +81,10 @@
 // local namespace for the constants/functions which are necessary only here
 //
 namespace DVTLogConsts {
-  const double LOG_UPPER_LIMIT = 1e307;
-  const double LOG_LOWER_LIMIT = 0;
+  const G4double LOG_UPPER_LIMIT = 1e307;
+  const G4double LOG_LOWER_LIMIT = 0;
 
-  const double SQRTH  = 0.70710678118654752440;
+  const G4double SQRTH  = 0.70710678118654752440;
   const float MAXNUMF = 3.4028234663852885981170418348451692544e38f;
 
   //----------------------------------------------------------------------------
@@ -93,26 +93,26 @@ namespace DVTLogConsts {
   //
   union ieee754 {
     ieee754(){};
-    ieee754(double thed) { d = thed; };
+    ieee754(G4double thed) { d = thed; };
     ieee754(uint64_t thell) { ll = thell; };
     ieee754(float thef) { f[0] = thef; };
     ieee754(uint32_t thei) { i[0] = thei; };
-    double d;
+    G4double d;
     float f[2];
     uint32_t i[2];
     uint64_t ll;
     uint16_t s[4];
   };
 
-  inline double get_log_px(const double x) {
-    const double PX1log = 1.01875663804580931796E-4;
-    const double PX2log = 4.97494994976747001425E-1;
-    const double PX3log = 4.70579119878881725854E0;
-    const double PX4log = 1.44989225341610930846E1;
-    const double PX5log = 1.79368678507819816313E1;
-    const double PX6log = 7.70838733755885391666E0;
+  inline G4double get_log_px(const G4double x) {
+    const G4double PX1log = 1.01875663804580931796E-4;
+    const G4double PX2log = 4.97494994976747001425E-1;
+    const G4double PX3log = 4.70579119878881725854E0;
+    const G4double PX4log = 1.44989225341610930846E1;
+    const G4double PX5log = 1.79368678507819816313E1;
+    const G4double PX6log = 7.70838733755885391666E0;
 
-    double px = PX1log;
+    G4double px = PX1log;
     px *= x;
     px += PX2log;
     px *= x;
@@ -126,14 +126,14 @@ namespace DVTLogConsts {
     return px;
   }
 
-  inline double get_log_qx(const double x) {
-    const double QX1log = 1.12873587189167450590E1;
-    const double QX2log = 4.52279145837532221105E1;
-    const double QX3log = 8.29875266912776603211E1;
-    const double QX4log = 7.11544750618563894466E1;
-    const double QX5log = 2.31251620126765340583E1;
+  inline G4double get_log_qx(const G4double x) {
+    const G4double QX1log = 1.12873587189167450590E1;
+    const G4double QX2log = 4.52279145837532221105E1;
+    const G4double QX3log = 8.29875266912776603211E1;
+    const G4double QX4log = 7.11544750618563894466E1;
+    const G4double QX5log = 2.31251620126765340583E1;
 
-    double qx = x;
+    G4double qx = x;
     qx += QX1log;
     qx *= x;
     qx += QX2log;
@@ -147,18 +147,18 @@ namespace DVTLogConsts {
   }
 
   //----------------------------------------------------------------------------
-  // Converts a double to an unsigned long long
+  // Converts a G4double to an unsigned long long
   //
-  inline uint64_t dp2uint64(double x) {
+  inline uint64_t dp2uint64(G4double x) {
     ieee754 tmp;
     tmp.d = x;
     return tmp.ll;
   }
 
   //----------------------------------------------------------------------------
-  // Converts an unsigned long long to a double
+  // Converts an unsigned long long to a G4double
   //
-  inline double uint642dp(uint64_t ll) {
+  inline G4double uint642dp(uint64_t ll) {
     ieee754 tmp;
     tmp.ll = ll;
     return tmp.d;
@@ -184,8 +184,8 @@ namespace DVTLogConsts {
   }
 
   //----------------------------------------------------------------------------
-  /// Like frexp but vectorising and the exponent is a double.
-  inline double getMantExponent(const double x, double& fe) {
+  /// Like frexp but vectorising and the exponent is a G4double.
+  inline G4double getMantExponent(const G4double x, G4double& fe) {
     uint64_t n = dp2uint64(x);
 
     // Shift to the right up to the beginning of the exponent.
@@ -223,13 +223,13 @@ namespace DVTLogConsts {
   }
 }  // namespace DVTLogConsts
 
-// Log double precision --------------------------------------------------------
+// Log G4double precision --------------------------------------------------------
 
-inline double VDTLog(double x) {
-  const double original_x = x;
+inline G4double VDTLog(G4double x) {
+  const G4double original_x = x;
 
   /* separate mantissa from exponent */
-  double fe;
+  G4double fe;
   x = DVTLogConsts::getMantExponent(x, fe);
 
   // blending
@@ -237,16 +237,16 @@ inline double VDTLog(double x) {
   x -= 1.0;
 
   /* rational form */
-  double px = DVTLogConsts::get_log_px(x);
+  G4double px = DVTLogConsts::get_log_px(x);
 
   // for the final formula
-  const double x2 = x * x;
+  const G4double x2 = x * x;
   px *= x;
   px *= x2;
 
-  const double qx = DVTLogConsts::get_log_qx(x);
+  const G4double qx = DVTLogConsts::get_log_qx(x);
 
-  double res = px / qx;
+  G4double res = px / qx;
 
   res -= fe * 2.121944400546905827679e-4;
   res -= 0.5 * x2;
@@ -255,9 +255,9 @@ inline double VDTLog(double x) {
   res += fe * 0.693359375;
 
   if(original_x > DVTLogConsts::LOG_UPPER_LIMIT)
-    res = std::numeric_limits<double>::infinity();
+    res = std::numeric_limits<G4double>::infinity();
   if(original_x < DVTLogConsts::LOG_LOWER_LIMIT)  // THIS IS NAN!
-    res = -std::numeric_limits<double>::quiet_NaN();
+    res = -std::numeric_limits<G4double>::quiet_NaN();
 
   return res;
 }
@@ -335,8 +335,8 @@ inline float VDTLogf(float x) {
 
 //------------------------------------------------------------------------------
 
-void logv(const uint32_t size, double const* __restrict__ iarray,
-          double* __restrict__ oarray);
+void logv(const uint32_t size, G4double const* __restrict__ iarray,
+          G4double* __restrict__ oarray);
 void logfv(const uint32_t size, float const* __restrict__ iarray,
            float* __restrict__ oarray);
 
