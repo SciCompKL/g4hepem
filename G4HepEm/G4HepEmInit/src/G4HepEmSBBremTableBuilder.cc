@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #include "G4HepEmSBBremTableBuilder.hh"
 
 #include "G4SystemOfUnits.hh"

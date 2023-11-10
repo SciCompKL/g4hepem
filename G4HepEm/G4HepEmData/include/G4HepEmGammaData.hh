@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #ifndef G4HepEmGammaData_HH
 #define G4HepEmGammaData_HH
 

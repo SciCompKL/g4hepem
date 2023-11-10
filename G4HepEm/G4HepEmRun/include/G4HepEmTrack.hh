@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmTrack_HH
 #define G4HepEmTrack_HH

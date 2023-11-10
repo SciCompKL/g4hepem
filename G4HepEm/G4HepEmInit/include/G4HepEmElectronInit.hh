@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 // Initialisation of all e-/e+ related data (e-loss tables, macroscopic cross 
 // sections and target element selectors for each model) and interaction models.

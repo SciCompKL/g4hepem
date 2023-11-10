@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #include "G4HepEmElectronInteractionUMSC.hh"
 
 #include "G4HepEmRandomEngine.hh"

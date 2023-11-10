@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #ifndef G4HepEmElementData_HH
 #define G4HepEmElementData_HH
 

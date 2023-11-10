@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #ifndef G4HepEmDataJsonIOImpl_H
 #define G4HepEmDataJsonIOImpl_H
 

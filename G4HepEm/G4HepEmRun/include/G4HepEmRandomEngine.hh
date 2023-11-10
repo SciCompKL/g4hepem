@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmRandomEngine_HH
 #define G4HepEmRandomEngine_HH

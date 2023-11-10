@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmElectronManager_HH
 #define G4HepEmElectronManager_HH

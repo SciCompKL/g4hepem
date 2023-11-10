@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #ifndef G4HepEmInteractionUtil_HH
 #define G4HepEmInteractionUtil_HH
 

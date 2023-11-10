@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmElectronInteractionIoni_HH
 #define G4HepEmElectronInteractionIoni_HH

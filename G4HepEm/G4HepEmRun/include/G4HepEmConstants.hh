@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmConstants__HH
 #define G4HepEmConstants__HH

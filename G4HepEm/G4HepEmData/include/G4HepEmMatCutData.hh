@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #ifndef G4HepEmMatCutData_HH
 #define G4HepEmMatCutData_HH
 

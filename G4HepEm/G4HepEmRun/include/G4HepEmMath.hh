@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmMath_HH
 #define G4HepEmMath_HH

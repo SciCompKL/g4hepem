@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #ifndef G4HepEmElectronInteractionUMSC_HH
 #define G4HepEmElectronInteractionUMSC_HH
 

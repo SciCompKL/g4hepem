@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmGammaInteractionConversion_HH
 #define G4HepEmGammaInteractionConversion_HH

@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmRunUtils_HH
 #define G4HepEmRunUtils_HH

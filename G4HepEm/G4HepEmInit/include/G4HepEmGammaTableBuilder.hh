@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #ifndef G4HepEmGammaTableBuilder_HH
 #define G4HepEmGammaTableBuilder_HH
 

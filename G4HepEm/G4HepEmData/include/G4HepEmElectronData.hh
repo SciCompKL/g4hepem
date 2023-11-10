@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #ifndef G4HepEmElectronData_HH
 #define G4HepEmElectronData_HH
 

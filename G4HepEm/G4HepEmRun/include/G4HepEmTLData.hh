@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmTLData_HH
 #define G4HepEmTLData_HH

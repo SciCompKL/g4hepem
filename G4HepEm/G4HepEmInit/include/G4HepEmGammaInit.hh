@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 // Initialisation of all gamma related data (macroscopic cross sections
 // and target element selectors for each model) and interaction models.

@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #include "G4HepEmRandomEngine.hh"
 
 #include "CLHEP/Random/RandomEngine.h"

@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmPositronInteractionAnnihilation_HH
 #define G4HepEmPositronInteractionAnnihilation_HH

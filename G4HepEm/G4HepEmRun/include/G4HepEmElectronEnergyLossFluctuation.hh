@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmElectronEnergyLossFluctuation_HH
 #define G4HepEmElectronEnergyLossFluctuation_HH

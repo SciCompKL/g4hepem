@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmMaterialInit_HH
 #define G4HepEmMaterialInit_HH

@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #include "G4HepEmGammaData.hh"
 
 // NOTE: allocates only the main data structure but not the dynamic members

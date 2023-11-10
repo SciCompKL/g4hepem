@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #include "G4HepEmStateInit.hh"
 
 #include "G4HepEmState.hh"

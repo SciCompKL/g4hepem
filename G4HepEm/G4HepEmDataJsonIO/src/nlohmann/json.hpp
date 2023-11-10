@@ -1,3 +1,4 @@
+#include "ad_type.h"
 /*
     __ _____ _____ _____
  __|  |   __|     |   | |  JSON for Modern C++

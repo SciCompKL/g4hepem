@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #ifndef G4HepEmStateInit_HH
 #define G4HepEmStateInit_HH
 

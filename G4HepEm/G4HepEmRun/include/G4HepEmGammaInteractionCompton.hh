@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #ifndef G4HepEmGammaInteractionCompton_HH
 #define G4HepEmGammaInteractionCompton_HH
 

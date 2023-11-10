@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmElectronInteractionBrem_HH
 #define G4HepEmElectronInteractionBrem_HH

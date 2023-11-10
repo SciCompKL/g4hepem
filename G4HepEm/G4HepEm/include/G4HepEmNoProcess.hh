@@ -1,3 +1,4 @@
+#include "ad_type.h"
 
 #ifndef G4HepEmNoProcess_h
 #define G4HepEmNoProcess_h 1

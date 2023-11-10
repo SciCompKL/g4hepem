@@ -1,3 +1,4 @@
+#include "ad_type.h"
 #ifndef G4EmTrackingManager_h
 #define G4EmTrackingManager_h 1
 
