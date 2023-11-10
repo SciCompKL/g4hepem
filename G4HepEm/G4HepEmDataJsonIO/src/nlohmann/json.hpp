@@ -1,4 +1,3 @@
-#include "ad_type.h"
 /*
     __ _____ _____ _____
  __|  |   __|     |   | |  JSON for Modern C++
@@ -1384,12 +1383,12 @@ JSON_HEDLEY_DIAGNOSTIC_POP
     (((probability) >= 0.9) ? __builtin_expect((expr), (expected)) : (JSON_HEDLEY_STATIC_CAST(void, expected), (expr)))
 #  define JSON_HEDLEY_PREDICT_TRUE(expr, probability) \
     (__extension__ ({ \
-        G4double hedley_probability_ = (probability); \
+        double hedley_probability_ = (probability); \
         ((hedley_probability_ >= 0.9) ? __builtin_expect(!!(expr), 1) : ((hedley_probability_ <= 0.1) ? __builtin_expect(!!(expr), 0) : !!(expr))); \
     }))
 #  define JSON_HEDLEY_PREDICT_FALSE(expr, probability) \
     (__extension__ ({ \
-        G4double hedley_probability_ = (probability); \
+        double hedley_probability_ = (probability); \
         ((hedley_probability_ >= 0.9) ? __builtin_expect(!!(expr), 0) : ((hedley_probability_ <= 0.1) ? __builtin_expect(!!(expr), 1) : !!(expr))); \
     }))
 #  define JSON_HEDLEY_LIKELY(expr)   __builtin_expect(!!(expr), 1)
@@ -2902,7 +2901,7 @@ template<template<typename U, typename V, typename... Args> class ObjectType =
          class StringType = std::string, class BooleanType = bool,
          class NumberIntegerType = std::int64_t,
          class NumberUnsignedType = std::uint64_t,
-         class NumberFloatType = G4double,
+         class NumberFloatType = double,
          template<typename U> class AllocatorType = std::allocator,
          template<typename T, typename SFINAE = void> class JSONSerializer =
          adl_serializer,
@@ -6787,13 +6786,13 @@ class lexer : public lexer_base<BasicJsonType>
     }
 
     JSON_HEDLEY_NON_NULL(2)
-    static void strtof(G4double& f, const char* str, char** endptr) noexcept
+    static void strtof(double& f, const char* str, char** endptr) noexcept
     {
         f = std::strtod(str, endptr);
     }
 
     JSON_HEDLEY_NON_NULL(2)
-    static void strtof(long G4double& f, const char* str, char** endptr) noexcept
+    static void strtof(long double& f, const char* str, char** endptr) noexcept
     {
         f = std::strtold(str, endptr);
     }
@@ -7899,10 +7898,10 @@ class binary_reader
     {
         switch (element_type)
         {
-            case 0x01: // G4double
+            case 0x01: // double
             {
-                G4double number{};
-                return get_number<G4double, true>(input_format_t::bson, number) && sax->number_float(static_cast<number_float_t>(number), "");
+                double number{};
+                return get_number<double, true>(input_format_t::bson, number) && sax->number_float(static_cast<number_float_t>(number), "");
             }
 
             case 0x02: // string
@@ -8431,7 +8430,7 @@ class binary_reader
                 // half-precision floating-point numbers in the C language
                 // is shown in Fig. 3.
                 const auto half = static_cast<unsigned int>((byte1 << 8u) + byte2);
-                const G4double val = [&half]
+                const double val = [&half]
                 {
                     const int exp = (half >> 10u) & 0x1Fu;
                     const unsigned int mant = half & 0x3FFu;
@@ -8443,8 +8442,8 @@ class binary_reader
                             return std::ldexp(mant, -24);
                         case 31:
                             return (mant == 0)
-                            ? std::numeric_limits<G4double>::infinity()
-                            : std::numeric_limits<G4double>::quiet_NaN();
+                            ? std::numeric_limits<double>::infinity()
+                            : std::numeric_limits<double>::quiet_NaN();
                         default:
                             return std::ldexp(mant + 1024, exp - 25);
                     }
@@ -8462,7 +8461,7 @@ class binary_reader
 
             case 0xFB: // Double-Precision Float (eight-byte IEEE 754)
             {
-                G4double number{};
+                double number{};
                 return get_number(input_format_t::cbor, number) && sax->number_float(static_cast<number_float_t>(number), "");
             }
 
@@ -9016,7 +9015,7 @@ class binary_reader
 
             case 0xCB: // float 64
             {
-                G4double number{};
+                double number{};
                 return get_number(input_format_t::msgpack, number) && sax->number_float(static_cast<number_float_t>(number), "");
             }
 
@@ -9641,7 +9640,7 @@ class binary_reader
 
             case 'D':
             {
-                G4double number{};
+                double number{};
                 return get_number(input_format_t::ubjson, number) && sax->number_float(static_cast<number_float_t>(number), "");
             }
 
@@ -13662,13 +13661,13 @@ class binary_writer
     }
 
     /*!
-    @brief Writes a BSON element with key @a name and G4double value @a value
+    @brief Writes a BSON element with key @a name and double value @a value
     */
-    void write_bson_G4double(const string_t& name,
-                           const G4double value)
+    void write_bson_double(const string_t& name,
+                           const double value)
     {
         write_bson_entry_header(name, 0x01);
-        write_number<G4double, true>(value);
+        write_number<double, true>(value);
     }
 
     /*!
@@ -13897,7 +13896,7 @@ class binary_writer
                 return write_bson_boolean(name, j.m_value.boolean);
 
             case value_t::number_float:
-                return write_bson_G4double(name, j.m_value.number_float);
+                return write_bson_double(name, j.m_value.number_float);
 
             case value_t::number_integer:
                 return write_bson_integer(name, j.m_value.number_integer);
@@ -13961,7 +13960,7 @@ class binary_writer
         return to_char_type(0xFA);  // Single-Precision Float
     }
 
-    static constexpr CharType get_cbor_float_prefix(G4double /*unused*/)
+    static constexpr CharType get_cbor_float_prefix(double /*unused*/)
     {
         return to_char_type(0xFB);  // Double-Precision Float
     }
@@ -13975,7 +13974,7 @@ class binary_writer
         return to_char_type(0xCA);  // float 32
     }
 
-    static constexpr CharType get_msgpack_float_prefix(G4double /*unused*/)
+    static constexpr CharType get_msgpack_float_prefix(double /*unused*/)
     {
         return to_char_type(0xCB);  // float 64
     }
@@ -14212,7 +14211,7 @@ class binary_writer
         return 'd';  // float 32
     }
 
-    static constexpr CharType get_ubjson_float_prefix(G4double /*unused*/)
+    static constexpr CharType get_ubjson_float_prefix(double /*unused*/)
     {
         return 'D';  // float 64
     }
@@ -14251,9 +14250,9 @@ class binary_writer
 
     void write_compact_float(const number_float_t n, detail::input_format_t format)
     {
-        if (static_cast<G4double>(n) >= static_cast<G4double>(std::numeric_limits<float>::lowest()) &&
-                static_cast<G4double>(n) <= static_cast<G4double>((std::numeric_limits<float>::max)()) &&
-                static_cast<G4double>(static_cast<float>(n)) == static_cast<G4double>(n))
+        if (static_cast<double>(n) >= static_cast<double>(std::numeric_limits<float>::lowest()) &&
+                static_cast<double>(n) <= static_cast<double>((std::numeric_limits<float>::max)()) &&
+                static_cast<double>(static_cast<float>(n)) == static_cast<double>(n))
         {
             oa->write_character(format == detail::input_format_t::cbor
                                 ? get_cbor_float_prefix(static_cast<float>(n))
@@ -14680,7 +14679,7 @@ inline cached_power get_cached_power_for_binary_exponent(int e)
     //  and the computation itself is approximated [...]. In practice, however,
     //  this simple function is sufficient."
     //
-    // For IEEE G4double precision floating-point numbers converted into
+    // For IEEE double precision floating-point numbers converted into
     // normalized diyfp's w = f * 2^e, with q = 64,
     //
     //      e >= -1022      (min IEEE exponent)
@@ -15150,7 +15149,7 @@ inline void grisu2_digit_gen(char* buffer, int& length, int& decimal_exponent,
     // This implies that the algorithm does not produce more than N decimal
     // digits.
     //
-    //      N = 17 for p = 53 (IEEE G4double precision)
+    //      N = 17 for p = 53 (IEEE double precision)
     //      N = 9  for p = 24 (IEEE single precision)
 }
 
@@ -15228,13 +15227,13 @@ void grisu2(char* buf, int& len, int& decimal_exponent, FloatType value)
     JSON_ASSERT(std::isfinite(value));
     JSON_ASSERT(value > 0);
 
-    // If the neighbors (and boundaries) of 'value' are always computed for G4double-precision
+    // If the neighbors (and boundaries) of 'value' are always computed for double-precision
     // numbers, all float's can be recovered using strtod (and strtof). However, the resulting
     // decimal representations are not exactly "short".
     //
     // The documentation for 'std::to_chars' (https://en.cppreference.com/w/cpp/utility/to_chars)
     // says "value is converted to a string as if by std::sprintf in the default ("C") locale"
-    // and since sprintf promotes float's to G4double's, I think this is exactly what 'std::to_chars'
+    // and since sprintf promotes float's to double's, I think this is exactly what 'std::to_chars'
     // does.
     // On the other hand, the documentation for 'std::to_chars' requires that "parsing the
     // representation using the corresponding std::from_chars function recovers value exactly". That
@@ -15242,10 +15241,10 @@ void grisu2(char* buf, int& len, int& decimal_exponent, FloatType value)
     // 'std::strtof'.
     //
     // NB: If the neighbors are computed for single-precision numbers, there is a single float
-    //     (7.0385307e-26f) which can't be recovered using strtod. The resulting G4double precision
+    //     (7.0385307e-26f) which can't be recovered using strtod. The resulting double precision
     //     value is off by 1 ulp.
 #if 0
-    const boundaries w = compute_boundaries(static_cast<G4double>(value));
+    const boundaries w = compute_boundaries(static_cast<double>(value));
 #else
     const boundaries w = compute_boundaries(value);
 #endif
@@ -16206,19 +16205,19 @@ class serializer
             return;
         }
 
-        // If number_float_t is an IEEE-754 single or G4double precision number,
+        // If number_float_t is an IEEE-754 single or double precision number,
         // use the Grisu2 algorithm to produce short numbers which are
         // guaranteed to round-trip, using strtof and strtod, resp.
         //
-        // NB: The test below works if <long G4double> == <G4double>.
-        static constexpr bool is_ieee_single_or_G4double
+        // NB: The test below works if <long double> == <double>.
+        static constexpr bool is_ieee_single_or_double
             = (std::numeric_limits<number_float_t>::is_iec559 && std::numeric_limits<number_float_t>::digits == 24 && std::numeric_limits<number_float_t>::max_exponent == 128) ||
               (std::numeric_limits<number_float_t>::is_iec559 && std::numeric_limits<number_float_t>::digits == 53 && std::numeric_limits<number_float_t>::max_exponent == 1024);
 
-        dump_float(x, std::integral_constant<bool, is_ieee_single_or_G4double>());
+        dump_float(x, std::integral_constant<bool, is_ieee_single_or_double>());
     }
 
-    void dump_float(number_float_t x, std::true_type /*is_ieee_single_or_G4double*/)
+    void dump_float(number_float_t x, std::true_type /*is_ieee_single_or_double*/)
     {
         char* begin = number_buffer.data();
         char* end = ::nlohmann::detail::to_chars(begin, begin + number_buffer.size(), x);
@@ -16226,7 +16225,7 @@ class serializer
         o->write_characters(begin, static_cast<size_t>(end - begin));
     }
 
-    void dump_float(number_float_t x, std::false_type /*is_ieee_single_or_G4double*/)
+    void dump_float(number_float_t x, std::false_type /*is_ieee_single_or_double*/)
     {
         // get number of digits for a float -> text -> float round-trip
         static constexpr auto d = std::numeric_limits<number_float_t>::max_digits10;
@@ -16585,7 +16584,7 @@ in @ref boolean_t)
 default; will be used in @ref number_integer_t)
 @tparam NumberUnsignedType type for JSON unsigned integer numbers (@c
 `uint64_t` by default; will be used in @ref number_unsigned_t)
-@tparam NumberFloatType type for JSON floating-point numbers (`G4double` by
+@tparam NumberFloatType type for JSON floating-point numbers (`double` by
 default; will be used in @ref number_float_t)
 @tparam BinaryType type for packed binary data for compatibility with binary
 serialization formats (`std::vector<std::uint8_t>` by default; will be used in
@@ -17282,11 +17281,11 @@ class basic_json
 
     #### Default type
 
-    With the default values for @a NumberFloatType (`G4double`), the default
+    With the default values for @a NumberFloatType (`double`), the default
     value for @a number_float_t is:
 
     @code {.cpp}
-    G4double
+    double
     @endcode
 
     #### Default behavior
@@ -17303,13 +17302,13 @@ class basic_json
     [RFC 7159](http://rfc7159.net/rfc7159) states:
     > This specification allows implementations to set limits on the range and
     > precision of numbers accepted. Since software that implements IEEE
-    > 754-2008 binary64 (G4double precision) numbers is generally available and
+    > 754-2008 binary64 (double precision) numbers is generally available and
     > widely used, good interoperability can be achieved by implementations
     > that expect no more precision or range than these provide, in the sense
     > that implementations will approximate JSON numbers within the expected
     > precision.
 
-    This implementation does exactly follow this approach, as it uses G4double
+    This implementation does exactly follow this approach, as it uses double
     precision floating-point numbers. Note values smaller than
     `-1.79769313486232e+308` and values greater than `1.79769313486232e+308`
     will be stored as NaN internally and be serialized to `null`.
@@ -17882,7 +17881,7 @@ class basic_json
       containers can be used.
     - **numbers**: @ref number_integer_t, @ref number_unsigned_t,
       @ref number_float_t, and all convertible number types such as `int`,
-      `size_t`, `int64_t`, `float` or `G4double` can be used.
+      `size_t`, `int64_t`, `float` or `double` can be used.
     - **boolean**: @ref boolean_t / `bool` can be used.
     - **binary**: @ref binary_t / `std::vector<uint8_t>` may be used,
       unfortunately because string literals cannot be distinguished from binary
@@ -22565,7 +22564,7 @@ class basic_json
     - Two JSON null values are equal.
 
     @note Floating-point inside JSON values numbers are compared with
-    `json::number_float_t::operator==` which is `G4double::operator==` by
+    `json::number_float_t::operator==` which is `double::operator==` by
     default. To compare floating-point while respecting an epsilon, an alternative
     [comparison function](https://github.com/mariokonrad/marnav/blob/master/include/marnav/math/floatingpoint.hpp#L34-#L39)
     could be used, for instance
@@ -23788,7 +23787,7 @@ class basic_json
     number_unsigned | 0..2147483647                     | int32       | 0x10
     number_unsigned | 2147483648..9223372036854775807   | int64       | 0x12
     number_unsigned | 9223372036854775808..18446744073709551615| --   | --
-    number_float    | *any value*                       | G4double      | 0x01
+    number_float    | *any value*                       | double      | 0x01
     string          | *any value*                       | string      | 0x02
     array           | *any value*                       | document    | 0x04
     object          | *any value*                       | document    | 0x03
@@ -24278,7 +24277,7 @@ class basic_json
 
     BSON type       | BSON marker byte | JSON value type
     --------------- | ---------------- | ---------------------------
-    G4double          | 0x01             | number_float
+    double          | 0x01             | number_float
     string          | 0x02             | string
     document        | 0x03             | object
     array           | 0x04             | array
