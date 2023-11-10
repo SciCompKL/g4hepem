@@ -49,7 +49,7 @@ bool TestElemSelectorData ( const struct G4HepEmData* hepEmData, const struct G4
   // NOTE: we do not test MB model (element selector is not used)
   for (int iModel=1; iModel<3; ++iModel) {
     for (int i=0; i<numTestCases; ) {
-      int imc         = (int)(dis(gen)*numMCData);
+      int imc         = (int)(dis(gen)*numMCData).getValue();
       tsInImc[i]      = imc;
       double minEKin  = 0.0;
       double maxEKin  = 0.0;

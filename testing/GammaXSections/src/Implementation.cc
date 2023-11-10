@@ -49,7 +49,7 @@ bool TestGammaXSectionData ( const struct G4HepEmData* hepEmData ) {
   const double minLEKinConv = std::log(theGammaData->fConvEnergyGrid[0]*0.98);
   const double minLEKinComp = std::log(theGammaData->fCompEnergyGrid[0]*0.98);
   for (int i=0; i<numTestCases; ++i) {
-    int imat           = (int)(dis(gen)*numMatData);
+    int imat           = (int)(dis(gen)*numMatData).getValue();
     tsInImat[i]        = imat;
     // -- conversion
     double lMinEkin    = minLEKinConv;

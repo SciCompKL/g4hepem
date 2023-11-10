@@ -59,7 +59,7 @@ void EvaluateLPMFunctions(G4double& funcXiS, G4double& funcGS, G4double& funcPhi
   const G4double lpmISDelt = 20.0;
   if (varShat < lpmSLimit) {
     G4double  val = varShat*lpmISDelt;
-    int    ilow = (int)val;
+    int    ilow = (int)val.getValue();
     val        -= ilow;
     ilow       *= 2;
     funcGS      = ( kFuncLPM[ilow+2] - kFuncLPM[ilow]   ) * val + kFuncLPM[ilow];

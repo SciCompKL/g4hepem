@@ -125,7 +125,7 @@ void BuildElementSelectorTables(G4PairProductionRelModel* ppModel, struct G4HepE
   const G4double emin      = gmData->fConvEnergyGrid[0];
   const G4double emax      = gmData->fConvEnergyGrid[gmData->fConvEnergyGridSize-1];
   const G4double invlog106 = 1.0/(6.0*std::log(10.0));
-  int numConvEkin = (int)(G4EmParameters::Instance()->NumberOfBinsPerDecade()*std::log(emax/emin)*invlog106);
+  int numConvEkin = (int)(G4EmParameters::Instance()->NumberOfBinsPerDecade()*std::log(emax/emin)*invlog106).getValue();
   gmData->fElemSelectorConvEgridSize = numConvEkin;
   gmData->fElemSelectorConvEgrid = new G4double[numConvEkin]{};
   G4HepEmInitUtils::FillLogarithmicGrid(emin, emax, numConvEkin,

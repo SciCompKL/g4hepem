@@ -43,7 +43,7 @@ bool TestGammaElemSelectorData ( const struct G4HepEmData* hepEmData ) {
   double* tsInRngVals      = new double[numTestCases];
   int*    tsOutResElemIndx = new int[numTestCases];
   for (int i=0; i<numTestCases; ++i) {
-    int imat          = (int)(dis(gen)*numMatData);
+    int imat          = (int)(dis(gen)*numMatData).getValue();
     tsInImat[i]       = imat;
     double minEKin    = theGammaData->fConvEnergyGrid[0];
     double maxEKin    = theGammaData->fConvEnergyGrid[theGammaData->fConvEnergyGridSize-1];

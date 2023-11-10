@@ -30,7 +30,7 @@ public:
     fMin     = min;
     fMax     = max;
     fDelta   = delta;
-    fNumBins = (int)((fMax - fMin) / (delta)) + 1.0;
+    fNumBins = (int)((fMax - fMin) / (delta)).getValue() + 1.0;
     fx       = new double[fNumBins];
     fy       = new double[fNumBins];
     for (int i = 0; i < fNumBins; ++i) {
@@ -42,7 +42,7 @@ public:
 
   void Fill(double x)
   {
-    int indx = (int)((x - fMin) / fDelta);
+    int indx = (int)((x - fMin) / fDelta).getValue();
     if (indx < 0) {
       std::cerr << "\n ***** ERROR in Hist::FILL  =>  x = " << x << " < fMin = " << fMin << std::endl;
       exit(1);
@@ -53,7 +53,7 @@ public:
 
   void Fill(double x, double w)
   {
-    int indx = (int)((x - fMin) / fDelta);
+    int indx = (int)((x - fMin) / fDelta).getValue();
     if (indx < 0) {
       std::cerr << "\n ***** ERROR in Hist::FILL  =>  x = " << x << " < fMin = " << fMin << std::endl;
       exit(1);
