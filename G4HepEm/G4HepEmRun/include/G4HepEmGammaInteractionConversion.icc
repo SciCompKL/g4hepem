@@ -155,14 +155,14 @@ int G4HepEmGammaInteractionConversion::SelectTargetAtom(const struct G4HepEmGamm
   const int   indxStart = gmData->fElemSelectorConvStartIndexPerMat[imat];
   const G4double* theData = &(gmData->fElemSelectorConvData[indxStart]);
   const int     numData = gmData->fElemSelectorConvEgridSize;
-  const int     numElem = theData[0]; // the very first element for each material
+  const int     numElem = theData[0].getValue(); // the very first element for each material
   const G4double    logE0 = gmData->fElemSelectorConvLogMinEkin;
   const G4double    invLD = gmData->fElemSelectorConvEILDelta;
   const G4double*   xdata = gmData->fElemSelectorConvEgrid;
   // make sure that $x \in  [x[0],x[ndata-1]]$
   const G4double   xv = G4HepEmMax(xdata[0], G4HepEmMin(xdata[numData-1], ekin));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
-  const int idxEkin = G4HepEmMax(0.0, G4HepEmMin((lekin-logE0)*invLD, numData-2.0));
+  const int idxEkin = G4HepEmMax(0.0, G4HepEmMin((lekin-logE0)*invLD, numData-2.0)).getValue();
   // linear interpolation
   const G4double   x1 = xdata[idxEkin];
   const G4double   x2 = xdata[idxEkin+1];

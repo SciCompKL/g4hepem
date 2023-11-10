@@ -521,11 +521,11 @@ G4double  G4HepEmElectronManager::GetRestMacXSec(const struct G4HepEmElectronDat
 
 
 G4double  G4HepEmElectronManager::GetRestMacXSecForStepping(const struct G4HepEmElectronData* elData, const int imc, G4double ekin, G4double lekin, bool isioni) {
-  constexpr G4double log08 = -0.22314355131420971;
+  const G4double log08 = -0.22314355131420971;
   const int  iIoniStarts = elData->fResMacXSecStartIndexPerMatCut[imc];
-  const int  numIoniData = elData->fResMacXSecData[iIoniStarts]; // x3 for the 3 values and +5 at the beginning
-  const int       iStart = (isioni) ? iIoniStarts : (G4double)(iIoniStarts + 3*numIoniData + 5);
-  const int      numData = elData->fResMacXSecData[iStart];
+  const int  numIoniData = elData->fResMacXSecData[iIoniStarts].getValue(); // x3 for the 3 values and +5 at the beginning
+  const int       iStart = (isioni) ? iIoniStarts : (iIoniStarts + 3*numIoniData + 5);
+  const int      numData = elData->fResMacXSecData[iStart].getValue();
   const G4double mxsecMinE = elData->fResMacXSecData[iStart+5];
   const G4double mxsecMaxE = elData->fResMacXSecData[iStart+1];
   const G4double mxsecMaxV = elData->fResMacXSecData[iStart+2];
