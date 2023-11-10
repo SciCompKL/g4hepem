@@ -94,7 +94,7 @@ public:
     const G4double t = std::sqrt(-2.*G4HepEmLog(rnd[0])) * std::cos(k2Pi*rnd[1]);
     G4double value = mean + t*std::sqrt(mean) + 0.5;
     return value < 0.     ?  0 :
-           value >= limit ? static_cast<int>(limit) : static_cast<int>(value);
+           value >= limit ? static_cast<int>(limit.getValue()) : static_cast<int>(value.getValue());
   }
 
 
