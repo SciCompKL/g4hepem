@@ -10,28 +10,28 @@
 
 #include "G4HepEmMacros.hh"
 
-template <typename T>
+template <typename S, typename T>
 G4HepEmHostDevice static inline
-T G4HepEmMax(T a, T b) {
- return a > b ? a : b;
+auto G4HepEmMax(S a, T b) -> decltype(std::max(a,b)) {
+ return std::max(a,b);
+}
+
+template <typename S, typename T>
+G4HepEmHostDevice static inline
+auto G4HepEmMin(S a, T b) -> decltype(std::min(a,b)) {
+ return std::min(a,b);
 }
 
 template <typename T>
 G4HepEmHostDevice static inline
-T G4HepEmMin(T a, T b) {
- return a < b ? a : b;
-}
-
-template <typename T>
-G4HepEmHostDevice static inline
-T G4HepEmX13(T x) {
+auto G4HepEmX13(T x) -> decltype(std::pow(x,1./3.)) {
  return std::pow(x, 1./3.);
 }
 
 // --- Log function with VDT (G4Log) specialisations for G4double and float
 template <typename T>
 G4HepEmHostDevice inline
-T G4HepEmLog(T x) {
+auto G4HepEmLog(T x) -> decltype(std::log(x)) {
  return std::log(x);
 }
 // use the specialisations only on the host
@@ -51,7 +51,7 @@ float G4HepEmLog(float x) {
 // --- Exp function with VDT (G4Exp) specialisations for G4double and float
 template <typename T>
 G4HepEmHostDevice inline
-T G4HepEmExp(T x) {
+auto G4HepEmExp(T x) -> decltype(std::exp(x)) {
  return std::exp(x);
 }
 // use the specialisations only on the host
@@ -69,9 +69,9 @@ float G4HepEmExp(float x) {
 #endif // ndef __CUDA_ARCH__
 
 // --- Pow(x,a) function with the VDT (G4) Exp and Log specialisations for G4double and float
-template <typename T>
+template <typename S, typename T>
 G4HepEmHostDevice inline
-T G4HepEmPow(T x, T a) {
+auto G4HepEmPow(S x, T a) -> decltype(std::pow(x,a)) {
  return std::pow(x, a);
 }
 // use the specialisations only on the host
