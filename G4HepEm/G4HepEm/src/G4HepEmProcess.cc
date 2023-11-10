@@ -145,7 +145,7 @@ G4double G4HepEmProcess::PostStepGetPhysicalInteractionLength ( const G4Track& t
     //thePrimaryTrack->SetSafety(theG4PreStepPoint->GetSafety());
     G4HepEmGammaManager::HowFar(fTheG4HepEmRunManager->GetHepEmData(), fTheG4HepEmRunManager->GetHepEmParameters(), theTLData);
   } else {
-    const G4double preSafety = onBoundary ? 0. : fSafetyHelper->ComputeSafety(track.GetPosition());
+    const G4double preSafety = onBoundary ? 0. : (G4double)fSafetyHelper->ComputeSafety(track.GetPosition());
     thePrimaryTrack->SetSafety(preSafety);
     G4HepEmElectronManager::HowFar(fTheG4HepEmRunManager->GetHepEmData(), fTheG4HepEmRunManager->GetHepEmParameters(), theTLData);
   }

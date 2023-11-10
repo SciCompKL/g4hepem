@@ -107,7 +107,7 @@ void BuildELossTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMode
       if ( ekin > hepEmParams->fElectronBremModelLim ) {
         G4double dedx1  = sbModel->ComputeDEDX(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE);
         G4double dedx2  = rbModel->ComputeDEDX(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE);
-        dlta = dedx2 > 0.0 ? (dedx1/dedx2-1.0)*hepEmParams->fElectronBremModelLim : 0.0;
+        dlta = dedx2 > 0.0 ? (G4double)((dedx1/dedx2-1.0)*hepEmParams->fElectronBremModelLim) : 0.0;
       }
       //sbModel->SetupForMaterial(g4PartDef, g4MatCut->GetMaterial(), ekin);
       G4double dedxBrem = ekin > hepEmParams->fElectronBremModelLim
@@ -254,7 +254,7 @@ void BuildLambdaTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMod
     //
     // Fill the energy grid for Ioni
     // find out the lowest energy of the ioni Ekin grid and the number of entries
-    const G4double   eminIoni = iselectron ? 2*elCutE : elCutE;
+    const G4double   eminIoni = iselectron ? (G4double)(2*elCutE) : elCutE;
     const G4double  scaleIoni = std::log(emax/eminIoni);
     const int      numEIoni = std::max(4, (int)std::lrint(numDefEkin*scaleIoni/scale)+1);
     G4HepEmInitUtils::FillLogarithmicGrid(eminIoni, emax, numEIoni, logEmin, invLEDel, energyGrid);
@@ -310,11 +310,11 @@ void BuildLambdaTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerModel* sbMod
       if ( theEKin > hepEmParams->fElectronBremModelLim ) {
         G4double xsec1  = std::max(0.0, sbModel->CrossSection(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE, hepEmParams->fElectronBremModelLim));
         G4double xsec2  = std::max(0.0, rbModel->CrossSection(g4MatCut, g4PartDef, hepEmParams->fElectronBremModelLim, gamCutE, hepEmParams->fElectronBremModelLim));
-        dlta = xsec2 > 0.0 ? (xsec1/xsec2-1.0)*hepEmParams->fElectronBremModelLim : 0.0;
+        dlta = xsec2 > 0.0 ? (G4double)((xsec1/xsec2-1.0)*hepEmParams->fElectronBremModelLim) : 0.0;
       }
       G4double theXSec = theEKin > hepEmParams->fElectronBremModelLim
-                        ? std::max(0.0, rbModel->CrossSection(g4MatCut, g4PartDef, theEKin, gamCutE, theEKin))
-                        : std::max(0.0, sbModel->CrossSection(g4MatCut, g4PartDef, theEKin, gamCutE, theEKin));
+                        ? (G4double)std::max(0.0, rbModel->CrossSection(g4MatCut, g4PartDef, theEKin, gamCutE, theEKin))
+                        : (G4double)std::max(0.0, sbModel->CrossSection(g4MatCut, g4PartDef, theEKin, gamCutE, theEKin));
       theXSec *= (1.0+dlta/theEKin);
 
       if (theXSec>macXSecMax) {
@@ -490,7 +490,7 @@ void BuildElementSelectorTables(G4MollerBhabhaModel* mbModel, G4SeltzerBergerMod
     // ===== Ionisation
     //
     // generate the kinetic energy grid for this material-cut for ioni
-    G4double    minEKin = iselectron ? 2*elCutE : elCutE;
+    G4double    minEKin = iselectron ? (G4double)(2*elCutE) : elCutE;
     G4double    maxEKin = hepEmParams->fMaxLossTableEnergy;
     if (minEKin>=maxEKin) {
       elData->fElemSelectorIoniStartIndexPerMatCut[imc] = -1;

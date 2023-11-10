@@ -65,7 +65,7 @@ void G4HepEmElectronManager::HowFarToDiscreteInteraction(struct G4HepEmData* hep
   const G4double frange = hepEmPars->fFinalRange;
   const G4double drange = hepEmPars->fDRoverRange;
   pStepLength = (range > frange)
-                ? range*drange + frange*(1.0-drange)*(2.0-frange/range)
+                ? (G4double)(range*drange + frange*(1.0-drange)*(2.0-frange/range))
                 : range;
 //  std::cout << " pStepLength = " << pStepLength << " range = " << range << " frange = " << frange << std::endl;
   // === 2. Discrete limits due to eestricted Ioni and Brem (accounting e-loss)
@@ -81,7 +81,7 @@ void G4HepEmElectronManager::HowFarToDiscreteInteraction(struct G4HepEmData* hep
   // before we use it to get the current discrete proposed step length
   for (int ip=0; ip<3; ++ip) {
     const G4double mxsec = mxSecs[ip];
-    const G4double   mfp = (mxsec>0.) ? 1./mxsec : kALargeValue;
+    const G4double   mfp = (mxsec>0.) ? (G4double)(1./mxsec) : kALargeValue;
     // save the mac-xsec for the update of the `number-of-interaction-left`:
     // the `number-of-intercation-left` should be updated in the along-step-action
     // after the MSC has changed the step.
@@ -335,7 +335,7 @@ bool G4HepEmElectronManager::SampleLossFluctuations(struct G4HepEmData* hepEmDat
     const int    theImat = theMatCutData.fHepEmMatIndex;
     const G4double meanExE = hepEmData->fTheMaterialData->fMaterialData[theImat].fMeanExEnergy;
     //
-    const G4double tmax = isElectron ? 0.5*thePreStepEkin : thePreStepEkin;
+    const G4double tmax = isElectron ? (G4double)(0.5*thePreStepEkin) : thePreStepEkin;
     const G4double tcut = G4HepEmMin(elCut, tmax);
     eloss = G4HepEmElectronEnergyLossFluctuation::SampleEnergyLossFLuctuation(thePreStepEkin, tcut, tmax,
                                                   meanExE, pStepLength, eloss, rnge);
@@ -510,7 +510,7 @@ G4double  G4HepEmElectronManager::GetInvRange(const struct G4HepEmElectronData* 
 G4double  G4HepEmElectronManager::GetRestMacXSec(const struct G4HepEmElectronData* elData, const int imc, const G4double ekin, const G4double lekin, bool isioni) {
   const int iIoniStarts = elData->fResMacXSecStartIndexPerMatCut[imc];
   const int numIoniData = elData->fResMacXSecData[iIoniStarts]; // x3 for the 3 values and +5 at the beginning
-  const int      iStart = (isioni) ? iIoniStarts : iIoniStarts + 3*numIoniData + 5;
+  const int      iStart = (isioni) ? iIoniStarts : (G4double)(iIoniStarts + 3*numIoniData + 5);
   const int     numData = elData->fResMacXSecData[iStart];
   const G4double  minEKin = elData->fResMacXSecData[iStart+5];
   if (ekin<minEKin) {return 0.0; }
@@ -524,7 +524,7 @@ G4double  G4HepEmElectronManager::GetRestMacXSecForStepping(const struct G4HepEm
   constexpr G4double log08 = -0.22314355131420971;
   const int  iIoniStarts = elData->fResMacXSecStartIndexPerMatCut[imc];
   const int  numIoniData = elData->fResMacXSecData[iIoniStarts]; // x3 for the 3 values and +5 at the beginning
-  const int       iStart = (isioni) ? iIoniStarts : iIoniStarts + 3*numIoniData + 5;
+  const int       iStart = (isioni) ? iIoniStarts : (G4double)(iIoniStarts + 3*numIoniData + 5);
   const int      numData = elData->fResMacXSecData[iStart];
   const G4double mxsecMinE = elData->fResMacXSecData[iStart+5];
   const G4double mxsecMaxE = elData->fResMacXSecData[iStart+1];
@@ -552,7 +552,7 @@ G4double  G4HepEmElectronManager::GetTransportMFP(const struct G4HepEmElectronDa
   const int iStarts = 2*numEkin*im;
   // use the G4HepEmRunUtils function for interpolation
   const G4double tr1mxsec = G4HepEmMax(0.0, GetSplineLog(numEkin, elData->fELossEnergyGrid, &(elData->fTr1MacXSecData[iStarts]), ekin, lekin, elData->fELossLogMinEkin, elData->fELossEILDelta));
-  return tr1mxsec > 0. ? 1./tr1mxsec : kALargeValue;
+  return tr1mxsec > 0. ? (G4double)(1./tr1mxsec) : kALargeValue;
 }
 
 
@@ -599,8 +599,8 @@ void G4HepEmElectronManager::ConvertTrueToGeometricLength(const G4HepEmData* hep
   } else if (mscData->fTrueStepLength < range * kDtrl) {
     const G4double kTauLim  = 1.0e-6;
     mscData->fZPathLength = (tau < kTauLim)
-                            ? mscData->fTrueStepLength * (1. - 0.5 * tau)
-                            : mscData->fLambtr1 * (1. - G4HepEmExp(-tau));
+                            ? (G4double)(mscData->fTrueStepLength * (1. - 0.5 * tau))
+                            : (G4double)(mscData->fLambtr1 * (1. - G4HepEmExp(-tau)));
   } else if (ekin < kElectronMassC2 || mscData->fTrueStepLength == range) {
     mscData->fPar1        = 1. / range;
     mscData->fPar2        = 1. / (mscData->fPar1 * mscData->fLambtr1);

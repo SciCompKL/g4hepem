@@ -46,7 +46,7 @@ void G4HepEmElectronInteractionUMSC::StepLimit(G4HepEmData* hepEmData, G4HepEmPa
     // note: the below is true only because `lambdaLimit = 1.0 [mm]`
     //const G4double kILambdaLimit   = 1.0; // 1/(kLambdaLimit = 1.0 [mm])
     mscData->fDynamicRangeFactor = lambdaTr1 > 1.0
-                                   ? hepEmPars->fMSCRangeFactor*(0.75 + 0.25*lambdaTr1)
+                                   ? (G4double)(hepEmPars->fMSCRangeFactor*(0.75 + 0.25*lambdaTr1))
                                    : hepEmPars->fMSCRangeFactor;
     // note: `ekin` below is the kinetic energy in MeV;
     const G4double stepMin = lambdaTr1*1.0E-3/(2.0E-3 + ekin*(matData.fUMSCStepMinPars[0] + ekin*matData.fUMSCStepMinPars[1]));
@@ -61,9 +61,9 @@ void G4HepEmElectronInteractionUMSC::StepLimit(G4HepEmData* hepEmData, G4HepEmPa
     mscData->fTlimitMin  = G4HepEmMax(0.70*matData.fZeffSqrt*stepMin, kTLimitMinfix);
 #else
     // this is like in Geant4.11.0
-    const G4double dum0    = iselectron ? 0.87*matData.fZeff23 : 0.70*matData.fZeffSqrt;
+    const G4double dum0    = iselectron ? (G4double)(0.87*matData.fZeff23) : (G4double)(0.70*matData.fZeffSqrt);
     // note `tlow` = 5 [keV] ==> 5.0E-3 [MeV] ==> 1/tlow = 200 [1/MeV]
-    const G4double dum1    = ekin > 5.0E-3 ? dum0*stepMin : dum0*stepMin*0.5*(1.0 + ekin*200.0);
+    const G4double dum1    = ekin > 5.0E-3 ? (G4double)(dum0*stepMin) : (G4double)(dum0*stepMin*0.5*(1.0 + ekin*200.0));
     mscData->fTlimitMin  = G4HepEmMax(dum1, kTLimitMinfix);
 #endif
 
@@ -73,12 +73,12 @@ void G4HepEmElectronInteractionUMSC::StepLimit(G4HepEmData* hepEmData, G4HepEmPa
   // the true step limit
   const G4double tlimitmin = mscData->fTlimitMin;
   const G4double tlimit    = range > presafety
-                  ? G4HepEmMax(G4HepEmMax(mscData->fInitialRange*mscData->fDynamicRangeFactor, hepEmPars->fMSCSafetyFactor*presafety), tlimitmin)
-                  : G4HepEmMax(range, tlimitmin);
+                  ? (G4double)G4HepEmMax(G4HepEmMax(mscData->fInitialRange*mscData->fDynamicRangeFactor, hepEmPars->fMSCSafetyFactor*presafety), tlimitmin)
+                  : (G4double)G4HepEmMax(range, tlimitmin);
   // randomise the true step limit but only if the step was determined by msc
   if (tlimit < mscData->fTrueStepLength) { // keep mscData->fTrueStepLength otherwise as teh current step-limit --> not msc limited this step
     const G4double dum0 = tlimit > tlimitmin
-                        ? G4HepEmMax(rnge->Gauss(tlimit, 0.1*(tlimit - tlimitmin)), tlimitmin)
+                        ? (G4double)G4HepEmMax(rnge->Gauss(tlimit, 0.1*(tlimit - tlimitmin)), tlimitmin)
                         : tlimitmin;
     mscData->fTrueStepLength = G4HepEmMin(dum0, mscData->fTrueStepLength);
   }
@@ -122,8 +122,8 @@ G4double G4HepEmElectronInteractionUMSC::SampleCosineTheta(G4double pStepLength,
   const G4double iPreStepTr1mfp = 1.0/preStepTr1mfp;
   const G4double deltaR1mfp     = preStepTr1mfp - postStepTr1mfp;
   const G4double tau = std::abs(deltaR1mfp) > 0.01*preStepTr1mfp
-                     ? pStepLength*G4HepEmLog(preStepTr1mfp/postStepTr1mfp)/deltaR1mfp
-                     : pStepLength*iPreStepTr1mfp;
+                     ? (G4double)(pStepLength*G4HepEmLog(preStepTr1mfp/postStepTr1mfp)/deltaR1mfp)
+                     : (G4double)(pStepLength*iPreStepTr1mfp);
   //
   // Note:  `currentTau = tau` that is used in G4Urban before the displacement
   //        sampling and dispacement is done only if (currentTau >= tausmall)
@@ -165,7 +165,7 @@ G4double G4HepEmElectronInteractionUMSC::SampleCosineTheta(G4double pStepLength,
   const bool stpNotExSmall = pStepLength > tsmall;
   const G4double theta0      = stpNotExSmall
                             ? ComputeTheta0(pStepLength/radLength, postStepEkin, preStepEkin, zeff, umscThetaCoeff, isElectron)
-                            : ComputeTheta0(tsmall/radLength,      postStepEkin, preStepEkin, zeff, umscThetaCoeff, isElectron)*std::sqrt(pStepLength/tsmall);
+                            : (G4double)(ComputeTheta0(tsmall/radLength,      postStepEkin, preStepEkin, zeff, umscThetaCoeff, isElectron)*std::sqrt(pStepLength/tsmall));
   //
   if (theta0 > kPi*0.166666) {
     return SimpleScattering(xmeanth, x2meanth, rnge);
@@ -178,7 +178,7 @@ G4double G4HepEmElectronInteractionUMSC::SampleCosineTheta(G4double pStepLength,
   }
 
   // parameter for tail
-  const G4double dumtau = stpNotExSmall ? tau : tsmall*iPreStepTr1mfp;
+  const G4double dumtau = stpNotExSmall ? tau : (G4double)(tsmall*iPreStepTr1mfp);
   const G4double parU   = G4HepEmPow(dumtau, 0.1666666);
   const G4double dumxsi = umscTailCoeff[0] + parU*(umscTailCoeff[1] + parU*umscTailCoeff[2])
                         + umscTailCoeff[3]*G4HepEmLog(pStepLength/(tau*radLength));
@@ -252,8 +252,8 @@ G4double G4HepEmElectronInteractionUMSC::SimpleScattering(G4double xmeanth, G4do
   G4double rndArray[2];
   rnge->flatArray(2, rndArray);
   return (rndArray[0] < prob)
-         ? -1. + 2.*G4HepEmPow(rndArray[1],1./(1. + a))
-         : -1. + 2.*rndArray[1];
+         ? (G4double)(-1. + 2.*G4HepEmPow(rndArray[1],1./(1. + a)))
+         : (G4double)(-1. + 2.*rndArray[1]);
 }
 
 
@@ -263,11 +263,11 @@ G4double G4HepEmElectronInteractionUMSC::ComputeTheta0(G4double stepInRadLength,
   const G4double     kHighland = 13.6; // note:: assumed to be in MeV
   const G4double postInvBetaPc = (postStepEkin + kElectronMassC2)/(postStepEkin*(postStepEkin + 2.*kElectronMassC2));
   const G4double invBetaPc     = preStepEkin != postStepEkin
-                               ? std::sqrt(postInvBetaPc*(preStepEkin + kElectronMassC2)/(preStepEkin*(preStepEkin + 2.*kElectronMassC2)))
+                               ? (G4double)std::sqrt(postInvBetaPc*(preStepEkin + kElectronMassC2)/(preStepEkin*(preStepEkin + 2.*kElectronMassC2)))
                                : postInvBetaPc;
   const G4double y = isElectron
                    ? stepInRadLength
-                   : stepInRadLength * Theta0PositronCorrection(preStepEkin*postStepEkin, zeff);
+                   : (G4double)(stepInRadLength * Theta0PositronCorrection(preStepEkin*postStepEkin, zeff));
   return kHighland*std::sqrt(y)*invBetaPc*(umscThetaCoeff[0] + umscThetaCoeff[1]*G4HepEmLog(y));
 }
 
@@ -315,6 +315,6 @@ void G4HepEmElectronInteractionUMSC::SampleDisplacement(G4double pStepLength, G4
   G4double rndArray[2];
   rnge->flatArray(2, rndArray);
   const G4double psi = -G4HepEmLog(1. - rndArray[0]*cbeta1)/cbeta;
-  const G4double phi = (rndArray[1] < 0.5) ? thePhi + psi : thePhi - psi;
+  const G4double phi = (rndArray[1] < 0.5) ? (G4double)(thePhi + psi) : (G4double)(thePhi - psi);
   mscData->SetDisplacement(r*std::cos(phi), r*std::sin(phi), 0.0);
 }

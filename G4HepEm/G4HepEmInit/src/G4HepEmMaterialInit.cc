@@ -175,8 +175,8 @@ void InitMaterialAndCoupleData(struct G4HepEmData* hepEmData, struct G4HepEmPara
           elData.fZet23        = std::pow(dZet, 2.0/3.0);
           elData.fCoulomb      = ((*elmVec)[ie])->GetfCoulomb();
           elData.fLogZ         = std::log(dZet);
-          G4double Fel           = (izet<5) ? kFelLowZet[izet]   : std::log(184.15) -     elData.fLogZ/3.0;
-          G4double Finel         = (izet<5) ? kFinelLowZet[izet] : std::log(1194.0) - 2.0*elData.fLogZ/3.0;
+          G4double Fel           = (izet<5) ? kFelLowZet[izet]   : (G4double)(std::log(184.15) -     elData.fLogZ/3.0);
+          G4double Finel         = (izet<5) ? kFinelLowZet[izet] : (G4double)(std::log(1194.0) - 2.0*elData.fLogZ/3.0);
           elData.fZFactor1     = (Fel-elData.fCoulomb) + Finel/dZet;
           const G4double FZLow   = 8.0*elData.fLogZ/3.0;
           const G4double FZHigh  = 8.0*(elData.fLogZ/3.0 + elData.fCoulomb);

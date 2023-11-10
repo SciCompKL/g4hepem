@@ -30,7 +30,7 @@ G4double G4HepEmElectronEnergyLossFluctuation::SampleEnergyLossFLuctuation(G4dou
     const G4double kFluctParA0 = 42.;
     const G4double kFluctParFw =  4.;
     const G4double dum0  = a1Tmp < kFluctParA0
-                         ? .1 + (kFluctParFw - .1)*std::sqrt(a1Tmp/kFluctParA0)
+                         ? (G4double)(.1 + (kFluctParFw - .1)*std::sqrt(a1Tmp/kFluctParA0))
                          : kFluctParFw;
     // NOTE: this corresponds to G4UniversalFluctuation as in G4-v11.00
     // const G4double kFluctParA0 = 15.;
@@ -51,7 +51,7 @@ G4double G4HepEmElectronEnergyLossFluctuation::SampleEnergyLossFLuctuation(G4dou
     } else {
       // small number --> sampling from Poisson
       const int p = rnge->Poisson(a1);
-      eloss = p > 0 ? ((p + 1) - 2.*rnge->flat())*e1 : 0.;
+      eloss = p > 0 ? (G4double)(((p + 1) - 2.*rnge->flat())*e1) : 0.;
     }
   }
   //

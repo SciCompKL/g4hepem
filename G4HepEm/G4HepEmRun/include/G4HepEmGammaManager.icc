@@ -59,7 +59,7 @@ void G4HepEmGammaManager::HowFar(struct G4HepEmData* hepEmData, struct G4HepEmPa
   G4double pStepLength    = kALargeValue;   // init to a large value
   for (int ip=0; ip<3; ++ip) {
     const G4double mxsec = mxSecs[ip];
-    const G4double   mfp = (mxsec>0.) ? 1./mxsec : kALargeValue;
+    const G4double   mfp = (mxsec>0.) ? (G4double)(1./mxsec) : kALargeValue;
     // save the mac-xsec for the update of the `number-of-interaction-left`:
     // the `number-of-intercation-left` should be updated in the along-step-action
     theTrack->SetMFP(mfp, ip);

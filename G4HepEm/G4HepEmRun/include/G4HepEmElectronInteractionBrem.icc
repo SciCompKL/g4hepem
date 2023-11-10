@@ -176,7 +176,7 @@ G4double G4HepEmElectronInteractionBrem::SampleETransferSB(struct G4HepEmData* h
        const G4double     e2 = thePrimEkin - eGamma;
        const G4double iBeta2 = (e2 + kElectronMassC2) / std::sqrt(e2*(e2 + 2.0*kElectronMassC2));
        const G4double    dum = kAlpha*k2Pi*dZet*(iBeta1 - iBeta2);
-       suppression = (dum > -12.) ? suppression*G4HepEmExp(dum) : 0.;
+       suppression = (dum > -12.) ? (G4double)(suppression*G4HepEmExp(dum)) : 0.;
      }
    } while (rndm[1] > suppression);
    return eGamma;

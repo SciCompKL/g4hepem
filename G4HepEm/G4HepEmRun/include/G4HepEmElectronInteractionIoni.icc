@@ -24,7 +24,7 @@ void G4HepEmElectronInteractionIoni::Perform(G4HepEmTLData* tlData, struct G4Hep
   const int   theMCIndx = thePrimaryTrack->GetMCIndex();
   const G4double theElCut = hepEmData->fTheMatCutData->fMatCutData[theMCIndx].fSecElProdCutE;
 
-  const G4double maxETransfer = (iselectron) ? 0.5*thePrimEkin : thePrimEkin;
+  const G4double maxETransfer = (iselectron) ? (G4double)(0.5*thePrimEkin) : thePrimEkin;
   if (maxETransfer <= theElCut) return;
 
   //

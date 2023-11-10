@@ -50,7 +50,7 @@ bool TestXSectionData ( const struct G4HepEmData* hepEmData, bool iselectron ) {
     // get the min/max of the possible prirmary e-/e+ kinetic energies at which
     // the restricted interacton can happen in this material-cuts (use +- 2% out of range)
     double secElCutE   = theMatCutData->fMatCutData[imc].fSecElProdCutE;
-    double minEKin     = iselectron ? 0.98*2.0*secElCutE : 0.98*secElCutE;
+    double minEKin     = iselectron ? (G4double)(0.98*2.0*secElCutE) : (G4double)(0.98*secElCutE);
     // generate a unifomly random kinetic energy point in the allowed (+- 2%) primary
     // particle kinetic energy range on logarithmic scale
     double lMinEkin    = std::log(minEKin);

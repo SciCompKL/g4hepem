@@ -121,7 +121,7 @@ public:
   G4HepEmHostDevice
   G4double  GetLogEKin() {
     if (fLogEKin > 99.0) {
-      fLogEKin = (fEKin > 0.) ? G4HepEmLog(fEKin) : -30;
+      fLogEKin = (fEKin > 0.) ? (G4double)G4HepEmLog(fEKin) : -30;
     }
     return fLogEKin;
   }
