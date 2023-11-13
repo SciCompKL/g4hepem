@@ -10,17 +10,8 @@
 
 #include "G4HepEmMacros.hh"
 
-template <typename S, typename T>
-G4HepEmHostDevice static inline
-auto G4HepEmMax(S a, T b) -> decltype(std::max(a,b)) {
- return std::max(a,b);
-}
-
-template <typename S, typename T>
-G4HepEmHostDevice static inline
-auto G4HepEmMin(S a, T b) -> decltype(std::min(a,b)) {
- return std::min(a,b);
-}
+#define G4HepEmMax std::max
+#define G4HepEmMin std::min
 
 template <typename T>
 G4HepEmHostDevice static inline
