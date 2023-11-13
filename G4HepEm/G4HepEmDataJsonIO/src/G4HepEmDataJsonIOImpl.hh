@@ -80,7 +80,11 @@ void from_json(const json& j, T (&t)[N])
   size_t index = 0;
   for(auto& item : j)
   {
-    from_json(item, t[index++]);
+    using T_unq = std::remove_cv_t<T>;
+    using T_noad = std::conditional_t<std::is_same_v<T_unq,G4double>, double, T>;
+    T_noad data_noad;
+    from_json(item, data_noad);
+    t[index++] = data_noad;
   }
 }
 
@@ -99,7 +103,8 @@ namespace nlohmann
       // Assumes a to_json(j, T)
       for(auto& elem : d)
       {
-        if constexpr(std::is_same_v<T,G4double> && !std::is_same_v<T,double>){
+        using T_unq = std::remove_cv_t<T>;
+        if constexpr(std::is_same_v<T_unq,G4double> && !std::is_same_v<T_unq,double>){
           j.push_back(elem.getValue());
         } else {
           j.push_back(elem);
@@ -115,7 +120,9 @@ namespace nlohmann
       }
 
       auto d = make_array<T>(j.size());
-      std::copy(j.begin(), j.end(), d.begin());
+      for(size_t i=0; i<j.size(); i++){
+        d.begin()[i] = j.begin()[i];
+      }
       return d;
     }
   };
