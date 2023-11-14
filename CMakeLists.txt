@@ -10,6 +10,19 @@ include(CheckLanguage)
 
 option(CODI_FORWARD "Forward-mode AD builds with CoDiPack." OFF)
 
+if(CODI_FORWARD)
+  find_package(CoDiPack CONFIG REQUIRED)
+endif()
+
+function(target_add_codi _name)
+  if(CODI_FORWARD)
+    target_compile_definitions(${_name} PUBLIC "CODI_FORWARD")
+    target_link_libraries(${_name} PUBLIC CoDiPack)
+  else()
+    target_compile_definitions(${_name} PUBLIC "CODI_NONE")
+  endif()
+endfunction()
+
 #----------------------------------------------------------------------------
 # Convenience function to add shared / static libraries as configured.
 #
@@ -33,9 +46,7 @@ function(g4hepem_add_library _name)
       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>)
     target_link_libraries(${_name} PUBLIC ${_g4hepem_LINK})
     
-    if(CODI_FORWARD)
-      target_compile_definitions(${_name} PUBLIC "CODI_FORWARD")
-    endif()
+    target_add_codi(${_name})
   endif()
 
   # Build static library, if enabled.
@@ -52,9 +63,7 @@ function(g4hepem_add_library _name)
       target_link_libraries(${_name}-static PUBLIC ${_lib}-static)
     endforeach()
 
-    if(CODI_FORWARD)
-      target_compile_definitions(${_name} PUBLIC "CODI_FORWARD")
-    endif()
+    target_add_codi(${_name}-static)
 
     # If only the static library, add alias targets for convenience.
     if(NOT BUILD_SHARED_LIBS)
@@ -68,6 +77,7 @@ function(g4hepem_add_library _name)
 
   # Install headers.
   install(FILES ${_g4hepem_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
+  install(FILES "G4HepEm/ad_type.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
 
   # Install libraries, as built.
   if(BUILD_SHARED_LIBS)
