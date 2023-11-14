@@ -51,7 +51,7 @@ bool TestElossData ( const struct G4HepEmData* hepEmData, bool iselectron ) {
   const double lMinELoss   = std::log(minELoss);
   const double lELossDelta = std::log(maxELoss/minELoss);
   for (int i=0; i<numTestCases; ++i) {
-    tsInImc[i]     = (int)(dis(gen)*numMCData).getValue();
+    tsInImc[i]     = (int)GET_VALUE((dis(gen)*numMCData));
     tsInLogEkin[i] = dis(gen)*lELossDelta+lMinELoss;
     tsInEkin[i]    = std::exp(tsInLogEkin[i]);
   }

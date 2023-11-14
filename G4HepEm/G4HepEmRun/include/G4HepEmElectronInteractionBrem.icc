@@ -97,11 +97,11 @@ G4double G4HepEmElectronInteractionBrem::SampleETransferSB(struct G4HepEmData* h
   // find lower e- energy bin
   bool      isCorner = false; // indicate that the lower edge e- energy < gam-gut
   bool      isSimply = false; // simply sampling: isCorner+lower egde is selected
-  int   elEnergyIndx = (int)(theSBTables->fSBTableData[iStart+2]).getValue();  // maxE-grid index for this Z
+  int   elEnergyIndx = (int)GET_VALUE((theSBTables->fSBTableData[iStart+2]));  // maxE-grid index for this Z
   // only if e- ekin is below the maximum value(use table at maximum otherwise)
   if (thePrimEkin < theSBTables->fElEnergyVect[elEnergyIndx]) {
     const G4double val = (theLogEkin-theSBTables->fLogMinElEnergy)*theSBTables->fILDeltaElEnergy;
-    elEnergyIndx     = (int)val.getValue();
+    elEnergyIndx     = (int)GET_VALUE(val);
     G4double pIndxH    = val-elEnergyIndx;
     // check if we are at limiting case: lower edge e- energy < gam-gut
     if (theSBTables->fElEnergyVect[elEnergyIndx] <= theGamCut) {
@@ -119,8 +119,8 @@ G4double G4HepEmElectronInteractionBrem::SampleETransferSB(struct G4HepEmData* h
     }
   }
   // compute the start index of the sampling table data for this `elEnergyIndx`
-  const int   minEIndx = (int)(theSBTables->fSBTableData[iStart+1]).getValue();
-  const int numGamCuts = (int)(theSBTables->fSBTableData[iStart+3]).getValue();
+  const int   minEIndx = (int)GET_VALUE((theSBTables->fSBTableData[iStart+1]));
+  const int numGamCuts = (int)GET_VALUE((theSBTables->fSBTableData[iStart+3]));
   const int   sizeOneE = (int)(numGamCuts + 3*theSBTables->fNumKappa);
   const int   iSTStart = iStart + 4 + (elEnergyIndx-minEIndx)*sizeOneE;
   // the minimum value of the cumulative (that corresponds to the kappa-cut value)
@@ -274,15 +274,15 @@ int G4HepEmElectronInteractionBrem::SelectTargetAtom(const struct G4HepEmElectro
   const G4double* theData = isbremSB
                           ? &(elData->fElemSelectorBremSBData[indxStart])
                           : &(elData->fElemSelectorBremRBData[indxStart]);
-  const int     numData = theData[0].getValue();
-  const int     numElem = theData[1].getValue();
+  const int     numData = GET_VALUE(theData[0]);
+  const int     numElem = GET_VALUE(theData[1]);
   const G4double    logE0 = theData[2];
   const G4double    invLD = theData[3];
   const G4double*   xdata = &(theData[4]);
   // make sure that $x \in  [x[0],x[ndata-1]]$
   const G4double   xv = G4HepEmMax(xdata[0], G4HepEmMin(xdata[numElem*(numData-1)], ekin));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
-  const int idxEkin = G4HepEmMax(0.0, G4HepEmMin((lekin-logE0)*invLD, numData-2.0)).getValue();
+  const int idxEkin = GET_VALUE(G4HepEmMax(0.0, G4HepEmMin((lekin-logE0)*invLD, numData-2.0)));
   // the real index position is idxEkin x numElem
   int   indx0 = idxEkin*numElem;
   int   indx1 = indx0+numElem;

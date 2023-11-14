@@ -66,7 +66,7 @@ G4double GetSplineLog(int ndata, G4double* xdata, G4double* ydata, G4double* sec
   // make sure that $x \in  [x[0],x[ndata-1]]$
   const G4double xv = G4HepEmMax(xdata[0], G4HepEmMin(xdata[ndata-1], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
-  const int   idx = (int)G4HepEmMax(0., G4HepEmMin((logx-logxmin)*invLDBin, ndata-2.)).getValue();
+  const int   idx = (int)GET_VALUE(G4HepEmMax(0., G4HepEmMin((logx-logxmin)*invLDBin, ndata-2.)));
   return GetSpline(xdata[idx], xdata[idx+1], ydata[idx], ydata[idx+1], secderiv[idx], secderiv[idx+1], xv);
 }
 
@@ -75,7 +75,7 @@ G4double GetSplineLog(int ndata, G4double* xdata, G4double* ydata, G4double x, G
   // make sure that $x \in  [x[0],x[ndata-1]]$
   const G4double xv = G4HepEmMax(xdata[0], G4HepEmMin(xdata[ndata-1], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
-  const int   idx = (int)G4HepEmMax(0., G4HepEmMin((logx-logxmin)*invLDBin, ndata-2.)).getValue();
+  const int   idx = (int)GET_VALUE(G4HepEmMax(0., G4HepEmMin((logx-logxmin)*invLDBin, ndata-2.)));
   const int  idx2 = 2*idx; 
   return GetSpline(xdata[idx], xdata[idx+1], ydata[idx2], ydata[idx2+2], ydata[idx2+1], ydata[idx2+3], xv);
 }
@@ -86,7 +86,7 @@ G4double GetSplineLog(int ndata, G4double* data, G4double x, G4double logx, G4do
   // make sure that $x \in  [x[0],x[ndata-1]]$
   const G4double xv = G4HepEmMax(data[0], G4HepEmMin(data[3*(ndata-1)], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
-  const int   idx = (int)G4HepEmMax(0., G4HepEmMin((logx-logxmin)*invLDBin, ndata-2.)).getValue();
+  const int   idx = (int)GET_VALUE(G4HepEmMax(0., G4HepEmMin((logx-logxmin)*invLDBin, ndata-2.)));
   const int  idx3 = 3*idx;
   return GetSpline(data[idx3], data[idx3+3], data[idx3+1], data[idx3+4], data[idx3+2], data[idx3+5], xv);
 }

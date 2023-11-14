@@ -599,7 +599,7 @@ void BuildElementSelector(G4double minEKin, G4double maxEKin, int numBinsPerDeca
 
 int InitElementSelectorEnergyGrid(int binsperdecade, G4double* egrid, G4double mine, G4double maxe, G4double& logMinEnergy, G4double& invLEDelta) {
   const G4double invlog106 = 1.0/(6.0*std::log(10.0));
-  int numEnergyBins = (int)(binsperdecade*std::log(maxe/mine)*invlog106).getValue();
+  int numEnergyBins = (int)GET_VALUE(binsperdecade*std::log(maxe/mine)*invlog106);
   if (numEnergyBins<3) {
     numEnergyBins = 3;
   }
@@ -638,7 +638,7 @@ void BuildSBBremSTables(struct G4HepEmData* hepEmData, struct G4HepEmParameters*
   // loop over the elements used in the geometry
   int numSBData = 0;
   for (int iz=1; iz<theElemData->fMaxZet; ++iz) {
-    const int izet = (int)(theElemData->fElementData[iz].fZet.getValue());
+    const int izet = (int)GET_VALUE(theElemData->fElementData[iz].fZet);
     if (izet<0) {
       continue;
     }
@@ -695,7 +695,7 @@ void BuildSBBremSTables(struct G4HepEmData* hepEmData, struct G4HepEmParameters*
   int indxCumSBTableData  = 0;
   // loop over the elements used in the geometry and construct HepEM SB-tables
   for (int iz=1; iz<theElemData->fMaxZet; ++iz) {
-    const int izet = (int)(theElemData->fElementData[iz].fZet.getValue());
+    const int izet = (int)GET_VALUE(theElemData->fElementData[iz].fZet);
     if (izet<0) {
       continue;
     }

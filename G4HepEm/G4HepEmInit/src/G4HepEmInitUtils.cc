@@ -30,7 +30,7 @@ void G4HepEmInitUtils::GLIntegral(int npoints, G4double* abscissas, G4double* we
   const G4double kPi      = 3.14159265358979323846;
   const G4double kEpsilon = 1.0E-13;
   G4double xm,xl,z,z1,p1,p2,p3,pp;
-  int m = (int)(0.5*(npoints + 1.)).getValue();
+  int m = (int)GET_VALUE(0.5*(npoints + 1.));
   xm    = 0.5*(max+min);
   xl    = 0.5*(max-min);
   for (int i=1; i<=m; ++i) {
@@ -119,7 +119,7 @@ G4double G4HepEmInitUtils::GetSplineLog(int ndata, G4double* xdata, G4double* yd
   // make sure that $x \in  [x[0],x[ndata-1]]$
   const G4double xv = std::max(xdata[0], std::min(xdata[ndata-1], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
-  const int   idx = (int)std::max(0., std::min((logx-logxmin)*invLDBin, ndata-2.)).getValue();
+  const int   idx = (int)GET_VALUE(std::max(0., std::min((logx-logxmin)*invLDBin, ndata-2.)));
   return GetSplineImpl(xdata[idx], xdata[idx+1], ydata[idx], ydata[idx+1], secderiv[idx], secderiv[idx+1], xv);
 }
 
@@ -128,7 +128,7 @@ G4double G4HepEmInitUtils::GetSplineLog(int ndata, G4double* xdata, G4double* yd
   // make sure that $x \in  [x[0],x[ndata-1]]$
   const G4double xv = std::max(xdata[0], std::min(xdata[ndata-1], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
-  const int   idx = (int)std::max(0., std::min((logx-logxmin)*invLDBin, ndata-2.)).getValue();
+  const int   idx = (int)GET_VALUE(std::max(0., std::min((logx-logxmin)*invLDBin, ndata-2.)));
   const int  idx2 = 2*idx;
   return GetSplineImpl(xdata[idx], xdata[idx+1], ydata[idx2], ydata[idx2+2], ydata[idx2+1], ydata[idx2+3], xv);
 }
@@ -139,7 +139,7 @@ G4double G4HepEmInitUtils::GetSplineLog(int ndata, G4double* data, G4double x, G
   // make sure that $x \in  [x[0],x[ndata-1]]$
   const G4double xv = std::max(data[0], std::min(data[3*(ndata-1)], x));
   // compute the lowerindex of the x bin (idx \in [0,N-2] will be guaranted)
-  const int   idx = (int)std::max(0., std::min((logx-logxmin)*invLDBin, ndata-2.)).getValue();
+  const int   idx = (int)GET_VALUE(std::max(0., std::min((logx-logxmin)*invLDBin, ndata-2.)));
   const int  idx3 = 3*idx;
   return GetSplineImpl(data[idx3], data[idx+3], data[idx3+1], data[idx3+4], data[idx3+2], data[idx3+5], xv);
 }

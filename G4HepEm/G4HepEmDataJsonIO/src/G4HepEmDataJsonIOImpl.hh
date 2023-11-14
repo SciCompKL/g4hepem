@@ -104,8 +104,8 @@ namespace nlohmann
       for(auto& elem : d)
       {
         using T_unq = std::remove_cv_t<T>;
-        if constexpr(std::is_same_v<T_unq,G4double> && !std::is_same_v<T_unq,double>){
-          j.push_back(elem.getValue());
+        if constexpr(std::is_same_v<T_unq,G4double>){
+          j.push_back(GET_VALUE(elem));
         } else {
           j.push_back(elem);
         }
@@ -147,16 +147,16 @@ namespace nlohmann
       }
       else
       {
-        j["fElectronTrackingCut"]  = d->fElectronTrackingCut.getValue();
-        j["fMinLossTableEnergy"]   = d->fMinLossTableEnergy.getValue();
-        j["fMaxLossTableEnergy"]   = d->fMaxLossTableEnergy.getValue();
+        j["fElectronTrackingCut"]  = GET_VALUE(d->fElectronTrackingCut);
+        j["fMinLossTableEnergy"]   = GET_VALUE(d->fMinLossTableEnergy);
+        j["fMaxLossTableEnergy"]   = GET_VALUE(d->fMaxLossTableEnergy);
         j["fNumLossTableBins"]     = d->fNumLossTableBins;
-        j["fFinalRange"]           = d->fFinalRange.getValue();
-        j["fDRoverRange"]          = d->fDRoverRange.getValue();
-        j["fLinELossLimit"]        = d->fLinELossLimit.getValue();
-        j["fElectronBremModelLim"] = d->fElectronBremModelLim.getValue();
-        j["fMSCRangeFactor"]       = d->fMSCRangeFactor.getValue();
-        j["fMSCSafetyFactor"]      = d->fMSCSafetyFactor.getValue();
+        j["fFinalRange"]           = GET_VALUE(d->fFinalRange);
+        j["fDRoverRange"]          = GET_VALUE(d->fDRoverRange);
+        j["fLinELossLimit"]        = GET_VALUE(d->fLinELossLimit);
+        j["fElectronBremModelLim"] = GET_VALUE(d->fElectronBremModelLim);
+        j["fMSCRangeFactor"]       = GET_VALUE(d->fMSCRangeFactor);
+        j["fMSCSafetyFactor"]      = GET_VALUE(d->fMSCSafetyFactor);
       }
     }
 
@@ -208,21 +208,21 @@ namespace nlohmann
     // JSON
     static void to_json(json& j, const G4HepEmElemData& d)
     {
-      j["fZet"]          = d.fZet.getValue();
-      j["fZet13"]        = d.fZet13.getValue();
-      j["fZet23"]        = d.fZet23.getValue();
-      j["fCoulomb"]      = d.fCoulomb.getValue();
-      j["fLogZ"]         = d.fLogZ.getValue();
-      j["fZFactor1"]     = d.fZFactor1.getValue();
-      j["fDeltaMaxLow"]  = d.fDeltaMaxLow.getValue();
-      j["fDeltaMaxHigh"] = d.fDeltaMaxHigh.getValue();
-      j["fILVarS1"]      = d.fILVarS1.getValue();
-      j["fILVarS1Cond"]  = d.fILVarS1Cond.getValue();
+      j["fZet"]          = GET_VALUE(d.fZet);
+      j["fZet13"]        = GET_VALUE(d.fZet13);
+      j["fZet23"]        = GET_VALUE(d.fZet23);
+      j["fCoulomb"]      = GET_VALUE(d.fCoulomb);
+      j["fLogZ"]         = GET_VALUE(d.fLogZ);
+      j["fZFactor1"]     = GET_VALUE(d.fZFactor1);
+      j["fDeltaMaxLow"]  = GET_VALUE(d.fDeltaMaxLow);
+      j["fDeltaMaxHigh"] = GET_VALUE(d.fDeltaMaxHigh);
+      j["fILVarS1"]      = GET_VALUE(d.fILVarS1);
+      j["fILVarS1Cond"]  = GET_VALUE(d.fILVarS1Cond);
       j["fSandiaEnergies"] =
         make_span(d.fNumOfSandiaIntervals, d.fSandiaEnergies);
       j["fSandiaCoefficients"] =
         make_span(4 * d.fNumOfSandiaIntervals, d.fSandiaCoefficients);
-      j["fKShellBindingEnergy"] = d.fKShellBindingEnergy.getValue();
+      j["fKShellBindingEnergy"] = GET_VALUE(d.fKShellBindingEnergy);
     }
 
     static G4HepEmElemData from_json(const json& j)
@@ -299,7 +299,7 @@ namespace nlohmann
         for(const auto& e : j)
         {
           auto tmpElem       = e.get<G4HepEmElemData>();
-          int i              = static_cast<int>(tmpElem.fZet.getValue());
+          int i              = static_cast<int>(GET_VALUE(tmpElem.fZet));
           p->fElementData[i] = tmpElem;
         }
         return p;
@@ -324,21 +324,21 @@ namespace nlohmann
       j["fElementVect"] = make_span(d.fNumOfElement, d.fElementVect);
       j["fNumOfAtomsPerVolumeVect"] =
         make_span(d.fNumOfElement, d.fNumOfAtomsPerVolumeVect);
-      j["fDensity"]          = d.fDensity.getValue();
-      j["fDensityCorfactor"] = d.fDensityCorFactor.getValue();
-      j["fElectronDensity"]  = d.fElectronDensity.getValue();
-      j["fRadiationLength"]  = d.fRadiationLength.getValue();
-      j["fMeanExEnergy"]     = d.fMeanExEnergy.getValue();
+      j["fDensity"]          = GET_VALUE(d.fDensity);
+      j["fDensityCorfactor"] = GET_VALUE(d.fDensityCorFactor);
+      j["fElectronDensity"]  = GET_VALUE(d.fElectronDensity);
+      j["fRadiationLength"]  = GET_VALUE(d.fRadiationLength);
+      j["fMeanExEnergy"]     = GET_VALUE(d.fMeanExEnergy);
       j["fSandiaEnergies"] =
         make_span(d.fNumOfSandiaIntervals, d.fSandiaEnergies);
       j["fSandiaCoefficients"] =
         make_span(4 * d.fNumOfSandiaIntervals, d.fSandiaCoefficients);
 
-      j["fZeff"]      = d.fZeff.getValue();
-      j["fZeff23"]    = d.fZeff23.getValue();
-      j["fZeffSqrt"]  = d.fZeffSqrt.getValue();
+      j["fZeff"]      = GET_VALUE(d.fZeff);
+      j["fZeff23"]    = GET_VALUE(d.fZeff23);
+      j["fZeffSqrt"]  = GET_VALUE(d.fZeffSqrt);
 
-      j["fUMSCPar"]         = d.fUMSCPar.getValue();
+      j["fUMSCPar"]         = GET_VALUE(d.fUMSCPar);
       ARR(d.fUMSCStepMinPars,tmp10,2);
       j["fUMSCStepMinPars"] = tmp10;
       ARR(d.fUMSCTailCoeff,tmp11,4);
@@ -449,9 +449,9 @@ namespace nlohmann
   {
     static void to_json(json& j, const G4HepEmMCCData& d)
     {
-      j["fSecElProdCutE"]  = d.fSecElProdCutE.getValue();
-      j["fSecGamProdCutE"] = d.fSecGamProdCutE.getValue();
-      j["fLogSecGamCutE"]  = d.fLogSecGamCutE.getValue();
+      j["fSecElProdCutE"]  = GET_VALUE(d.fSecElProdCutE);
+      j["fSecGamProdCutE"] = GET_VALUE(d.fSecGamProdCutE);
+      j["fLogSecGamCutE"]  = GET_VALUE(d.fLogSecGamCutE);
       j["fHepEmMatIndex"]  = d.fHepEmMatIndex;
       j["fG4MatCutIndex"]  = d.fG4MatCutIndex;
     }
@@ -533,8 +533,8 @@ namespace nlohmann
       {
         j["fNumMatCuts"]      = d->fNumMatCuts;
         j["fNumMaterials"]    = d->fNumMaterials;
-        j["fELossLogMinEkin"] = d->fELossLogMinEkin.getValue();
-        j["fELossEILDelta"]   = d->fELossEILDelta.getValue();
+        j["fELossLogMinEkin"] = GET_VALUE(d->fELossLogMinEkin);
+        j["fELossEILDelta"]   = GET_VALUE(d->fELossEILDelta);
 
         j["fELossEnergyGrid"] =
           make_span(d->fELossEnergyGridSize, d->fELossEnergyGrid);
@@ -663,8 +663,8 @@ namespace nlohmann
       }
       else
       {
-        j["fLogMinElEnergy"]  = d->fLogMinElEnergy.getValue();
-        j["fILDeltaElEnergy"] = d->fILDeltaElEnergy.getValue();
+        j["fLogMinElEnergy"]  = GET_VALUE(d->fLogMinElEnergy);
+        j["fILDeltaElEnergy"] = GET_VALUE(d->fILDeltaElEnergy);
         ARR(d->fElEnergyVect,tmp10,65);
         j["fElEnergyVect"]    = tmp10;
         ARR(d->fLElEnergyVect,tmp11,65);
@@ -758,15 +758,15 @@ namespace nlohmann
         j["fNumMaterials"] = d->fNumMaterials;
 
         //// === conversion related data. Grid: 146 bins form 2mc^2 - 100 TeV
-        j["fConvLogMinEkin"] = d->fConvLogMinEkin.getValue();
-        j["fConvEILDelta"]   = d->fConvEILDelta.getValue();
+        j["fConvLogMinEkin"] = GET_VALUE(d->fConvLogMinEkin);
+        j["fConvEILDelta"]   = GET_VALUE(d->fConvEILDelta);
         j["fConvEnergyGrid"] =
           make_span(d->fConvEnergyGridSize, d->fConvEnergyGrid);
 
         //// === compton related data. 84 bins (7 per decades) from 100 eV - 100
         /// TeV
-        j["fCompLogMinEkin"] = d->fCompLogMinEkin.getValue();
-        j["fCompEILDelta"]   = d->fCompEILDelta.getValue();
+        j["fCompLogMinEkin"] = GET_VALUE(d->fCompLogMinEkin);
+        j["fCompEILDelta"]   = GET_VALUE(d->fCompEILDelta);
         j["fCompEnergyGrid"] =
           make_span(d->fCompEnergyGridSize, d->fCompEnergyGrid);
 
@@ -778,8 +778,8 @@ namespace nlohmann
 
         //// === element selector for conversion (note: KN compton interaction
         /// do not know anything about Z)
-        j["fElemSelectorConvLogMinEkin"] = d->fElemSelectorConvLogMinEkin.getValue();
-        j["fElemSelectorConvEILDelta"]   = d->fElemSelectorConvEILDelta.getValue();
+        j["fElemSelectorConvLogMinEkin"] = GET_VALUE(d->fElemSelectorConvLogMinEkin);
+        j["fElemSelectorConvEILDelta"]   = GET_VALUE(d->fElemSelectorConvEILDelta);
         j["fElemSelectorConvStartIndexPerMat"] =
           make_span(d->fNumMaterials, d->fElemSelectorConvStartIndexPerMat);
 

@@ -44,7 +44,7 @@ bool TestXSectionData ( const struct G4HepEmData* hepEmData, bool iselectron ) {
   // the maximum (+2%) primary particle kinetic energy that is covered by the simulation (100 TeV by default)
   const double    maxEKin = 1.02*theElectronData->fELossEnergyGrid[numELossData-1];
   for (int i=0; i<numTestCases; ++i) {
-    int imc            = (int)(dis(gen)*numMCData).getValue();
+    int imc            = (int)GET_VALUE((dis(gen)*numMCData));
     tsInImc[i]         = imc;
     // == Ionisation:
     // get the min/max of the possible prirmary e-/e+ kinetic energies at which

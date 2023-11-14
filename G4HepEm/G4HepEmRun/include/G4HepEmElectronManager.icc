@@ -509,9 +509,9 @@ G4double  G4HepEmElectronManager::GetInvRange(const struct G4HepEmElectronData* 
 
 G4double  G4HepEmElectronManager::GetRestMacXSec(const struct G4HepEmElectronData* elData, const int imc, const G4double ekin, const G4double lekin, bool isioni) {
   const int iIoniStarts = elData->fResMacXSecStartIndexPerMatCut[imc];
-  const int numIoniData = elData->fResMacXSecData[iIoniStarts].getValue(); // x3 for the 3 values and +5 at the beginning
+  const int numIoniData = GET_VALUE(elData->fResMacXSecData[iIoniStarts]); // x3 for the 3 values and +5 at the beginning
   const int      iStart = (isioni) ? iIoniStarts : (iIoniStarts + 3*numIoniData + 5);
-  const int     numData = elData->fResMacXSecData[iStart].getValue();
+  const int     numData = GET_VALUE(elData->fResMacXSecData[iStart]);
   const G4double  minEKin = elData->fResMacXSecData[iStart+5];
   if (ekin<minEKin) {return 0.0; }
   // use the G4HepEmRunUtils function for interpolation
@@ -523,9 +523,9 @@ G4double  G4HepEmElectronManager::GetRestMacXSec(const struct G4HepEmElectronDat
 G4double  G4HepEmElectronManager::GetRestMacXSecForStepping(const struct G4HepEmElectronData* elData, const int imc, G4double ekin, G4double lekin, bool isioni) {
   const G4double log08 = -0.22314355131420971;
   const int  iIoniStarts = elData->fResMacXSecStartIndexPerMatCut[imc];
-  const int  numIoniData = elData->fResMacXSecData[iIoniStarts].getValue(); // x3 for the 3 values and +5 at the beginning
+  const int  numIoniData = GET_VALUE(elData->fResMacXSecData[iIoniStarts]); // x3 for the 3 values and +5 at the beginning
   const int       iStart = (isioni) ? iIoniStarts : (iIoniStarts + 3*numIoniData + 5);
-  const int      numData = elData->fResMacXSecData[iStart].getValue();
+  const int      numData = GET_VALUE(elData->fResMacXSecData[iStart]);
   const G4double mxsecMinE = elData->fResMacXSecData[iStart+5];
   const G4double mxsecMaxE = elData->fResMacXSecData[iStart+1];
   const G4double mxsecMaxV = elData->fResMacXSecData[iStart+2];
