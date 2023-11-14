@@ -8,6 +8,8 @@ project(G4HepEm VERSION 0.1.0)
 include(GNUInstallDirs)
 include(CheckLanguage)
 
+option(CODI_FORWARD "Forward-mode AD builds with CoDiPack." OFF)
+
 #----------------------------------------------------------------------------
 # Convenience function to add shared / static libraries as configured.
 #
@@ -30,6 +32,10 @@ function(g4hepem_add_library _name)
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
       $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>)
     target_link_libraries(${_name} PUBLIC ${_g4hepem_LINK})
+    
+    if(CODI_FORWARD)
+      target_compile_definitions(${_name} PUBLIC "CODI_FORWARD")
+    endif()
   endif()
 
   # Build static library, if enabled.
@@ -45,6 +51,10 @@ function(g4hepem_add_library _name)
     foreach(_lib ${_g4hepem_LINK})
       target_link_libraries(${_name}-static PUBLIC ${_lib}-static)
     endforeach()
+
+    if(CODI_FORWARD)
+      target_compile_definitions(${_name} PUBLIC "CODI_FORWARD")
+    endif()
 
     # If only the static library, add alias targets for convenience.
     if(NOT BUILD_SHARED_LIBS)
