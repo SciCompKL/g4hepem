@@ -16,6 +16,12 @@ if(G4HepEm_geant4_FOUND)
   find_dependency(Geant4 @Geant4_VERSION@ REQUIRED)
 endif()
 
+set(G4HepEm_codi_forward @CODI_FORWARD@)
+if(G4HepEm_codi_forward)
+  message(STATUS "G4HepEm has been built with CoDiPack, thus load CoDiPack.")
+  find_dependency(CoDiPack REQUIRED)
+endif()
+
 # Direct CUDA deps to be determined, but should be handled by
 # target properties (remains to be seen if we need find_dependency on CUDA Toolkit
 # and to transport CUDA architecture flags)
