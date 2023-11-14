@@ -21,6 +21,7 @@ set(G4HEPEMDATA_CXX_sources
 )
 
 g4hepem_add_library(g4HepEmData SOURCES ${G4HEPEMDATA_CXX_sources} HEADERS ${G4HEPEMDATA_headers})
+target_add_codi(g4HepEmData)
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(g4HepEmData PUBLIC $<$<BOOL:${G4HepEm_CUDA_BUILD}>:G4HepEm_CUDA_BUILD>)

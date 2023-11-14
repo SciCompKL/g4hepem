@@ -15,6 +15,9 @@ if(CODI_FORWARD)
 endif()
 
 function(target_add_codi _name)
+  target_include_directories(${_name} PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/G4HepEm>
+      $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>) 
   if(CODI_FORWARD)
     target_compile_definitions(${_name} PUBLIC "CODI_FORWARD")
     target_link_libraries(${_name} PUBLIC CoDiPack)
@@ -22,6 +25,8 @@ function(target_add_codi _name)
     target_compile_definitions(${_name} PUBLIC "CODI_NONE")
   endif()
 endfunction()
+
+install(FILES "${CMAKE_SOURCE_DIR}/G4HepEm/ad_type.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
 
 #----------------------------------------------------------------------------
 # Convenience function to add shared / static libraries as configured.
@@ -77,7 +82,6 @@ function(g4hepem_add_library _name)
 
   # Install headers.
   install(FILES ${_g4hepem_HEADERS} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
-  install(FILES "G4HepEm/ad_type.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
 
   # Install libraries, as built.
   if(BUILD_SHARED_LIBS)
