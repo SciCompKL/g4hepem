@@ -11,7 +11,7 @@ using G4double = codi::RealForward;
 
 #if !defined(CODI_FORWARD)
 using G4double = double;
-#define GET_GRADIENT(var) 0
+#define GET_GRADIENT(var) 0.0
 #define GET_VALUE(var) (var)
 #define SET_GRADIENT(var, dotval)
 #endif
