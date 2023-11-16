@@ -4,16 +4,14 @@
 #if defined(CODI_FORWARD)
 #include "codi.hpp"
 using G4double = codi::RealForward;
-#define GET_GRADIENT(var) ((var).getGradient())
+#define GET_DOTVALUE(var) ((var).getGradient())
 #define GET_VALUE(var) (((var)).getValue())
-#define SET_GRADIENT(var,dotval) (var).setGradient(dotval);
+#define SET_DOTVALUE(var,dotval) (var).setGradient(dotval);
 #endif
 
 #if !defined(CODI_FORWARD)
 using G4double = double;
-#define GET_GRADIENT(var) 0.0
 #define GET_VALUE(var) (var)
-#define SET_GRADIENT(var, dotval)
 #endif
 
 #define ARR(ad_array,new_array,size) \
