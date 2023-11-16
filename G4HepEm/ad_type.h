@@ -9,7 +9,13 @@ using G4double = codi::RealForward;
 #define SET_DOTVALUE(var,dotval) (var).setGradient(dotval);
 #endif
 
-#if !defined(CODI_FORWARD)
+#if defined(CODI_REVERSE)
+#include "codi.hpp"
+using G4double = codi::RealReverse;
+#define GET_VALUE(var) (((var)).getValue())
+#endif
+
+#if !defined(CODI_FORWARD) && !defined(CODI_REVERSE)
 using G4double = double;
 #define GET_VALUE(var) (var)
 #endif

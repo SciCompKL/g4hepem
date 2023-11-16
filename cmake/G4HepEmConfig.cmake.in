@@ -18,7 +18,12 @@ endif()
 
 set(G4HepEm_codi_forward @CODI_FORWARD@)
 if(G4HepEm_codi_forward)
-  message(STATUS "G4HepEm has been built with CoDiPack, thus load CoDiPack.")
+  message(STATUS "G4HepEm has been built with forward-mode AD support using CoDiPack, thus load CoDiPack.")
+  find_dependency(CoDiPack REQUIRED)
+endif()
+set(G4HepEm_codi_reverse @CODI_REVERSE@)
+if(G4HepEm_codi_reverse)
+  message(STATUS "G4HepEm has been built with reverse-mode AD support using CoDiPack, thus load CoDiPack.")
   find_dependency(CoDiPack REQUIRED)
 endif()
 
