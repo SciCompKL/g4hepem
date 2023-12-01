@@ -1,69 +1,27 @@
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/mnovak42/g4hepem/cpu_build.yml?branch=master&label=Tests%20%28CI%29&logo=github&logoColor=white&style=plastic)
-![Read the Docs](https://img.shields.io/readthedocs/g4hepem?label=%20Building%20docs&logo=read%20the%20docs&logoColor=white&style=plastic)
+*This README is about the extension of G4HepEm with AD capabilities. See [README_ORIGINAL.md](README_ORIGINAL.md) for information about G4HepEm.*
 
-<p align="center">  
-  <a href="https://g4hepem.readthedocs.io/en/latest/">
-    <img src="./docs/source/logo_HepEM3.png"></a>
-</p>
+# Differentiated G4HepEm
+[G4HepEm](https://github.com/mnovak42/g4hepem/) is a compact, self-contained toolkit for electromagnetic shower simulation. This repository contains a version of G4HepEm that has been extended with algorithmic differentiation (AD) capabilities. Specifically, most occurences of `double` in the code have been replaced by types provided by the AD tool CoDiPack [CoDiPack](https://github.com/SciCompKL/CoDiPack), making it possible to 
+- propagate dot values through G4HepEm functionalities to do **forward-mode AD**, and
+- record G4HepEm calculations on a "tape" to implement operator-overloading **reverse-mode AD**.
 
+Differentiated G4HepEm is used by [differentiated HepEmshow](https://github.com/maxaehle/hepemshow) to compute derivatives in a simple calorimetry setup.
 
-# The G4HepEm R&D Project
+## Building from source
+A version of G4HepEm without any AD capabilities can be built as usual: Download the code into some directory, enter the directory and run
+```bash
+mkdir build
+cd build
+cmake ../ -DG4HepEm_GEANT4_BUILD=OFF -DCMAKE_INSTALL_PREFIX=$PWD/../install -DCMAKE_BUILD_TYPE=Release
+make
+make install
+```
+To create a forward-mode or reverse-mode AD build, supply `-DCODI_FORWARD=yes` or `-DCODI_REVERSE=yes` to the `cmake` call, respectively. Most likely, you also have to download the AD tool [CoDiPack](https://github.com/SciCompKL/CoDiPack) and specify its path to `cmake` via `-DCoDiPack_DIR=/path/to/CoDiPack/cmake`. 
 
-The ``G4HepEm`` R&D project was initiated by the `Electromagnetic Physics Working Group` of the ``Geant4`` collaboration as part of looking for solutions to reduce the computing performance bottleneck experienced by the `High Energy Physics` (HEP) detector simulation applications.
+If both non-AD and AD builds are required, consider using directories `build_no`/`build_ad` and `$PWD/../install_no`/`$PWD/../install_ad` instead of `build` and `$PWD/../install`.
 
-
-
-## Description
-
-The project (initially) targets the most performance critical part of the HEP detector simulation applications, i.e. the EM shower generation covering <img src="https://render.githubusercontent.com/render/math?math=e^{-}/e^{%2B}"> and <img src="https://render.githubusercontent.com/render/math?math=\gamma"> particle transport. By
-
-  - starting from the EM physics modelling part, the project **isolates and extracts** **all the data and functionalities** required for EM shower simulation in HEP detectors **in a clear, compact and well documented form**
-
-  - investigates the possible computing performance benefits of replacing the **current general** particle transport simulation **stepping-loop** of ``Geant4`` **by alternatives, highly specialised for particle types** and **tailored for HEP** detector simulation applications
-
-  - by providing a clear, compact and well documented environment for EM shower generation (already connected to ``Geant4`` applications), the project also **provides an excellent domain for further** related **R&D activities**.
-
-  - especially, the **projects facilitates** R&D activities targeting **EM shower simulation on GPU** by providing:
-
-    - functionalities of making **all required physics data** **available on** the main **device memory**, together **with example kernels** for their run-time usage.
-
-    - isolated, **self-contained** (i.e. `"single function"`) **implementations of both the** physics related parts of the **stepping loop** and **all required physics interactions**
-
-All details can be found in the **[documentation](https://g4hepem.readthedocs.io/en/latest/)**.
+## License Hints
+This product includes software developed by Members of the Geant4 Collaboration ([http://cern.ch/geant4](http://cern.ch/geant4)). The original version of [G4HepEm](https://github.com/mnovak42/g4hepem/) has been released under the [Geant4 Software License](https://github.com/mnovak42/g4hepem/blob/master/LICENSE). Please note that CoDiPack has been released under the [GNU General Public License (GPL) version 3](https://github.com/SciCompKL/CoDiPack/blob/master/LICENSE), meaning that you must comply with the provisions of the GPL if you convey the combined work to others.
 
 
-## Requirements
 
-``G4HepEm`` is one of the ongoing developments, carried out within the EM physics working group of the ``Geant4`` collaboration. It **has been made available in order to facilitate and catalyse correlated R&D activities by providing and sharing the related expertise and specific knowledge**. Therefore, ``G4HepEm`` is tightly connected to and depends on the ``Geant4`` simulation toolkit.
-
-The only requirement of ``G4HepEm`` is a recent ``Geant4`` version to be available on the system. The recommended version, ``Geant4-10.7.p01`` is available at the corresponding **[Geant4 Download](https://geant4.web.cern.ch/support/download)** area. All information regarding the **[Prerequisites of Geant4](https://geant4-userdoc.web.cern.ch/UsersGuides/InstallationGuide/html/gettingstarted.html)** as well as the detailed **[Geant4 Installation Instructions](https://geant4-userdoc.web.cern.ch/UsersGuides/InstallationGuide/html/installguide.html)**  can be found in the related sections of the **[Geant4 Installation Guide](https://geant4-userdoc.web.cern.ch/UsersGuides/InstallationGuide/html/index.html)**. 
-
-
-## Quick start
-
-More detailed instructions can be found in the **[Build and Install](https://g4hepem.readthedocs.io/en/latest/IntroAndInstall/install.html)** section of the documentation.
-
-It is assumed in the followings, that the required version of the ``Geant4`` toolkit is installed on the system and the corresponding ``Geant4Config.cmake`` ``CMake`` configuration file is located under the ``G4_INSTALL`` directory. Then building and installing ``G4HepEm`` (under the ``G4HepEm_INSTALL`` directory) can be done by simple:
-
-    $ git clone https://github.com/mnovak42/g4hepem.git    
-    $ cd g4hepem/
-    $ mkdir build
-    $ cd build/
-    $ cmake ../ -DGeant4_DIR=G4_INSTALL -DCMAKE_INSTALL_PREFIX=G4HepEm_INSTALL
-    $ make install
-
-<details>
- <summary> <b>Example: build and execute an example application</b> </summary>
-
-After building and installing G4HepEm under the `G4HepEm_INSTALL` directory, the `g4hepem/apps/examples/TestEm3` (general) simplified sampling calorimeter example application can be built and executed as:
-
-    $ cd g4hepem/apps/examples/TestEm3/
-    $ mkdir build
-    $ cd build/
-    $ cmake ../ -DGeant4_DIR=G4_INSTALL -DG4HepEm_DIR=G4HepEm_INSTALL/lib/cmake/G4HepEm/  
-    $ make
-    $ ./TestEm3 -m ../ATLASbar.mac
-
-Execute the application as `./TestEm3 --help` for more information and see the `g4hepem/apps/examples/TestEm3/ATLASbar.mac` example input macro file for more details.
-
-</details>
