@@ -47,7 +47,10 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "ad_type.h"
+
 #include <iomanip>
+#include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -355,12 +358,16 @@ void Run::EndOfRun()
   G4cout << "  #Layers   Charged-TrakL [mm]   Energy-Dep [MeV]  " << G4endl << G4endl;
   G4cout.setf(std::ios::scientific);
   G4cout.precision(6);
+  std::ofstream edeps("edeps");
   for (G4int il = 0; il < nLayers; ++il)  {
+      passivedouble edep_d = GET_VALUE(fEDepPerLayer[il]);
       G4cout << "  " 
              << std::setw(5)  << il 
              << std::setw(20) << fCHTrackLPerLayer[il]*norm/mm 
              << std::setw(20) << fEDepPerLayer[il]*norm/MeV
+             << std::setw(20) << edep_d*norm/MeV
              << G4endl;
+      edeps << il << " " << std::setprecision(15) << fEDepPerLayer[il]*norm/MeV << " " << edep_d*norm/MeV << std::endl;
   }
   G4cout << G4endl;
   G4cout << " \n ================================================================== \n"

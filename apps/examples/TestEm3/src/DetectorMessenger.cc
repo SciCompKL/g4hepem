@@ -157,6 +157,9 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      is >> num >> mat >> tick >> unt;
      G4String material=mat;
      tick *= G4UIcommand::ValueOf(unt);
+     if(num==1) {
+       SET_DOTVALUE(tick, 1.0);
+     }
      fDetector->SetAbsorMaterial (num,material);
      fDetector->SetAbsorThickness(num,tick);
    }

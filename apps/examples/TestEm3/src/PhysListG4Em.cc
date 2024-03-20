@@ -91,7 +91,7 @@ void PhysListG4Em::ConstructProcess()
   // Add e- EM processes
   particle = G4Electron::Electron();
 
-  ph->RegisterProcess(new G4eMultipleScattering, particle);
+  //ph->RegisterProcess(new G4eMultipleScattering, particle); // DISABLE
   ph->RegisterProcess(new G4eIonisation, particle);
   ph->RegisterProcess(new G4eBremsstrahlung, particle);
 
@@ -100,7 +100,7 @@ void PhysListG4Em::ConstructProcess()
 
   particle = G4Positron::Positron();
 
-  ph->RegisterProcess(new G4eMultipleScattering, particle);
+  //ph->RegisterProcess(new G4eMultipleScattering, particle); // DISABLE
   ph->RegisterProcess(new G4eIonisation, particle);
   ph->RegisterProcess(new G4eBremsstrahlung, particle);
   ph->RegisterProcess(new G4eplusAnnihilation, particle);

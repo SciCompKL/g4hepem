@@ -85,9 +85,10 @@ int main(int argc,char** argv) {
     help();
     exit(0);
   }
+  unsigned int randomSeed=12345678;
   while (true) {
     int c, optidx = 0;
-    c = getopt_long(argc, argv, "pm:", options, &optidx);
+    c = getopt_long(argc, argv, "pm:s:", options, &optidx);
     if (c == -1)
       break;
     //
@@ -101,6 +102,9 @@ int main(int argc,char** argv) {
     case 'm':
       macrofile = optarg;
       break;
+    case 's':
+      randomSeed = std::stoi(optarg);
+      break;
     default:
       help();
       errx(1, "unknown option %c", c);
@@ -108,7 +112,7 @@ int main(int argc,char** argv) {
   }
   //
   // set the RNG seed and custom stepping verbose
-  G4Random::setTheSeed(12345678);
+  G4Random::setTheSeed(randomSeed);
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
 
   // Construct the default run manager

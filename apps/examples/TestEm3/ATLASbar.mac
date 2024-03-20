@@ -15,7 +15,7 @@
 /testem/det/setSizeYZ 40 cm
 /testem/det/setNbOfLayers 50
 /testem/det/setNbOfAbsor 2
-/testem/det/setAbsor 1 G4_Pb 2.3 mm
+/testem/det/setAbsor 1 G4_PbWO4 2.3 mm
 /testem/det/setAbsor 2 G4_lAr 5.7 mm
 ## -----------------------------------------------------------------------------
 ## Optionally, set a constant magnetic filed:
