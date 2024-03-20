@@ -30,7 +30,7 @@ void G4HepEmInitUtils::GLIntegral(int npoints, G4double* abscissas, G4double* we
   const G4double kPi      = 3.14159265358979323846;
   const G4double kEpsilon = 1.0E-13;
   G4double xm,xl,z,z1,p1,p2,p3,pp;
-  int m = (int)GET_VALUE(0.5*(npoints + 1.));
+  int m = (int)(0.5*(npoints + 1.));
   xm    = 0.5*(max+min);
   xl    = 0.5*(max-min);
   for (int i=1; i<=m; ++i) {
