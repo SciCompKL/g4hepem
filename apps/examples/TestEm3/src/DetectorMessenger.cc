@@ -32,7 +32,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorMessenger.hh"
-
+#include "ad_type.h"
 #include <sstream>
 
 #include "DetectorConstruction.hh"

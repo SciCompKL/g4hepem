@@ -63,8 +63,8 @@ class Run : public G4Run
     void AddNeutralStep();
     void AddSecondaryTrack(const G4Track*);
     
-    void AddCHStepInLayer(double stepl, int layerindx) { fCHTrackLPerLayer[layerindx] += stepl; }
-    void AddEDepInLayer(double edep, int layerindx)    { fEDepPerLayer[layerindx]     += edep;  }
+    void AddCHStepInLayer(G4double stepl, int layerindx) { fCHTrackLPerLayer[layerindx] += stepl; }
+    void AddEDepInLayer(G4double edep, int layerindx)    { fEDepPerLayer[layerindx]     += edep;  }
 
     void SetEdepAndRMS(G4int, G4double, G4double, G4double);
     void SetApplyLimit(G4bool);

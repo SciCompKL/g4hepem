@@ -26,6 +26,11 @@ if(G4HepEm_codi_reverse)
   message(STATUS "G4HepEm has been built with reverse-mode AD support using CoDiPack, thus load CoDiPack.")
   find_dependency(CoDiPack REQUIRED)
 endif()
+set(G4HepEm_easyad_forward @EASYAD_FORWARD@)
+if(G4HepEm_easyad_forward)
+  message(STATUS "G4HepEm has been built with forward-mode AD support using EasyAD, thus load EasyAD.")
+#find_dependency(CoDiPack REQUIRED)
+endif()
 
 # Direct CUDA deps to be determined, but should be handled by
 # target properties (remains to be seen if we need find_dependency on CUDA Toolkit

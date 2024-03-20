@@ -16,6 +16,22 @@ find_package(Geant4 REQUIRED)
 #
 find_package(G4HepEm REQUIRED)
 
+if(G4HepEm_codi_forward)
+  message(NOTICE "G4HepEm has been configured with forward-mode AD using CoDiPack, \nso we will build a forward-mode AD version of TestEm3.")
+  set(CODI_FORWARD ON)  # Actually, not any further change required, as the compile definition and library link have PUBLIC inheritance.
+endif()
+
+if(G4HepEm_codi_reverse)
+  message(NOTICE "G4HepEm has been configured with reverse-mode AD using CoDiPack, \nso we will build a reverse-mode AD version of TestEm3.")
+  set(CODI_REVERSE ON)
+endif()
+
+if(G4HepEm_easyad_forward)
+  message(NOTICE "G4HepEm has been configured with forward-mode AD using EasyAD, \nso we will build a forward-mode AD version of TestEm3.")
+  set(EASYAD_FORWARD ON)
+endif()
+
+
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
