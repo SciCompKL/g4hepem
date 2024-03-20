@@ -121,7 +121,7 @@ namespace nlohmann
 
       auto d = make_array<T>(j.size());
       for(size_t i=0; i<j.size(); i++){
-        d.begin()[i] = j.begin()[i];
+        d.begin()[i] = (T)j.begin()[i];
       }
       return d;
     }
@@ -707,12 +707,12 @@ namespace nlohmann
                             tmpGammaCutIndices.size(), tmpSBTableData.size());
 
         // copy JSON arrays to newly allocated SB arrays
-        std::copy(tmpGammaCutStartIndices.begin(),
+        convcopy(tmpGammaCutStartIndices.begin(),
                   tmpGammaCutStartIndices.end(),
                   d->fGammaCutIndxStartIndexPerMC);
         std::copy(tmpGammaCutIndices.begin(), tmpGammaCutIndices.end(),
                   d->fGammaCutIndices);
-        std::copy(tmpSBTableData.begin(), tmpSBTableData.end(),
+        convcopy(tmpSBTableData.begin(), tmpSBTableData.end(),
                   d->fSBTableData);
 
         // Now remaining data
