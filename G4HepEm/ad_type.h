@@ -1,6 +1,14 @@
 #ifndef AD_TYPE_H
 #define AD_TYPE_H
 
+#if defined(EASYAD_FORWARD)
+#include "easyAD.hpp"
+using G4double = Forward;
+#define GET_DOTVALUE(var) ((var).dot)
+#define GET_VALUE(var) ((var).val)
+#define SET_DOTVALUE(var,dotval) (var).dot = (dotval);
+#endif
+
 #if defined(CODI_FORWARD)
 #include "codi.hpp"
 using G4double = codi::RealForward;
@@ -15,7 +23,7 @@ using G4double = codi::RealReverse;
 #define GET_VALUE(var) (((var)).getValue())
 #endif
 
-#if !defined(CODI_FORWARD) && !defined(CODI_REVERSE)
+#if !defined(EASYAD_FORWARD) && !defined(CODI_FORWARD) && !defined(CODI_REVERSE)
 using G4double = double;
 #define GET_VALUE(var) (var)
 #endif
