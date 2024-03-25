@@ -360,7 +360,7 @@ void Run::EndOfRun()
   G4cout.precision(6);
   std::ofstream edeps("edeps");
   for (G4int il = 0; il < nLayers; ++il)  {
-      passivedouble edep_d = GET_VALUE(fEDepPerLayer[il]);
+      passivedouble edep_d = GET_DOTVALUE(fEDepPerLayer[il]);
       G4cout << "  " 
              << std::setw(5)  << il 
              << std::setw(20) << fCHTrackLPerLayer[il]*norm/mm 
