@@ -43,6 +43,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#include "ad_type.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -88,6 +89,9 @@ void PrimaryGeneratorAction::SetDefaultKinematic()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  G4double energy = fParticleGun->GetParticleEnergy();
+  SET_DOTVALUE(energy, 1.0);
+  fParticleGun->SetParticleEnergy(energy);
   //this function is called at the begining of event
   //
   //randomize the beam, if requested.
