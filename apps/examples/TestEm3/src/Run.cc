@@ -48,7 +48,9 @@
 #include "G4SystemOfUnits.hh"
 
 #include "ad_type.h"
+#ifdef DERIVGRIND_VALIDATION
 #include "valgrind/derivgrind.h"
+#endif
 
 #include <iomanip>
 #include <fstream>
@@ -363,7 +365,9 @@ void Run::EndOfRun()
   for (G4int il = 0; il < nLayers; ++il)  {
       passivedouble edep_d = GET_DOTVALUE(fEDepPerLayer[il]);
       passivedouble edep_d_2 = 0.;
-      DG_GET_DOTVALUE(&fEDepPerLayer[il].val, &edep_d_2, sizeof(double));
+      #ifdef DERIVGRIND_VALIDATION
+        DG_GET_DOTVALUE(&fEDepPerLayer[il].val, &edep_d_2, sizeof(double));
+      #endif
       G4cout << "  " 
              << std::setw(5)  << il 
              << std::setw(20) << fCHTrackLPerLayer[il]*norm/mm 
