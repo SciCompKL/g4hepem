@@ -44,6 +44,7 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "ad_type.h"
+#include "valgrind/derivgrind.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -91,6 +92,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4double energy = fParticleGun->GetParticleEnergy();
   SET_DOTVALUE(energy, 1.0);
+  double const one = 1.0;
+  DG_SET_DOTVALUE(&energy.val, &one, sizeof(double));
   fParticleGun->SetParticleEnergy(energy);
   //this function is called at the begining of event
   //

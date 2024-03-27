@@ -43,6 +43,6 @@
 ## -----------------------------------------------------------------------------
 ## Run the simulation with the given number of events and print list of processes
 ## -----------------------------------------------------------------------------
-##/tracking/verbose 1
-/run/beamOn 1000
+#/tracking/verbose 1
+/run/beamOn 1
 /process/list

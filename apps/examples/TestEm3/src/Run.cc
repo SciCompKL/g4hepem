@@ -48,6 +48,7 @@
 #include "G4SystemOfUnits.hh"
 
 #include "ad_type.h"
+#include "valgrind/derivgrind.h"
 
 #include <iomanip>
 #include <fstream>
@@ -361,11 +362,14 @@ void Run::EndOfRun()
   std::ofstream edeps("edeps");
   for (G4int il = 0; il < nLayers; ++il)  {
       passivedouble edep_d = GET_DOTVALUE(fEDepPerLayer[il]);
+      passivedouble edep_d_2 = 0.;
+      DG_GET_DOTVALUE(&fEDepPerLayer[il].val, &edep_d_2, sizeof(double));
       G4cout << "  " 
              << std::setw(5)  << il 
              << std::setw(20) << fCHTrackLPerLayer[il]*norm/mm 
              << std::setw(20) << fEDepPerLayer[il]*norm/MeV
              << std::setw(20) << edep_d*norm/MeV
+             << std::setw(20) << edep_d_2*norm/MeV
              << G4endl;
       edeps << il << " " << std::setprecision(15) << fEDepPerLayer[il]*norm/MeV << " " << edep_d*norm/MeV << std::endl;
   }
