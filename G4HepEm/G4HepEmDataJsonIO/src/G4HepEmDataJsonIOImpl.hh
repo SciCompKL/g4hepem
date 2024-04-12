@@ -707,12 +707,12 @@ namespace nlohmann
                             tmpGammaCutIndices.size(), tmpSBTableData.size());
 
         // copy JSON arrays to newly allocated SB arrays
-        convcopy(tmpGammaCutStartIndices.begin(),
+        std::copy(tmpGammaCutStartIndices.begin(),
                   tmpGammaCutStartIndices.end(),
                   d->fGammaCutIndxStartIndexPerMC);
         std::copy(tmpGammaCutIndices.begin(), tmpGammaCutIndices.end(),
                   d->fGammaCutIndices);
-        convcopy(tmpSBTableData.begin(), tmpSBTableData.end(),
+        std::copy(tmpSBTableData.begin(), tmpSBTableData.end(),
                   d->fSBTableData);
 
         // Now remaining data

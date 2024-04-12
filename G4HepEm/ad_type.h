@@ -41,16 +41,5 @@ using G4double = double;
     ad_array[i] = new_array[i];
 
 
-#if defined(EASYAD_FORWARD)
-
-template< class InputIt, class OutputIt >
-OutputIt convcopy( InputIt first, InputIt last, OutputIt d_first ){
-  for(; first!=last; first++, d_first++){
-    *d_first = (decltype(*d_first))(*first);
-  }
-  return d_first;
-}
-
-#endif
 
 #endif
