@@ -8,7 +8,7 @@
 This differentiated version of G4HepEm is used by a [differentiated version of HepEmshow](https://github.com/maxaehle/hepemshow) to compute derivatives in a simple calorimetry setup.
 
 ## Building from source
-A version of G4HepEm without any AD capabilities can be built as usual: Download the code into some directory, enter the directory and run
+A version of G4HepEm without any AD capabilities can be built as usual: Download the code into some directory, enter the directory, checkout the `with_codipack` branch, and run
 ```bash
 mkdir build
 cd build
