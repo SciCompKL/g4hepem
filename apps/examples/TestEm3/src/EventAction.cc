@@ -38,6 +38,7 @@
 
 #include "G4RunManager.hh"
 #include "G4Event.hh"
+#include "ad_type.h"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,6 +60,11 @@ void EventAction::BeginOfEventAction(const G4Event*)
   for (G4int k=0; k<kMaxAbsor; k++) {
     fEnergyDeposit[k] = fTrackLengthCh[k] = 0.0;   
   }
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  for (G4int k=0; k<run->fEDepPerLayer.size(); k++) {
+    run->fEDepSinglePerLayer[k] = 0.0;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,6 +79,11 @@ void EventAction::EndOfEventAction(const G4Event*)
      run->FillPerEvent(k,fEnergyDeposit[k],fTrackLengthCh[k]);
      if (fEnergyDeposit[k] > 0.)
              G4AnalysisManager::Instance()->FillH1(k, fEnergyDeposit[k]);
+  }
+  for (G4int k=0; k<run->fEDepPerLayer.size(); k++) {
+    passivedouble diff = GET_DOTVALUE(run->fEDepSinglePerLayer[k]);
+    run->fEDepDPerLayer[k] += diff;
+    run->fEDepDSqPerLayer[k] += diff*diff;
   }
 }
 

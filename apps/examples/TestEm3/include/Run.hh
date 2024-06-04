@@ -64,7 +64,7 @@ class Run : public G4Run
     void AddSecondaryTrack(const G4Track*);
     
     void AddCHStepInLayer(G4double stepl, int layerindx) { fCHTrackLPerLayer[layerindx] += stepl; }
-    void AddEDepInLayer(G4double edep, int layerindx)    { fEDepPerLayer[layerindx]     += edep;  }
+    void AddEDepInLayer(G4double edep, int layerindx)    { fEDepPerLayer[layerindx]     += edep; fEDepSinglePerLayer[layerindx] += edep;  }
 
     void SetEdepAndRMS(G4int, G4double, G4double, G4double);
     void SetApplyLimit(G4bool);
@@ -72,7 +72,7 @@ class Run : public G4Run
     virtual void Merge(const G4Run*);
     void EndOfRun();
 
-  private:
+  public:
     DetectorConstruction*  fDetector;
     G4ParticleDefinition*  fParticle;
     G4double  fEkin;
@@ -86,6 +86,9 @@ class Run : public G4Run
     //
     std::vector<G4double> fCHTrackLPerLayer;
     std::vector<G4double> fEDepPerLayer;
+    std::vector<G4double> fEDepSinglePerLayer; // edeps collected for a single event
+    std::vector<passivedouble> fEDepDPerLayer; // accumulate edep derivatives for all events
+    std::vector<passivedouble> fEDepDSqPerLayer; // accumulate squares of edep derivatives, summed over all events
 
     G4double fChargedStep;
     G4double fNeutralStep;

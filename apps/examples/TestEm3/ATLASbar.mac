@@ -3,7 +3,7 @@
 ## =============================================================================
 ##
 /control/verbose 0
-/run/numberOfThreads 4
+/run/numberOfThreads 48
 /run/verbose 0
 ##
 ## -----------------------------------------------------------------------------
@@ -44,5 +44,5 @@
 ## Run the simulation with the given number of events and print list of processes
 ## -----------------------------------------------------------------------------
 #/tracking/verbose 1
-/run/beamOn 1
+/run/beamOn 100000
 /process/list
