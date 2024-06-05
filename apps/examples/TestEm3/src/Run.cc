@@ -78,6 +78,7 @@ Run::Run(DetectorConstruction* det)
   fCHTrackLPerLayer.resize(fDetector->GetNbOfLayers(),0.0);
   fEDepPerLayer.resize(fDetector->GetNbOfLayers(),0.0);
   fEDepSinglePerLayer.resize(fDetector->GetNbOfLayers(),0.0);
+  fEDepSqPerLayer.resize(fDetector->GetNbOfLayers(),0.0);
   fEDepDPerLayer.resize(fDetector->GetNbOfLayers(),0.0);
   fEDepDSqPerLayer.resize(fDetector->GetNbOfLayers(),0.0);
   //initialize Eflow
@@ -179,6 +180,7 @@ void Run::Merge(const G4Run* run)
   for (G4int il=0; il<nbLayers; ++il) {
     fCHTrackLPerLayer[il] += localRun->fCHTrackLPerLayer[il];
     fEDepPerLayer[il]     += localRun->fEDepPerLayer[il];
+    fEDepSqPerLayer[il]     += localRun->fEDepSqPerLayer[il];
     fEDepDPerLayer[il]     += localRun->fEDepDPerLayer[il];
     fEDepDSqPerLayer[il]     += localRun->fEDepDSqPerLayer[il];
   }
@@ -363,11 +365,12 @@ void Run::EndOfRun()
   G4cout << " \n ----------------------------------------------------------- \n"
          << " ----------------   Layer by layer mean data  -------------- \n"
          << " ----------------------------------------------------------- \n";
-  G4cout << "  #Layers   Charged-TrakL [mm]   Energy-Dep [MeV]  " << G4endl << G4endl;
+  G4cout << "  #Layers   Charged-TrakL [mm]   Energy-Dep [MeV]    Mean Sq Edep       Mean EdepDiff     Mean Sq EdepDiff " << G4endl << G4endl;
   G4cout.setf(std::ios::scientific);
   G4cout.precision(6);
   std::ofstream edeps("edeps");
   for (G4int il = 0; il < nLayers; ++il)  {
+      passivedouble edep_sq = fEDepSqPerLayer[il]; // mean squared edep
       passivedouble edep_d = fEDepDPerLayer[il]; // mean derivative of edep
       passivedouble edep_dsq = fEDepDSqPerLayer[il]; // mean squared derivative of edep
       passivedouble edep_d_2 = 0.;
@@ -378,10 +381,11 @@ void Run::EndOfRun()
              << std::setw(5)  << il 
              << std::setw(20) << fCHTrackLPerLayer[il]*norm/mm 
              << std::setw(20) << fEDepPerLayer[il]*norm/MeV
+             << std::setw(20) << edep_sq*norm/MeV
              << std::setw(20) << edep_d*norm/MeV
              << std::setw(20) << edep_dsq*norm/MeV/MeV
              << G4endl;
-      edeps << il << " " << std::setprecision(15) << fEDepPerLayer[il]*norm/MeV << " " << edep_d*norm/MeV << " " << edep_dsq*norm/MeV/MeV << std::endl;
+      edeps << il << " " << std::setprecision(15) << fEDepPerLayer[il]*norm/MeV << " " << edep_sq*norm/MeV/MeV << " " << edep_d*norm/MeV << " " << edep_dsq*norm/MeV/MeV << std::endl;
   }
   G4cout << G4endl;
   G4cout << " \n ================================================================== \n"

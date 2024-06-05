@@ -81,6 +81,8 @@ void EventAction::EndOfEventAction(const G4Event*)
              G4AnalysisManager::Instance()->FillH1(k, fEnergyDeposit[k]);
   }
   for (G4int k=0; k<run->fEDepPerLayer.size(); k++) {
+    passivedouble val = (passivedouble)run->fEDepSinglePerLayer[k];
+    run->fEDepSqPerLayer[k] += val*val; 
     passivedouble diff = GET_DOTVALUE(run->fEDepSinglePerLayer[k]);
     run->fEDepDPerLayer[k] += diff;
     run->fEDepDSqPerLayer[k] += diff*diff;

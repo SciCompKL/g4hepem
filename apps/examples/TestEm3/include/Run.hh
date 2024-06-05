@@ -87,7 +87,8 @@ class Run : public G4Run
     std::vector<G4double> fCHTrackLPerLayer;
     std::vector<G4double> fEDepPerLayer;
     std::vector<G4double> fEDepSinglePerLayer; // edeps collected for a single event
-    std::vector<passivedouble> fEDepDPerLayer; // accumulate edep derivatives for all events
+    std::vector<passivedouble> fEDepSqPerLayer; // accumulate squares of edep, summed over all events
+    std::vector<passivedouble> fEDepDPerLayer; // accumulate edep derivatives, summed over all events
     std::vector<passivedouble> fEDepDSqPerLayer; // accumulate squares of edep derivatives, summed over all events
 
     G4double fChargedStep;
